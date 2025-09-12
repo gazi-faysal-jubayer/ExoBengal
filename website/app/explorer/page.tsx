@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { SearchInterface } from '@/components/explorer/search-interface'
 import { DataTable } from '@/components/explorer/data-table'
-import { VisualizationPanels } from '@/components/explorer/visualization-panels'
+import VisualizationPanels from '@/components/explorer/visualization-panels'
 import { DetailView } from '@/components/explorer/detail-view'
 import { FilterPanel } from '@/components/explorer/filter-panel'
 import { motion } from 'framer-motion'

@@ -38,7 +38,7 @@ export function HeroSection() {
       setCurrentWordIndex((prev) => (prev + 1) % words.length)
     }, 3000)
     return () => clearInterval(interval)
-  }, [])
+  }, [words.length])
 
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-gradient-to-b from-light-background to-light-surface dark:from-dark-background dark:to-dark-surface">
