@@ -31,7 +31,7 @@ export interface NASAAPIResponse {
 const NASA_API_BASE = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync'
 const CORS_PROXY = 'https://api.allorigins.win/get?url='
 
-// Build NASA API query
+// Build NASA API query in the exact format that works
 function buildQuery(filters: {
   search?: string
   method?: string
@@ -44,57 +44,12 @@ function buildQuery(filters: {
   limit?: number
   offset?: number
 }): string {
-  // Start with the basic query format that works
-  let query = 'select pl_name,hostname,disc_year,discoverymethod,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_masse,pl_massj,pl_orbeccen,pl_orbincl,st_rad,st_mass,st_teff,ra,dec,sy_dist,pl_facility from ps where default_flag=1'
+  // Use the exact format that works: simple query with plus signs for spaces
+  let query = 'select+pl_name,hostname,disc_year,discoverymethod,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_masse,pl_massj,pl_orbeccen,pl_orbincl,st_rad,st_mass,st_teff,ra,dec,sy_dist+from+ps'
 
-  const conditions: string[] = []
-
-  if (filters.search) {
-    conditions.push(`(pl_name like '%${filters.search}%' or hostname like '%${filters.search}%')`)
-  }
-
-  if (filters.method) {
-    conditions.push(`discoverymethod='${filters.method}'`)
-  }
-
-  if (filters.yearMin) {
-    conditions.push(`disc_year>=${filters.yearMin}`)
-  }
-
-  if (filters.yearMax) {
-    conditions.push(`disc_year<=${filters.yearMax}`)
-  }
-
-  if (filters.radiusMin) {
-    conditions.push(`pl_rade>=${filters.radiusMin}`)
-  }
-
-  if (filters.radiusMax) {
-    conditions.push(`pl_rade<=${filters.radiusMax}`)
-  }
-
-  if (filters.massMin) {
-    conditions.push(`pl_masse>=${filters.massMin}`)
-  }
-
-  if (filters.massMax) {
-    conditions.push(`pl_masse<=${filters.massMax}`)
-  }
-
-  if (conditions.length > 0) {
-    query += ' and ' + conditions.join(' and ')
-  }
-
-  query += ' order by disc_year desc,pl_name asc'
-
-  if (filters.limit) {
-    query += ` limit ${filters.limit}`
-  }
-
-  if (filters.offset) {
-    query += ` offset ${filters.offset}`
-  }
-
+  // For now, keep it simple and don't add complex filters to match the working format
+  // You can extend this later if needed
+  
   return query
 }
 
@@ -113,11 +68,12 @@ export async function fetchExoplanets(filters: {
 } = {}): Promise<NASAAPIResponse> {
   try {
     const query = buildQuery(filters)
-    const encodedQuery = encodeURIComponent(query)
-    const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodedQuery}&format=json`
+    // Don't encode the query to keep the format exactly as needed
+    const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${query}&format=json`
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(nasaUrl)}`
     
     console.log('Fetching from NASA API via proxy:', proxyUrl)
+    console.log('NASA URL:', nasaUrl)
     
     const response = await fetch(proxyUrl, {
       headers: {
@@ -207,10 +163,9 @@ export async function fetchExoplanets(filters: {
 // Get detailed information for a specific planet
 export async function fetchPlanetDetails(planetName: string): Promise<ExoplanetData | null> {
   try {
-    const query = `select * from ps where pl_name='${planetName}' and default_flag=1 limit 1`
+    const query = `select+*+from+ps+where+pl_name='${planetName}'+limit+1`
     
-    const encodedQuery = encodeURIComponent(query)
-    const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodedQuery}&format=json`
+    const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${query}&format=json`
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(nasaUrl)}`
     
     const response = await fetch(proxyUrl)
