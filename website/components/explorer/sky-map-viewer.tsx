@@ -70,7 +70,7 @@ export default function SkyMapViewer() {
       .clipAngle(90)
 
     // Convert RA/Dec to longitude/latitude for projection
-    const convertCoords = (ra: number, dec: number) => {
+    const convertCoords = (ra: number, dec: number): [number, number] => {
       // Convert RA from degrees to longitude (-180 to 180)
       const longitude = ra > 180 ? ra - 360 : ra
       return [longitude, dec]

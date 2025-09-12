@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { ChevronRight, Copy, Terminal, CheckCircle, ExternalLink } from 'lucide-react'
 

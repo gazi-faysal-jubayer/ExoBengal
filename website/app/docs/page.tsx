@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { BookOpen, Download, Github, Rocket, Code, Star, Users, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'

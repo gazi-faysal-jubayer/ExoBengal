@@ -1,33 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, Telescope } from 'lucide-react'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Stars } from '@react-three/drei'
-import * as THREE from 'three'
-
-function AnimatedPlanet() {
-  const meshRef = useRef<THREE.Mesh>(null)
-
-  useEffect(() => {
-    const animate = () => {
-      if (meshRef.current) {
-        meshRef.current.rotation.y += 0.005
-      }
-      requestAnimationFrame(animate)
-    }
-    animate()
-  }, [])
-
-  return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[2, 32, 32]} />
-      <meshStandardMaterial color="#82b2d7" metalness={0.5} roughness={0.5} />
-    </mesh>
-  )
-}
 
 export function HeroSection() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
@@ -42,15 +18,14 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-gradient-to-b from-light-background to-light-surface dark:from-dark-background dark:to-dark-surface">
-      {/* 3D Background */}
-      <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 8], fov: 75 }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-          <AnimatedPlanet />
-          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
-        </Canvas>
+      {/* Animated Background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary-dark-blue/10 to-primary-light-blue/10">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 left-20 w-2 h-2 bg-white rounded-full animate-pulse"></div>
+          <div className="absolute top-32 right-32 w-1 h-1 bg-white rounded-full animate-pulse delay-1000"></div>
+          <div className="absolute bottom-40 left-40 w-1.5 h-1.5 bg-white rounded-full animate-pulse delay-500"></div>
+          <div className="absolute bottom-20 right-20 w-1 h-1 bg-white rounded-full animate-pulse delay-1500"></div>
+        </div>
       </div>
 
       {/* Content */}
@@ -133,4 +108,3 @@ export function HeroSection() {
     </section>
   )
 }
-
