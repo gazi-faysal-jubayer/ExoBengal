@@ -27,8 +27,9 @@ export interface NASAAPIResponse {
   query_time: string
 }
 
-// Use a CORS proxy for static deployment
-const NASA_BASE_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://exoplanetarchive.ipac.caltech.edu/TAP/sync')
+// NASA Exoplanet Archive API endpoint
+const NASA_API_BASE = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync'
+const CORS_PROXY = 'https://api.allorigins.win/get?url='
 
 // Build NASA API query
 function buildQuery(filters: {
@@ -222,14 +223,16 @@ export async function fetchPlanetDetails(planetName: string): Promise<ExoplanetD
     `
     
     const encodedQuery = encodeURIComponent(query)
-    const url = `${NASA_BASE_URL}?query=${encodedQuery}&format=json`
+    const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodedQuery}&format=json`
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(nasaUrl)}`
     
-    const response = await fetch(url)
+    const response = await fetch(proxyUrl)
     if (!response.ok) {
       throw new Error(`NASA API error: ${response.status}`)
     }
     
-    const data: ExoplanetData[] = await response.json()
+    const proxyData = await response.json()
+    const data: ExoplanetData[] = JSON.parse(proxyData.contents)
     return data.length > 0 ? data[0] : null
   } catch (error) {
     console.error('Error fetching planet details:', error)
@@ -254,9 +257,11 @@ export async function fetchExoplanetStats() {
     const results = await Promise.all(
       queries.map(async (query) => {
         const encodedQuery = encodeURIComponent(query)
-        const url = `${NASA_BASE_URL}?query=${encodedQuery}&format=json`
-        const response = await fetch(url)
-        return response.json()
+        const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodedQuery}&format=json`
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(nasaUrl)}`
+        const response = await fetch(proxyUrl)
+        const proxyData = await response.json()
+        return JSON.parse(proxyData.contents)
       })
     )
 
