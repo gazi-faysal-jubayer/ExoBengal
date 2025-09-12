@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export',
+  trailingSlash: true,
+  basePath: '/ExoBengal',
+  assetPrefix: '/ExoBengal/',
   images: {
-    domains: ['exoplanets.nasa.gov', 'images.unsplash.com'],
+    unoptimized: true,
   },
   experimental: {
     serverActions: {

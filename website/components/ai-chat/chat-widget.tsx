@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Sparkles, Loader2, Copy, ThumbsUp, ThumbsDown } from 'lucide-react'
-import { useChat } from 'ai/react'
+// import { useChat } from 'ai/react' // Disabled for static export
 
 interface Message {
   id: string
@@ -27,18 +27,35 @@ export function ChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    error,
-  } = useChat({
-    api: '/api/chat',
-    onResponse: () => setIsTyping(false),
-    onError: () => setIsTyping(false),
-  })
+  const [messages, setMessages] = useState<any[]>([])
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<any>(null)
+
+  const handleInputChange = (e: any) => setInput(e.target.value)
+  
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    if (!input.trim()) return
+    
+    // Add user message
+    const userMessage = { id: Date.now().toString(), role: 'user', content: input }
+    setMessages(prev => [...prev, userMessage])
+    
+    // Simulate AI response for GitHub Pages demo
+    setIsLoading(true)
+    setTimeout(() => {
+      const botResponse = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `Thank you for your question about "${input}". This is a demo response since the AI chat requires server-side functionality. In the full version, I would help you explore exoplanets, explain detection methods, and generate Python code for data analysis.`
+      }
+      setMessages(prev => [...prev, botResponse])
+      setIsLoading(false)
+    }, 1000)
+    
+    setInput('')
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
