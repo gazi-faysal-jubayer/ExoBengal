@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import { useExplorerStore } from '@/lib/explorer-store'
 import { BarChart3, Orbit, Map, TrendingUp, Maximize2 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
@@ -51,6 +53,8 @@ const visualizationTypes = [
 ]
 
 export default function VisualizationPanels() {
+  const loadRows = useExplorerStore(s => s.loadRows)
+  useEffect(() => { loadRows() }, [loadRows])
   const [activeVisualization, setActiveVisualization] = useState<VisualizationType>('3d-orbital')
 
   const renderVisualization = () => {

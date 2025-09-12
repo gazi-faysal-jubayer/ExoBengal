@@ -1,38 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as d3 from 'd3'
+import { useExplorerStore } from '@/lib/explorer-store'
 
-interface ExoplanetData {
-  name: string
-  ra: number // Right ascension in degrees
-  dec: number // Declination in degrees
-  distance: number // Distance in light years
-  radius: number // Planet radius in Earth radii
-  discoveryMethod: string
-  temperature?: number
-}
-
-// Sample exoplanet data
-const exoplanetData: ExoplanetData[] = [
-  { name: 'Kepler-452b', ra: 291.756, dec: 44.277, distance: 1400, radius: 1.6, discoveryMethod: 'Transit' },
-  { name: 'Proxima Centauri b', ra: 217.429, dec: -62.679, distance: 4.24, radius: 1.17, discoveryMethod: 'Radial Velocity' },
-  { name: 'TRAPPIST-1e', ra: 346.622, dec: -5.041, distance: 39.6, radius: 0.92, discoveryMethod: 'Transit' },
-  { name: 'HD 209458 b', ra: 330.795, dec: 18.884, distance: 159, radius: 1.38, discoveryMethod: 'Transit' },
-  { name: 'Gliese 667Cc', ra: 260.979, dec: -34.993, distance: 23.62, radius: 1.54, discoveryMethod: 'Radial Velocity' },
-  { name: 'Kepler-186f', ra: 285.679, dec: 43.941, distance: 500, radius: 1.11, discoveryMethod: 'Transit' },
-  { name: 'LHS 1140 b', ra: 24.327, dec: -15.282, distance: 40.7, radius: 1.4, discoveryMethod: 'Transit' },
-  { name: 'K2-18 b', ra: 173.067, dec: 7.589, distance: 124, radius: 2.3, discoveryMethod: 'Transit' },
-  // Add more sample data
-  ...Array.from({ length: 100 }, (_, i) => ({
-    name: `Exoplanet ${i + 9}`,
-    ra: Math.random() * 360,
-    dec: (Math.random() - 0.5) * 180,
-    distance: Math.random() * 1000 + 10,
-    radius: Math.random() * 3 + 0.5,
-    discoveryMethod: ['Transit', 'Radial Velocity', 'Microlensing', 'Direct Imaging'][Math.floor(Math.random() * 4)],
-  })),
-]
+type PlanetPoint = { name: string; ra: number; dec: number; distance?: number; radius?: number; method?: string }
 
 const constellationLines = [
   // Big Dipper (part of Ursa Major)
@@ -52,6 +24,27 @@ const constellationLines = [
 
 export default function SkyMapViewer() {
   const svgRef = useRef<SVGSVGElement>(null)
+  const rows = useExplorerStore(s => s.rows)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
+  const exoplanetData: PlanetPoint[] = useMemo(() => {
+    const out: PlanetPoint[] = []
+    for (const r of rows) {
+      if (typeof r.ra === 'number' && typeof r.dec === 'number') {
+        out.push({
+          name: r.pl_name,
+          ra: r.ra,
+          dec: r.dec,
+          distance: r.sy_dist,
+          radius: r.pl_rade,
+          method: r.discoverymethod,
+        })
+      }
+      if (out.length >= 2000) break
+    }
+    return out
+  }, [rows])
 
   useEffect(() => {
     if (!svgRef.current) return
@@ -95,11 +88,11 @@ export default function SkyMapViewer() {
       .append('circle')
       .attr('class', 'background-star')
       .attr('cx', d => {
-        const projected = projection(convertCoords(d.ra, d.dec))
+        const projected = projection(convertCoords(d.ra || 0, d.dec || 0))
         return projected ? projected[0] : 0
       })
       .attr('cy', d => {
-        const projected = projection(convertCoords(d.ra, d.dec))
+        const projected = projection(convertCoords(d.ra || 0, d.dec || 0))
         return projected ? projected[1] : 0
       })
       .attr('r', d => d.magnitude * 1.5)
@@ -134,11 +127,11 @@ export default function SkyMapViewer() {
 
     // Color scale for discovery methods
     const colorScale = d3.scaleOrdinal<string>()
-      .domain(['Transit', 'Radial Velocity', 'Microlensing', 'Direct Imaging', 'Astrometry'])
-      .range(['#82b2d7', '#ef7454', '#b6e2f4', '#355381', '#2b3952'])
+      .domain(['Transit', 'Radial Velocity', 'Microlensing', 'Direct Imaging', 'Astrometry', 'Unknown'])
+      .range(['#82b2d7', '#ef7454', '#b6e2f4', '#355381', '#2b3952', '#6b7280'])
 
     // Size scale for planet radius
-    const sizeScale = d3.scaleSqrt()
+    const sizeScale = d3.scaleSqrt<number, number>()
       .domain([0.5, 3])
       .range([2, 8])
 
@@ -149,22 +142,22 @@ export default function SkyMapViewer() {
       .append('g')
       .attr('class', 'exoplanet')
       .attr('transform', d => {
-        const projected = projection(convertCoords(d.ra, d.dec))
+        const projected = projection(convertCoords(d.ra || 0, d.dec || 0))
         return projected ? `translate(${projected[0]}, ${projected[1]})` : 'translate(0,0)'
       })
 
     // Add glow effect
     planets.append('circle')
-      .attr('r', d => sizeScale(d.radius) + 2)
+      .attr('r', d => sizeScale(d.radius || 1) + 2)
       .attr('fill', 'none')
-      .attr('stroke', d => colorScale(d.discoveryMethod))
+      .attr('stroke', d => colorScale(d.method || 'Transit'))
       .attr('stroke-width', 1)
       .attr('opacity', 0.6)
 
     // Add planet circles
     planets.append('circle')
-      .attr('r', d => sizeScale(d.radius))
-      .attr('fill', d => colorScale(d.discoveryMethod))
+      .attr('r', d => sizeScale(d.radius || 1))
+      .attr('fill', d => colorScale(d.method || 'Transit'))
       .attr('cursor', 'pointer')
       .on('mouseover', function(event, d) {
         // Show tooltip
@@ -185,9 +178,9 @@ export default function SkyMapViewer() {
           <strong>${d.name}</strong><br/>
           <span style="color: #94a3b8;">RA:</span> ${d.ra.toFixed(2)}°<br/>
           <span style="color: #94a3b8;">Dec:</span> ${d.dec.toFixed(2)}°<br/>
-          <span style="color: #94a3b8;">Distance:</span> ${d.distance.toFixed(1)} ly<br/>
-          <span style="color: #94a3b8;">Radius:</span> ${d.radius.toFixed(2)} R⊕<br/>
-          <span style="color: #94a3b8;">Method:</span> ${d.discoveryMethod}
+          <span style="color: #94a3b8;">Distance:</span> ${d.distance ? d.distance.toFixed(1) : '—'} pc<br/>
+          <span style="color: #94a3b8;">Radius:</span> ${d.radius ? d.radius.toFixed(2) : '—'} R⊕<br/>
+          <span style="color: #94a3b8;">Method:</span> ${d.method || '—'}
         `)
           .style('left', (event.pageX + 10) + 'px')
           .style('top', (event.pageY - 10) + 'px')
@@ -198,14 +191,14 @@ export default function SkyMapViewer() {
         d3.select(this)
           .transition()
           .duration(200)
-          .attr('r', sizeScale(d.radius) + 2)
+          .attr('r', sizeScale((d.radius ?? 1)) + 2)
       })
       .on('mouseout', function(event, d) {
         d3.selectAll('.sky-map-tooltip').remove()
         d3.select(this)
           .transition()
           .duration(200)
-          .attr('r', sizeScale(d.radius))
+          .attr('r', sizeScale((d.radius ?? 1)))
       })
 
     // Add coordinate grid
@@ -254,7 +247,7 @@ export default function SkyMapViewer() {
       .attr('stroke-width', 0.5)
       .attr('opacity', 0.3)
 
-  }, [])
+  }, [exoplanetData])
 
   return (
     <div className="relative h-96 bg-slate-900 rounded-lg overflow-hidden">
@@ -301,9 +294,9 @@ export default function SkyMapViewer() {
         <h4 className="font-semibold mb-2">Statistics</h4>
         <div className="space-y-1">
           <p>Total Exoplanets: {exoplanetData.length}</p>
-          <p>Transit: {exoplanetData.filter(d => d.discoveryMethod === 'Transit').length}</p>
-          <p>Radial Velocity: {exoplanetData.filter(d => d.discoveryMethod === 'Radial Velocity').length}</p>
-          <p>Other Methods: {exoplanetData.filter(d => !['Transit', 'Radial Velocity'].includes(d.discoveryMethod)).length}</p>
+          <p>Transit: {exoplanetData.filter(d => d.method === 'Transit').length}</p>
+          <p>Radial Velocity: {exoplanetData.filter(d => d.method === 'Radial Velocity').length}</p>
+          <p>Other Methods: {exoplanetData.filter(d => !['Transit', 'Radial Velocity'].includes(d.method || '')).length}</p>
         </div>
       </div>
     </div>

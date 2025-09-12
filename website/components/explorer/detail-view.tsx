@@ -1,76 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Star, Orbit, Thermometer, Ruler, Weight, Clock, ExternalLink, Heart, Share2 } from 'lucide-react'
+import { useExplorerStore } from '@/lib/explorer-store'
 
 interface DetailViewProps {
   planetId: string
   onClose: () => void
 }
 
-// Sample planet data - in production this would come from API
-const planetData = {
-  '1': {
-    name: 'Kepler-452b',
-    nickname: 'Earth\'s Cousin',
-    description: 'Kepler-452b is an exoplanet orbiting within the habitable zone of the Sun-like star Kepler-452, located about 1,400 light-years from Earth in the constellation Cygnus.',
-    discovered: '2015-07-23',
-    discoveryMethod: 'Transit',
-    telescope: 'Kepler Space Telescope',
-    artistConception: '/images/kepler-452b.jpg',
-    physicalProperties: {
-      radius: { value: 1.6, unit: 'R⊕', uncertainty: '±0.2' },
-      mass: { value: 5.0, unit: 'M⊕', uncertainty: '±1.0', estimated: true },
-      density: { value: 5.0, unit: 'g/cm³', uncertainty: '±1.0', estimated: true },
-      temperature: { value: 265, unit: 'K', uncertainty: '±15' },
-      gravity: { value: 1.94, unit: 'g', uncertainty: '±0.4', estimated: true },
-    },
-    orbitalCharacteristics: {
-      period: { value: 384.843, unit: 'days', uncertainty: '±0.007' },
-      semiMajorAxis: { value: 1.046, unit: 'AU', uncertainty: '±0.014' },
-      eccentricity: { value: 0.097, unit: '', uncertainty: '±0.06' },
-      inclination: { value: 89.806, unit: '°', uncertainty: '±0.2' },
-    },
-    hostStar: {
-      name: 'Kepler-452',
-      type: 'G2V',
-      mass: { value: 1.04, unit: 'M☉', uncertainty: '±0.05' },
-      radius: { value: 1.11, unit: 'R☉', uncertainty: '±0.09' },
-      temperature: { value: 5757, unit: 'K', uncertainty: '±85' },
-      age: { value: 6.0, unit: 'Gyr', uncertainty: '±2.0' },
-      metallicity: { value: 0.21, unit: '[Fe/H]', uncertainty: '±0.05' },
-    },
-    habitability: {
-      inHabitableZone: true,
-      earthSimilarityIndex: 0.83,
-      potentialForLiquidWater: 'High',
-      atmosphereModel: 'Uncertain - potentially thick atmosphere',
-      biosignaturePotential: 'Moderate',
-    },
-    location: {
-      constellation: 'Cygnus',
-      ra: '19h 44m 00.89s',
-      dec: '+41° 53\' 20.4"',
-      distance: { value: 1400, unit: 'ly', uncertainty: '±100' },
-    },
-    references: [
-      {
-        title: 'Kepler-452b: A Possibly Rocky Planet in the Habitable Zone',
-        authors: 'Jenkins et al.',
-        journal: 'The Astronomical Journal',
-        year: 2015,
-        link: 'https://iopscience.iop.org/article/10.1088/0004-6256/150/2/56'
-      }
-    ]
-  }
+function formatNum(n?: number, unit?: string) {
+  if (n === undefined || n === null) return '—'
+  return `${n}${unit ? ` ${unit}` : ''}`
 }
 
 export function DetailView({ planetId, onClose }: DetailViewProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'physical' | 'orbital' | 'host-star' | 'habitability' | 'references'>('overview')
   const [isFavorite, setIsFavorite] = useState(false)
-
-  const planet = planetData[planetId as keyof typeof planetData]
+  const rows = useExplorerStore(s => s.rows)
+  const planet = useMemo(() => rows.find(r => r.pl_name === planetId), [rows, planetId])
 
   if (!planet) {
     return null
@@ -105,7 +54,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
             <div>
               <h3 className="text-lg font-semibold mb-2">Discovery Story</h3>
               <p className="text-light-text-secondary dark:text-dark-text-secondary">
-                {planet.description}
+                {planet.disc_refname || 'Discovered and cataloged in the NASA Exoplanet Archive.'}
               </p>
             </div>
 
@@ -118,15 +67,15 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-light-text-secondary dark:text-dark-text-secondary">Date:</span>
-                    <span>{planet.discovered}</span>
+                    <span>{planet.disc_pubdate || (planet.disc_year ? String(planet.disc_year) : '—')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-light-text-secondary dark:text-dark-text-secondary">Method:</span>
-                    <span>{planet.discoveryMethod}</span>
+                    <span>{planet.discoverymethod || '—'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-light-text-secondary dark:text-dark-text-secondary">Telescope:</span>
-                    <span>{planet.telescope}</span>
+                    <span>{planet.disc_telescope || planet.disc_facility || '—'}</span>
                   </div>
                 </div>
               </div>
@@ -136,15 +85,15 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-light-text-secondary dark:text-dark-text-secondary">Radius:</span>
-                    <span>{formatValue(planet.physicalProperties.radius)}</span>
+                    <span>{formatNum(planet.pl_rade, 'R⊕')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-light-text-secondary dark:text-dark-text-secondary">Period:</span>
-                    <span>{formatValue(planet.orbitalCharacteristics.period)}</span>
+                    <span>{formatNum(planet.pl_orbper, 'days')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-light-text-secondary dark:text-dark-text-secondary">Distance:</span>
-                    <span>{formatValue(planet.location.distance)}</span>
+                    <span>{formatNum(planet.sy_dist, 'pc')}</span>
                   </div>
                 </div>
               </div>
@@ -157,12 +106,11 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Physical Properties</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(planet.physicalProperties).map(([key, value]) => (
-                <div key={key} className="card p-4">
-                  <h4 className="font-medium capitalize mb-2">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                  <p className="text-xl font-bold text-primary-dark-blue">{formatValue(value)}</p>
-                </div>
-              ))}
+              <div className="card p-4"><h4 className="font-medium mb-2">Radius</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_rade, 'R⊕')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Mass</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_masse, 'M⊕')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Radius (Jupiter)</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_radj, 'R♃')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Mass (Jupiter)</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_massj, 'M♃')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Equilibrium Temp</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum((planet as any).pl_eqt, 'K')}</p></div>
             </div>
           </div>
         )
@@ -172,12 +120,10 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Orbital Characteristics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(planet.orbitalCharacteristics).map(([key, value]) => (
-                <div key={key} className="card p-4">
-                  <h4 className="font-medium capitalize mb-2">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                  <p className="text-xl font-bold text-primary-dark-blue">{formatValue(value)}</p>
-                </div>
-              ))}
+              <div className="card p-4"><h4 className="font-medium mb-2">Period</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbper, 'days')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Semi-Major Axis</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbsmax, 'AU')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Eccentricity</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbeccen)}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Inclination</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbincl, '°')}</p></div>
             </div>
           </div>
         )
@@ -185,14 +131,11 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
       case 'host-star':
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Host Star: {planet.hostStar.name}</h3>
+            <h3 className="text-lg font-semibold">Host Star: {planet.hostname}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(planet.hostStar).filter(([key]) => key !== 'name').map(([key, value]) => (
-                <div key={key} className="card p-4">
-                  <h4 className="font-medium capitalize mb-2">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                  <p className="text-xl font-bold text-primary-dark-blue">{formatValue(value)}</p>
-                </div>
-              ))}
+              <div className="card p-4"><h4 className="font-medium mb-2">Stellar Radius</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_rad, 'R☉')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Stellar Mass</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_mass, 'M☉')}</p></div>
+              <div className="card p-4"><h4 className="font-medium mb-2">Effective Temperature</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_teff, 'K')}</p></div>
             </div>
           </div>
         )
@@ -205,30 +148,10 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
               <div className="card p-4">
                 <h4 className="font-medium mb-2">Habitable Zone Status</h4>
                 <div className="flex items-center gap-2">
-                  <div className={`w-3 h-3 rounded-full ${planet.habitability.inHabitableZone ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                  <span>{planet.habitability.inHabitableZone ? 'Within Habitable Zone' : 'Outside Habitable Zone'}</span>
+                  <div className={`w-3 h-3 rounded-full bg-gray-500`}></div>
+                  <span>Not available from CSV</span>
                 </div>
               </div>
-              
-              <div className="card p-4">
-                <h4 className="font-medium mb-2">Earth Similarity Index</h4>
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 bg-light-border dark:bg-dark-border rounded-full h-2">
-                    <div 
-                      className="bg-green-500 h-2 rounded-full"
-                      style={{ width: `${planet.habitability.earthSimilarityIndex * 100}%` }}
-                    ></div>
-                  </div>
-                  <span className="font-bold">{(planet.habitability.earthSimilarityIndex * 100).toFixed(0)}%</span>
-                </div>
-              </div>
-
-              {Object.entries(planet.habitability).filter(([key]) => !['inHabitableZone', 'earthSimilarityIndex'].includes(key)).map(([key, value]) => (
-                <div key={key} className="card p-4">
-                  <h4 className="font-medium capitalize mb-2">{key.replace(/([A-Z])/g, ' $1')}</h4>
-                  <p className="text-light-text-secondary dark:text-dark-text-secondary">{value}</p>
-                </div>
-              ))}
             </div>
           </div>
         )
@@ -238,22 +161,20 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Scientific References</h3>
             <div className="space-y-4">
-              {planet.references.map((ref, index) => (
-                <div key={index} className="card p-4">
-                  <h4 className="font-medium mb-2">{ref.title}</h4>
-                  <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">
-                    {ref.authors} ({ref.year}) - {ref.journal}
-                  </p>
+              <div className="card p-4">
+                <h4 className="font-medium mb-2">Reference</h4>
+                <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">
+                  {planet.disc_refname || '—'}
+                </p>
+                {planet.disc_refname && (
                   <a 
-                    href={ref.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#"
                     className="text-primary-dark-blue dark:text-primary-light-blue hover:underline text-sm flex items-center gap-1"
                   >
-                    View Paper <ExternalLink className="h-3 w-3" />
+                    Open Reference <ExternalLink className="h-3 w-3" />
                   </a>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
           </div>
         )
@@ -284,10 +205,10 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">
-                  {planet.name}
+                  {planet.pl_name}
                 </h2>
                 <p className="text-light-text-secondary dark:text-dark-text-secondary">
-                  {planet.nickname}
+                  {planet.hostname}
                 </p>
               </div>
               <div className="flex items-center gap-2">

@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { X, RotateCcw, Save } from 'lucide-react'
+import { useExplorerStore, type ExplorerFilters } from '@/lib/explorer-store'
 
 interface FilterState {
   discoveryMethod: string[]
@@ -46,7 +47,13 @@ const dispositions = [
 ]
 
 export function FilterPanel() {
-  const [filters, setFilters] = useState<FilterState>(defaultFilters)
+  const storeFilters = useExplorerStore(s => s.filters)
+  const setStoreFilters = useExplorerStore(s => s.setFilters)
+  const [filters, setFilters] = useState<FilterState>({ ...defaultFilters, ...storeFilters })
+
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, ...storeFilters }))
+  }, [storeFilters])
 
   const updateFilter = <T extends keyof FilterState>(
     key: T,
@@ -68,6 +75,7 @@ export function FilterPanel() {
 
   const resetFilters = () => {
     setFilters(defaultFilters)
+    setStoreFilters(defaultFilters as unknown as ExplorerFilters)
   }
 
   const saveFilters = () => {
@@ -335,8 +343,7 @@ export function FilterPanel() {
         whileTap={{ scale: 0.98 }}
         className="w-full btn-primary"
         onClick={() => {
-          console.log('Applying filters:', filters)
-          // Here you would apply the filters to the data
+          setStoreFilters(filters as unknown as ExplorerFilters)
         }}
       >
         Apply Filters

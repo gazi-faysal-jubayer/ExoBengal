@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useCallback, createContext, useContext } from 'react'
+import { useState, useCallback, createContext, useContext, useEffect } from 'react'
 import { Search, X, Clock, Mic, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useExplorerStore } from '@/lib/explorer-store'
 
 const searchSuggestions = [
   'Kepler-452b',
@@ -31,10 +32,15 @@ export function SearchInterface() {
   const [query, setQuery] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
+  const setSearchQuery = useExplorerStore(s => s.setSearchQuery)
+  const loadRows = useExplorerStore(s => s.loadRows)
+
+  useEffect(() => {
+    loadRows()
+  }, [loadRows])
 
   const handleSearch = useCallback((searchQuery: string) => {
-    console.log('Searching for:', searchQuery)
-    // Here you would implement the actual search logic
+    setSearchQuery(searchQuery)
     setShowSuggestions(false)
   }, [])
 
@@ -65,6 +71,9 @@ export function SearchInterface() {
             onFocus={() => setShowSuggestions(true)}
             placeholder="Search by planet name, star system, or use natural language..."
             className="w-full pl-12 pr-20 py-4 text-lg input-base rounded-lg shadow-sm"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearch(query)
+            }}
           />
           
           {/* Voice Search & AI Assistant */}

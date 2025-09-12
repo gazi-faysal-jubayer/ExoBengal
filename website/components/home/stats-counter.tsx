@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { fetchExoplanetStats } from '@/lib/nasa-api'
+import { loadExoplanetsFromCSV } from '@/lib/csv-loader'
 
 interface Stat {
   label: string
@@ -59,24 +59,27 @@ export function StatsCounter() {
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const nasaStats = await fetchExoplanetStats()
-        
+        const data = await loadExoplanetsFromCSV('/PS_2025.09.12_13.49.08.csv')
+        const total = data.length
+        const systems = new Set<string>()
+        const methods = new Set<string>()
+        data.forEach(d => {
+          if (d.hostname) systems.add(d.hostname)
+          if (d.discoverymethod) methods.add(d.discoverymethod)
+        })
         const updatedStats: Stat[] = [
-          { label: 'Confirmed Exoplanets', value: nasaStats.total || 5565, suffix: '+' },
-          { label: 'Discovery Methods', value: nasaStats.by_method.length || 8, suffix: '' },
-          { label: 'NASA Missions', value: 15, suffix: '' },
+          { label: 'Confirmed Exoplanets', value: total, suffix: '+' },
+          { label: 'Discovery Methods', value: methods.size || 0, suffix: '' },
+          { label: 'Planetary Systems', value: systems.size || 0, suffix: '+' },
           { label: 'Years of Data', value: new Date().getFullYear() - 1992, suffix: '' },
         ]
-        
         setStats(updatedStats)
       } catch (error) {
-        console.error('Failed to load NASA stats:', error)
-        // Keep initial stats as fallback
+        console.error('Failed to load CSV stats:', error)
       } finally {
         setLoading(false)
       }
     }
-
     loadStats()
   }, [])
 

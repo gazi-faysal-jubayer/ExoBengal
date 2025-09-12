@@ -13,18 +13,18 @@ import {
   Star,
   Loader2
 } from 'lucide-react'
-import { fetchExoplanets, type ExoplanetData } from '@/lib/nasa-api'
+import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
+import { useExplorerStore, selectFilteredRows } from '@/lib/explorer-store'
 
-// Convert NASA data to table format
-const convertNASAData = (nasaData: ExoplanetData[]) => {
+// Convert CSV data to table format
+const convertNASAData = (nasaData: ExplorerPlanetRow[]) => {
   return nasaData.map((planet, index) => ({
     id: index.toString(),
     pl_name: planet.pl_name || 'Unknown',
     hostname: planet.hostname || 'Unknown',
-    tic_id: `TIC ${Math.floor(Math.random() * 1000000)}`, // Placeholder
     discoverymethod: planet.discoverymethod || 'Unknown',
     disc_year: planet.disc_year || 0,
-    disc_telescope: planet.pl_facility || 'Unknown',
+    disc_telescope: planet.disc_telescope || planet.disc_facility || 'Unknown',
     pl_orbper: planet.pl_orbper || 0,
     pl_orbsmax: planet.pl_orbsmax || 0,
     pl_rade: planet.pl_rade || 0,
@@ -39,8 +39,8 @@ const convertNASAData = (nasaData: ExoplanetData[]) => {
     dec: planet.dec || 0,
     distance: planet.sy_dist || 0,
     reference: 'NASA Exoplanet Archive',
-    pl_facility: planet.pl_facility || 'Unknown',
-    disposition: 'Confirmed',
+    pl_facility: planet.disc_facility || 'Unknown',
+    disposition: planet.default_flag === 1 ? 'Confirmed' : 'Candidate',
     favorite: false,
   }))
 }
@@ -97,7 +97,7 @@ const fallbackData = [
 ]
 
 interface Column {
-  key: keyof typeof sampleData[0]
+  key: keyof typeof fallbackData[0]
   label: string
   sortable: boolean
   unit?: string
@@ -120,6 +120,7 @@ interface DataTableProps {
 }
 
 export function DataTable({ onPlanetSelect }: DataTableProps) {
+  const store = useExplorerStore(s => s)
   const [sortColumn, setSortColumn] = useState<string>('pl_name')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [selectedRows, setSelectedRows] = useState<string[]>([])
@@ -136,15 +137,13 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
         setLoading(true)
         setError(null)
         
-        const response = await fetchExoplanets({
-          limit: 100, // Limit to 100 for demo
-          offset: 0
-        })
+        await store.loadRows()
+        const exoplanets = selectFilteredRows(store)
         
-        const convertedData = convertNASAData(response.data)
+        const convertedData = convertNASAData(exoplanets)
         setData(convertedData)
         
-        console.log(`Loaded ${convertedData.length} exoplanets from NASA API`)
+        console.log(`Loaded ${convertedData.length} exoplanets from CSV`)
       } catch (err) {
         console.error('Failed to load NASA data:', err)
         setError('Failed to load data from NASA API. Using fallback data.')
@@ -156,6 +155,15 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
 
     loadData()
   }, [])
+
+  // Re-apply filters when store changes
+  useEffect(() => {
+    if (!store.isLoaded) return
+    const exo = selectFilteredRows(store)
+    const converted = convertNASAData(exo)
+    setData(converted)
+    setCurrentPage(1)
+  }, [store.searchQuery, store.filters, store.rows, store.isLoaded])
 
   const handleSort = useCallback((columnKey: string) => {
     if (sortColumn === columnKey) {
@@ -279,12 +287,12 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
               <th className="w-8 p-3"></th>
               {columns.map((column) => (
                 <th
-                  key={column.key}
+                  key={column.key as string}
                   className={`p-3 text-left ${column.width || 'w-auto'}`}
                 >
                   {column.sortable ? (
                     <button
-                      onClick={() => handleSort(column.key)}
+                      onClick={() => handleSort(column.key as string)}
                       className="flex items-center gap-1 hover:text-primary-light-blue transition-colors group"
                     >
                       <span className="font-medium text-sm">{column.label}</span>
@@ -338,10 +346,10 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
                   </button>
                 </td>
                 {columns.map((column) => (
-                  <td key={column.key} className="p-3">
+                  <td key={column.key as string} className="p-3">
                     {column.key === 'pl_name' ? (
                       <button
-                        onClick={() => onPlanetSelect(row.id)}
+                        onClick={() => onPlanetSelect(row.pl_name)}
                         className="text-primary-dark-blue dark:text-primary-light-blue hover:underline font-medium"
                       >
                         {row[column.key]}

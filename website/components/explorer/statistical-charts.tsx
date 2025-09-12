@@ -1,43 +1,16 @@
 'use client'
 
-import { useState } from 'react'
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ScatterChart, Scatter, PieChart, Pie, Cell } from 'recharts'
+import { useEffect, useMemo, useState } from 'react'
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ScatterChart, Scatter, PieChart, Pie, Cell, BarChart, Bar } from 'recharts'
+import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
 
-// Sample data for different chart types
-const discoveryTimelineData = [
-  { year: 1995, cumulative: 1, transit: 0, radial_velocity: 1, microlensing: 0, direct_imaging: 0 },
-  { year: 2000, cumulative: 69, transit: 0, radial_velocity: 69, microlensing: 0, direct_imaging: 0 },
-  { year: 2005, cumulative: 180, transit: 12, radial_velocity: 168, microlensing: 0, direct_imaging: 0 },
-  { year: 2010, cumulative: 490, transit: 70, radial_velocity: 410, microlensing: 8, direct_imaging: 2 },
-  { year: 2015, cumulative: 1500, transit: 1200, radial_velocity: 280, microlensing: 15, direct_imaging: 5 },
-  { year: 2020, cumulative: 4300, transit: 3800, radial_velocity: 450, microlensing: 30, direct_imaging: 20 },
-  { year: 2024, cumulative: 5565, transit: 4200, radial_velocity: 1200, microlensing: 135, direct_imaging: 30 },
-]
-
-const massRadiusData = [
-  { mass: 0.055, radius: 0.87, type: 'Rocky', name: 'Mercury-like' },
-  { mass: 0.815, radius: 0.95, type: 'Rocky', name: 'Venus-like' },
-  { mass: 1.0, radius: 1.0, type: 'Rocky', name: 'Earth-like' },
-  { mass: 0.107, radius: 0.532, type: 'Rocky', name: 'Mars-like' },
-  { mass: 17.1, radius: 4.0, type: 'Ice Giant', name: 'Neptune-like' },
-  { mass: 95.2, radius: 9.4, type: 'Gas Giant', name: 'Saturn-like' },
-  { mass: 317.8, radius: 11.2, type: 'Gas Giant', name: 'Jupiter-like' },
-  // Add more scattered points for exoplanets
-  ...Array.from({ length: 50 }, (_, i) => ({
-    mass: Math.random() * 1000 + 0.1,
-    radius: Math.random() * 15 + 0.5,
-    type: Math.random() > 0.7 ? 'Gas Giant' : Math.random() > 0.4 ? 'Ice Giant' : 'Rocky',
-    name: `Exoplanet ${i + 1}`,
-  })),
-]
-
-const discoveryMethodData = [
-  { name: 'Transit', value: 4200, color: '#355381' },
-  { name: 'Radial Velocity', value: 1200, color: '#82b2d7' },
-  { name: 'Microlensing', value: 135, color: '#b6e2f4' },
-  { name: 'Direct Imaging', value: 30, color: '#ef7454' },
-  { name: 'Astrometry', value: 15, color: '#2b3952' },
-]
+const METHOD_COLORS: Record<string, string> = {
+  Transit: '#355381',
+  'Radial Velocity': '#82b2d7',
+  Microlensing: '#b6e2f4',
+  'Direct Imaging': '#ef7454',
+  Astrometry: '#2b3952',
+}
 
 const RADIAN = Math.PI / 180
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
@@ -59,12 +32,128 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   )
 }
 
-type ChartType = 'timeline' | 'mass-radius' | 'methods' | 'habitable-zone'
+type ChartType = 'timeline' | 'mass-radius' | 'methods' | 'radius-dist' | 'mass-dist' | 'period-axis' | 'habitable-zone'
 
 export default function StatisticalCharts() {
   const [activeChart, setActiveChart] = useState<ChartType>('timeline')
+  const [rows, setRows] = useState<ExplorerPlanetRow[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    const load = async () => {
+      try {
+        const data = await loadExoplanetsFromCSV('/PS_2025.09.12_13.49.08.csv')
+        if (!cancelled) setRows(data)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+    load()
+    return () => { cancelled = true }
+  }, [])
+
+  const discoveryTimelineData = useMemo(() => {
+    const yearCounts: Record<number, { cumulative: number; transit: number; radial_velocity: number; microlensing: number; direct_imaging: number }> = {}
+    const years = new Set<number>()
+    rows.forEach(r => {
+      if (!r.disc_year) return
+      years.add(r.disc_year)
+      if (!yearCounts[r.disc_year]) {
+        yearCounts[r.disc_year] = { cumulative: 0, transit: 0, radial_velocity: 0, microlensing: 0, direct_imaging: 0 }
+      }
+      const method = (r.discoverymethod || '').toLowerCase()
+      if (method.includes('transit')) yearCounts[r.disc_year].transit++
+      else if (method.includes('radial')) yearCounts[r.disc_year].radial_velocity++
+      else if (method.includes('micro')) yearCounts[r.disc_year].microlensing++
+      else if (method.includes('imaging')) yearCounts[r.disc_year].direct_imaging++
+    })
+    const sortedYears = Array.from(years).sort((a, b) => a - b)
+    let cumulative = 0
+    return sortedYears.map(year => {
+      const yc = yearCounts[year] || { cumulative: 0, transit: 0, radial_velocity: 0, microlensing: 0, direct_imaging: 0 }
+      const totalYear = yc.transit + yc.radial_velocity + yc.microlensing + yc.direct_imaging
+      cumulative += totalYear
+      return { year, transit: yc.transit, radial_velocity: yc.radial_velocity, microlensing: yc.microlensing, direct_imaging: yc.direct_imaging, cumulative }
+    })
+  }, [rows])
+
+  const massRadiusData = useMemo(() => {
+    const MAX_POINTS = 1000
+    const out: { mass: number; radius: number; type: string; name: string }[] = []
+    for (const r of rows) {
+      if (r.pl_masse && r.pl_rade) {
+        const type = r.pl_rade > 8 ? 'Gas Giant' : r.pl_rade > 2 ? 'Ice Giant' : 'Rocky'
+        out.push({ mass: r.pl_masse, radius: r.pl_rade, type, name: r.pl_name })
+        if (out.length >= MAX_POINTS) break
+      }
+    }
+    return out
+  }, [rows])
+
+  const discoveryMethodData = useMemo(() => {
+    const counts: Record<string, number> = {}
+    rows.forEach(r => {
+      const key = r.discoverymethod || 'Unknown'
+      counts[key] = (counts[key] || 0) + 1
+    })
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([name, value]) => ({ name, value, color: METHOD_COLORS[name] || '#6b7280' }))
+  }, [rows])
+
+  const radiusDistData = useMemo(() => {
+    const bins: { label: string; min: number; max: number }[] = []
+    for (let i = 0; i < 20; i++) {
+      bins.push({ label: `${i}-${i + 1}`, min: i, max: i + 1 })
+    }
+    bins.push({ label: '20+', min: 20, max: Infinity })
+    const counts: Record<string, number> = {}
+    rows.forEach(r => {
+      const val = r.pl_rade
+      if (!val && val !== 0) return
+      const bin = bins.find(b => val >= b.min && val < b.max)
+      if (!bin) return
+      counts[bin.label] = (counts[bin.label] || 0) + 1
+    })
+    return bins.map(b => ({ bin: b.label, count: counts[b.label] || 0 }))
+  }, [rows])
+
+  const massDistData = useMemo(() => {
+    const bins = [
+      { label: '0-1', min: 0, max: 1 },
+      { label: '1-10', min: 1, max: 10 },
+      { label: '10-100', min: 10, max: 100 },
+      { label: '100-1000', min: 100, max: 1000 },
+      { label: '1000+', min: 1000, max: Infinity },
+    ]
+    const counts: Record<string, number> = {}
+    rows.forEach(r => {
+      const val = r.pl_masse
+      if (!val && val !== 0) return
+      const bin = bins.find(b => val >= b.min && val < b.max)
+      if (!bin) return
+      counts[bin.label] = (counts[bin.label] || 0) + 1
+    })
+    return bins.map(b => ({ bin: b.label, count: counts[b.label] || 0 }))
+  }, [rows])
+
+  const periodAxisData = useMemo(() => {
+    const pts: { period: number; axis: number; name: string }[] = []
+    for (const r of rows) {
+      if (typeof r.pl_orbper === 'number' && typeof r.pl_orbsmax === 'number') {
+        pts.push({ period: r.pl_orbper, axis: r.pl_orbsmax, name: r.pl_name })
+      }
+      if (pts.length >= 1500) break
+    }
+    return pts
+  }, [rows])
 
   const renderChart = () => {
+    if (loading) {
+      return <div className="h-80 flex items-center justify-center text-light-text-secondary dark:text-dark-text-secondary">Loading charts…</div>
+    }
     switch (activeChart) {
       case 'timeline':
         return (
@@ -197,6 +286,47 @@ export default function StatisticalCharts() {
           </ResponsiveContainer>
         )
 
+      case 'radius-dist':
+        return (
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={radiusDistData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <XAxis dataKey="bin" stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} angle={-30} height={60} textAnchor="end" interval={0} />
+              <YAxis stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px', color: '#F9FAFB' }} />
+              <Legend />
+              <Bar dataKey="count" name="Planets" fill="#355381" />
+            </BarChart>
+          </ResponsiveContainer>
+        )
+
+      case 'mass-dist':
+        return (
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={massDistData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <XAxis dataKey="bin" stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} />
+              <YAxis stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px', color: '#F9FAFB' }} />
+              <Legend />
+              <Bar dataKey="count" name="Planets" fill="#82b2d7" />
+            </BarChart>
+          </ResponsiveContainer>
+        )
+
+      case 'period-axis':
+        return (
+          <ResponsiveContainer width="100%" height={350}>
+            <ScatterChart data={periodAxisData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <XAxis dataKey="period" type="number" scale="log" stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} label={{ value: 'Orbital Period (days)', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }} />
+              <YAxis dataKey="axis" type="number" scale="log" stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} label={{ value: 'Semi-Major Axis (AU)', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px', color: '#F9FAFB' }} formatter={(value, name) => [value, name]} labelFormatter={(label, payload) => payload?.[0]?.payload?.name || 'Planet'} />
+              <Scatter name="Planets" fill="#ef7454" />
+            </ScatterChart>
+          </ResponsiveContainer>
+        )
+
       case 'habitable-zone':
         return (
           <div className="h-350 flex items-center justify-center">
@@ -254,6 +384,36 @@ export default function StatisticalCharts() {
           }`}
         >
           Discovery Methods
+        </button>
+        <button
+          onClick={() => setActiveChart('radius-dist')}
+          className={`px-4 py-2 text-sm rounded-md transition-colors ${
+            activeChart === 'radius-dist'
+              ? 'bg-primary-dark-blue text-white'
+              : 'bg-light-surface dark:bg-dark-surface text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover'
+          }`}
+        >
+          Radius Distribution
+        </button>
+        <button
+          onClick={() => setActiveChart('mass-dist')}
+          className={`px-4 py-2 text-sm rounded-md transition-colors ${
+            activeChart === 'mass-dist'
+              ? 'bg-primary-dark-blue text-white'
+              : 'bg-light-surface dark:bg-dark-surface text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover'
+          }`}
+        >
+          Mass Distribution
+        </button>
+        <button
+          onClick={() => setActiveChart('period-axis')}
+          className={`px-4 py-2 text-sm rounded-md transition-colors ${
+            activeChart === 'period-axis'
+              ? 'bg-primary-dark-blue text-white'
+              : 'bg-light-surface dark:bg-dark-surface text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover'
+          }`}
+        >
+          Period vs Axis
         </button>
         <button
           onClick={() => setActiveChart('habitable-zone')}
