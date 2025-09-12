@@ -44,63 +44,55 @@ function buildQuery(filters: {
   limit?: number
   offset?: number
 }): string {
-  let query = `
-    SELECT 
-      pl_name, hostname, disc_year, discoverymethod,
-      pl_orbper, pl_orbsmax, pl_rade, pl_radj, 
-      pl_masse, pl_massj, pl_orbeccen, pl_orbincl,
-      st_rad, st_mass, st_teff, ra, dec, sy_dist,
-      pl_facility
-    FROM ps 
-    WHERE default_flag = 1
-  `
+  // Start with the basic query format that works
+  let query = 'select pl_name,hostname,disc_year,discoverymethod,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_masse,pl_massj,pl_orbeccen,pl_orbincl,st_rad,st_mass,st_teff,ra,dec,sy_dist,pl_facility from ps where default_flag=1'
 
   const conditions: string[] = []
 
   if (filters.search) {
-    conditions.push(`(pl_name LIKE '%${filters.search}%' OR hostname LIKE '%${filters.search}%')`)
+    conditions.push(`(pl_name like '%${filters.search}%' or hostname like '%${filters.search}%')`)
   }
 
   if (filters.method) {
-    conditions.push(`discoverymethod = '${filters.method}'`)
+    conditions.push(`discoverymethod='${filters.method}'`)
   }
 
   if (filters.yearMin) {
-    conditions.push(`disc_year >= ${filters.yearMin}`)
+    conditions.push(`disc_year>=${filters.yearMin}`)
   }
 
   if (filters.yearMax) {
-    conditions.push(`disc_year <= ${filters.yearMax}`)
+    conditions.push(`disc_year<=${filters.yearMax}`)
   }
 
   if (filters.radiusMin) {
-    conditions.push(`pl_rade >= ${filters.radiusMin}`)
+    conditions.push(`pl_rade>=${filters.radiusMin}`)
   }
 
   if (filters.radiusMax) {
-    conditions.push(`pl_rade <= ${filters.radiusMax}`)
+    conditions.push(`pl_rade<=${filters.radiusMax}`)
   }
 
   if (filters.massMin) {
-    conditions.push(`pl_masse >= ${filters.massMin}`)
+    conditions.push(`pl_masse>=${filters.massMin}`)
   }
 
   if (filters.massMax) {
-    conditions.push(`pl_masse <= ${filters.massMax}`)
+    conditions.push(`pl_masse<=${filters.massMax}`)
   }
 
   if (conditions.length > 0) {
-    query += ' AND ' + conditions.join(' AND ')
+    query += ' and ' + conditions.join(' and ')
   }
 
-  query += ` ORDER BY disc_year DESC, pl_name ASC`
+  query += ' order by disc_year desc,pl_name asc'
 
   if (filters.limit) {
-    query += ` LIMIT ${filters.limit}`
+    query += ` limit ${filters.limit}`
   }
 
   if (filters.offset) {
-    query += ` OFFSET ${filters.offset}`
+    query += ` offset ${filters.offset}`
   }
 
   return query
@@ -215,12 +207,7 @@ export async function fetchExoplanets(filters: {
 // Get detailed information for a specific planet
 export async function fetchPlanetDetails(planetName: string): Promise<ExoplanetData | null> {
   try {
-    const query = `
-      SELECT * FROM ps 
-      WHERE pl_name = '${planetName}' 
-      AND default_flag = 1
-      LIMIT 1
-    `
+    const query = `select * from ps where pl_name='${planetName}' and default_flag=1 limit 1`
     
     const encodedQuery = encodeURIComponent(query)
     const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodedQuery}&format=json`
@@ -245,13 +232,13 @@ export async function fetchExoplanetStats() {
   try {
     const queries = [
       // Total confirmed planets
-      "SELECT COUNT(*) as total FROM ps WHERE default_flag = 1",
+      "select count(*) as total from ps where default_flag=1",
       // By discovery method
-      "SELECT discoverymethod, COUNT(*) as count FROM ps WHERE default_flag = 1 GROUP BY discoverymethod ORDER BY count DESC",
+      "select discoverymethod,count(*) as count from ps where default_flag=1 group by discoverymethod order by count desc",
       // By year
-      "SELECT disc_year, COUNT(*) as count FROM ps WHERE default_flag = 1 AND disc_year IS NOT NULL GROUP BY disc_year ORDER BY disc_year",
+      "select disc_year,count(*) as count from ps where default_flag=1 and disc_year is not null group by disc_year order by disc_year",
       // Recent discoveries
-      "SELECT pl_name, hostname, disc_year FROM ps WHERE default_flag = 1 AND disc_year >= 2020 ORDER BY disc_year DESC, pl_name LIMIT 10"
+      "select pl_name,hostname,disc_year from ps where default_flag=1 and disc_year>=2020 order by disc_year desc,pl_name limit 10"
     ]
 
     const results = await Promise.all(
