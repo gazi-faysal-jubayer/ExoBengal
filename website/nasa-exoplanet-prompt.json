@@ -1,0 +1,581 @@
+{
+  "project": {
+    "name": "NASA Exoplanet Archive Visualization Platform",
+    "description": "Interactive web platform for exploring and visualizing NASA exoplanet data with documentation and AI assistance",
+    "version": "1.0.0",
+    "stack": {
+      "frontend": ["Next.js 14+", "TypeScript", "Tailwind CSS"],
+      "visualization": ["D3.js", "Recharts", "Three.js", "Plotly.js"],
+      "state_management": ["Zustand", "React Query"],
+      "ui_components": ["Radix UI", "Framer Motion", "React Hot Toast"],
+      "backend": ["Next.js API Routes", "Prisma ORM"],
+      "database": ["PostgreSQL", "Redis (caching)"],
+      "ai_integration": ["OpenAI API", "Vercel AI SDK"],
+      "deployment": ["GitHub"],
+      "testing": ["Jest", "React Testing Library", "Cypress"]
+    }
+  },
+  
+  "design_system": {
+    "color_palette": {
+      "primary": {
+        "dark_blue": "#355381",
+        "light_blue": "#82b2d7",
+        "cyan": "#b6e2f4",
+        "reddish_orange": "#ef7454",
+        "very_dark_blue": "#2b3952"
+      },
+      "light_mode": {
+        "background": "#ffffff",
+        "surface": "#f8fafc",
+        "card": "#ffffff",
+        "text_primary": "#1e293b",
+        "text_secondary": "#64748b",
+        "border": "#e2e8f0",
+        "hover": "#f1f5f9"
+      },
+      "dark_mode": {
+        "background": "#0f172a",
+        "surface": "#1e293b",
+        "card": "#2b3952",
+        "text_primary": "#f1f5f9",
+        "text_secondary": "#cbd5e1",
+        "border": "#334155",
+        "hover": "#355381"
+      },
+      "semantic": {
+        "success": "#10b981",
+        "warning": "#f59e0b",
+        "error": "#ef4444",
+        "info": "#3b82f6"
+      }
+    },
+    "typography": {
+      "fonts": {
+        "heading": "Inter, system-ui, sans-serif",
+        "body": "Inter, system-ui, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "sizes": {
+        "xs": "0.75rem",
+        "sm": "0.875rem",
+        "base": "1rem",
+        "lg": "1.125rem",
+        "xl": "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "1.875rem",
+        "4xl": "2.25rem",
+        "5xl": "3rem"
+      }
+    },
+    "spacing": {
+      "unit": "4px",
+      "scale": [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 96, 128]
+    },
+    "animations": {
+      "transition": "all 0.2s ease-in-out",
+      "hover_scale": "scale(1.02)",
+      "click_scale": "scale(0.98)",
+      "fade_in": "fadeIn 0.3s ease-in",
+      "slide_up": "slideUp 0.4s ease-out"
+    }
+  },
+  
+  "features": {
+    "1_exoplanet_explorer": {
+      "description": "Main data exploration interface",
+      "components": {
+        "search_bar": {
+          "type": "advanced_search",
+          "features": [
+            "Autocomplete suggestions",
+            "Filter chips",
+            "Search history",
+            "Voice search",
+            "Advanced query builder"
+          ],
+          "filters": {
+            "discovery_method": ["Transit", "Radial Velocity", "Microlensing", "Direct Imaging", "Astrometry"],
+            "year_range": "Slider component (1992-present)",
+            "planet_radius": "Range slider (Earth radii)",
+            "planet_mass": "Range slider (Earth masses)",
+            "temperature": "Range slider (Kelvin)",
+            "host_star_type": ["M", "K", "G", "F", "A", "B", "O"],
+            "disposition": ["Confirmed", "Candidate", "False Positive", "Controversial"]
+          }
+        },
+        
+        "data_table": {
+          "columns": [
+            {"key": "pl_name", "label": "Planet Name", "sortable": true, "searchable": true},
+            {"key": "hostname", "label": "Host Star", "sortable": true, "searchable": true},
+            {"key": "tic_id", "label": "TIC ID", "sortable": true},
+            {"key": "discoverymethod", "label": "Discovery Method", "sortable": true, "filterable": true},
+            {"key": "disc_year", "label": "Discovery Year", "sortable": true, "filterable": true},
+            {"key": "disc_telescope", "label": "Telescope", "sortable": true, "filterable": true},
+            {"key": "pl_orbper", "label": "Orbital Period (days)", "sortable": true, "unit": "days"},
+            {"key": "pl_orbsmax", "label": "Semi-Major Axis (AU)", "sortable": true, "unit": "AU"},
+            {"key": "pl_rade", "label": "Planet Radius (Earth)", "sortable": true, "unit": "R⊕"},
+            {"key": "pl_radj", "label": "Planet Radius (Jupiter)", "sortable": true, "unit": "RJ"},
+            {"key": "pl_masse", "label": "Planet Mass (Earth)", "sortable": true, "unit": "M⊕"},
+            {"key": "pl_massj", "label": "Planet Mass (Jupiter)", "sortable": true, "unit": "MJ"},
+            {"key": "pl_orbeccen", "label": "Eccentricity", "sortable": true},
+            {"key": "pl_orbincl", "label": "Inclination (deg)", "sortable": true, "unit": "°"},
+            {"key": "pl_tranmid", "label": "Transit Midpoint", "sortable": true},
+            {"key": "pl_trandep", "label": "Transit Depth", "sortable": true},
+            {"key": "pl_orbtper", "label": "Transit Duration", "sortable": true, "unit": "hours"},
+            {"key": "st_rad", "label": "Star Radius (Solar)", "sortable": true, "unit": "R☉"},
+            {"key": "st_mass", "label": "Star Mass (Solar)", "sortable": true, "unit": "M☉"},
+            {"key": "ra", "label": "Right Ascension", "sortable": true, "unit": "degrees"},
+            {"key": "dec", "label": "Declination", "sortable": true, "unit": "degrees"},
+            {"key": "reference", "label": "Reference", "linkable": true}
+          ],
+          "features": [
+            "Virtualized scrolling for performance",
+            "Column resizing and reordering",
+            "Multi-column sorting",
+            "Export to CSV/JSON",
+            "Saved views",
+            "Row selection for comparisons",
+            "Inline editing with validation",
+            "Column pinning/freezing"
+          ]
+        },
+        
+        "visualization_panels": {
+          "3d_orbital_system": {
+            "library": "Three.js",
+            "features": [
+              "Interactive 3D planet system viewer",
+              "Accurate scale representations",
+              "Orbital animation with time controls",
+              "Camera controls (zoom, pan, rotate)",
+              "Planet information on hover",
+              "Comparison mode for multiple systems",
+              "VR/AR support"
+            ]
+          },
+          
+          "statistical_charts": {
+            "discovery_timeline": {
+              "type": "Area chart with annotations",
+              "axes": {"x": "Year", "y": "Cumulative discoveries"},
+              "features": ["Method breakdown", "Major mission markers", "Interactive tooltips"]
+            },
+            "mass_radius_diagram": {
+              "type": "Scatter plot with density contours",
+              "axes": {"x": "log(Mass)", "y": "log(Radius)"},
+              "features": ["Planet type regions", "Solar system reference", "Zoom regions", "Custom selections"]
+            },
+            "habitable_zone_plot": {
+              "type": "2D scatter with zone overlays",
+              "axes": {"x": "Semi-major axis", "y": "Stellar temperature"},
+              "features": ["Habitable zone calculation", "Earth similarity index", "Interactive filters"]
+            },
+            "method_distribution": {
+              "type": "Animated donut chart",
+              "features": ["Year-by-year animation", "Drill-down capability", "Method comparisons"]
+            },
+            "sky_map": {
+              "type": "Celestial sphere projection",
+              "library": "D3.js with astronomical projections",
+              "features": ["Constellation overlays", "Telescope coverage areas", "Discovery density heatmap"]
+            },
+            "parameter_correlations": {
+              "type": "Interactive correlation matrix",
+              "features": ["Heatmap visualization", "Pearson coefficients", "Click for scatter plots"]
+            }
+          },
+          
+          "comparison_tools": {
+            "planet_comparison": {
+              "features": [
+                "Side-by-side parameter comparison",
+                "Radar charts for multi-parameter view",
+                "Scale visualizations",
+                "Similarity scoring"
+              ]
+            },
+            "system_architecture": {
+              "features": [
+                "Multi-planet system layouts",
+                "Resonance chain detection",
+                "Stability analysis visualization"
+              ]
+            }
+          }
+        },
+        
+        "detail_view": {
+          "layout": "Modal or side panel",
+          "sections": [
+            {
+              "title": "Overview",
+              "content": ["Key parameters card", "Discovery story", "Artist conception"]
+            },
+            {
+              "title": "Physical Properties",
+              "content": ["Detailed measurements", "Error bars", "Comparison to Earth/Jupiter"]
+            },
+            {
+              "title": "Host Star",
+              "content": ["Stellar parameters", "Spectrum type", "Location in galaxy"]
+            },
+            {
+              "title": "Orbital Characteristics",
+              "content": ["Orbital diagram", "Transit light curve", "Radial velocity curve"]
+            },
+            {
+              "title": "Habitability",
+              "content": ["HZ position", "Atmosphere models", "Biosignature potential"]
+            },
+            {
+              "title": "References",
+              "content": ["Primary papers", "NASA links", "Related discoveries"]
+            }
+          ]
+        }
+      }
+    },
+    
+    "2_python_package_documentation": {
+      "description": "Comprehensive documentation for the Python package",
+      "structure": {
+        "landing_page": {
+          "sections": [
+            "Hero with package description",
+            "Quick start guide",
+            "Installation instructions",
+            "Feature highlights",
+            "Code examples carousel",
+            "Performance benchmarks"
+          ]
+        },
+        
+        "documentation_sections": {
+          "getting_started": {
+            "pages": [
+              "Installation",
+              "Quick Start",
+              "Basic Usage",
+              "Configuration",
+              "Examples"
+            ]
+          },
+          "api_reference": {
+            "features": [
+              "Auto-generated from docstrings",
+              "Interactive code examples",
+              "Parameter descriptions",
+              "Return value documentation",
+              "Exception handling",
+              "Version history"
+            ]
+          },
+          "tutorials": {
+            "content": [
+              "Data retrieval basics",
+              "Advanced queries",
+              "Data visualization",
+              "Statistical analysis",
+              "Machine learning applications",
+              "Building custom pipelines"
+            ]
+          },
+          "guides": {
+            "content": [
+              "Best practices",
+              "Performance optimization",
+              "Error handling",
+              "Contributing guide",
+              "Migration guides"
+            ]
+          }
+        },
+        
+        "features": {
+          "code_playground": {
+            "description": "Interactive Python environment",
+            "capabilities": [
+              "Live code execution",
+              "Syntax highlighting",
+              "Auto-completion",
+              "Output visualization",
+              "Share snippets"
+            ]
+          },
+          "search": {
+            "type": "Algolia or ElasticSearch",
+            "features": ["Full-text search", "Filters", "Suggestions", "Recent searches"]
+          },
+          "version_switcher": "Support multiple package versions",
+          "copy_code_button": "One-click code copying",
+          "dark_mode_support": "Synchronized with main site theme"
+        }
+      }
+    },
+    
+    "3_ai_chatbot": {
+      "description": "AI-powered assistant for exoplanet queries",
+      "capabilities": {
+        "knowledge_base": [
+          "Exoplanet database queries",
+          "Scientific explanations",
+          "Discovery method details",
+          "Habitability assessments",
+          "Statistical analysis help",
+          "Python package support",
+          "Visualization recommendations"
+        ],
+        
+        "interaction_modes": {
+          "natural_language_queries": {
+            "examples": [
+              "Show me Earth-like planets discovered in 2023",
+              "What's the most massive exoplanet?",
+              "Explain the transit method",
+              "Compare Kepler-452b to Earth",
+              "Generate Python code to analyze hot Jupiters"
+            ]
+          },
+          "visual_responses": {
+            "capabilities": [
+              "Generate charts on demand",
+              "Create comparison tables",
+              "Show relevant visualizations",
+              "Highlight data points"
+            ]
+          },
+          "code_generation": {
+            "languages": ["Python", "JavaScript", "SQL"],
+            "features": ["Syntax highlighting", "Copy button", "Run in playground"]
+          }
+        },
+        
+        "ui_features": {
+          "chat_interface": {
+            "components": [
+              "Message bubbles with markdown support",
+              "Typing indicators",
+              "Message reactions",
+              "Thread support",
+              "Voice input/output",
+              "File uploads for data analysis"
+            ]
+          },
+          "suggested_prompts": [
+            "Trending discoveries",
+            "Common questions",
+            "Feature tutorials",
+            "Data insights"
+          ],
+          "context_awareness": [
+            "Current page context",
+            "User's search history",
+            "Selected data points",
+            "Previous conversations"
+          ],
+          "export_options": [
+            "Chat history PDF",
+            "Generated code files",
+            "Data analysis reports"
+          ]
+        }
+      }
+    },
+    
+    "4_additional_features": {
+      "user_dashboard": {
+        "components": [
+          "Saved searches",
+          "Favorite planets",
+          "Custom visualizations",
+          "Analysis history",
+          "Collaboration spaces",
+          "API usage stats"
+        ]
+      },
+      
+      "educational_resources": {
+        "interactive_lessons": [
+          "Exoplanet detection methods",
+          "Habitable zone calculator",
+          "Transit photometry simulator",
+          "Radial velocity simulator"
+        ],
+        "glossary": {
+          "features": ["Searchable terms", "Visual explanations", "Related concepts"]
+        },
+        "news_feed": {
+          "sources": ["NASA", "ESA", "Recent discoveries", "Mission updates"],
+          "features": ["Real-time updates", "Filtering", "Notifications"]
+        }
+      },
+      
+      "api_access": {
+        "endpoints": [
+          "/api/exoplanets",
+          "/api/search",
+          "/api/visualizations",
+          "/api/statistics",
+          "/api/comparisons"
+        ],
+        "features": [
+          "RESTful and GraphQL",
+          "Rate limiting",
+          "API key management",
+          "Webhook support",
+          "WebSocket for real-time data"
+        ]
+      },
+      
+      "mobile_responsive": {
+        "breakpoints": {
+          "mobile": "< 640px",
+          "tablet": "640px - 1024px",
+          "desktop": "> 1024px"
+        },
+        "optimizations": [
+          "Touch-friendly controls",
+          "Swipe gestures",
+          "Simplified visualizations",
+          "Progressive web app"
+        ]
+      },
+      
+      "accessibility": {
+        "standards": "WCAG 2.1 AA",
+        "features": [
+          "Keyboard navigation",
+          "Screen reader support",
+          "High contrast mode",
+          "Focus indicators",
+          "Alt text for visualizations",
+          "Reduced motion options"
+        ]
+      },
+      
+      "performance": {
+        "targets": {
+          "lighthouse_score": "> 95",
+          "first_contentful_paint": "< 1.2s",
+          "time_to_interactive": "< 3.5s"
+        },
+        "optimizations": [
+          "Code splitting",
+          "Lazy loading",
+          "Image optimization",
+          "CDN integration",
+          "Service workers",
+          "Database indexing"
+        ]
+      }
+    }
+  },
+  
+  "pages_structure": {
+    "home": {
+      "path": "/",
+      "sections": [
+        "Hero with animated exoplanet visualization",
+        "Statistics counter (total planets, systems, etc.)",
+        "Featured discoveries carousel",
+        "Quick search",
+        "Interactive galaxy map preview",
+        "Latest news ticker",
+        "Call-to-action buttons"
+      ]
+    },
+    "explorer": {
+      "path": "/explorer",
+      "description": "Main data exploration interface"
+    },
+    "visualizations": {
+      "path": "/visualizations",
+      "sub_pages": [
+        "/visualizations/3d-systems",
+        "/visualizations/statistics",
+        "/visualizations/comparisons",
+        "/visualizations/sky-map"
+      ]
+    },
+    "documentation": {
+      "path": "/docs",
+      "sub_pages": [
+        "/docs/getting-started",
+        "/docs/api",
+        "/docs/tutorials",
+        "/docs/examples"
+      ]
+    },
+    "education": {
+      "path": "/learn",
+      "sub_pages": [
+        "/learn/basics",
+        "/learn/methods",
+        "/learn/missions",
+        "/learn/glossary"
+      ]
+    },
+    "api": {
+      "path": "/api-access",
+      "sections": ["Documentation", "Playground", "Keys management"]
+    },
+    "about": {
+      "path": "/about",
+      "sections": ["Mission", "Team", "Data sources", "Citations"]
+    }
+  },
+  
+  "technical_requirements": {
+    "seo": {
+      "meta_tags": "Dynamic generation",
+      "sitemap": "Auto-generated",
+      "robots_txt": "Configured",
+      "structured_data": "JSON-LD for datasets",
+      "open_graph": "Full support"
+    },
+    "security": {
+      "authentication": "NextAuth.js",
+      "api_protection": "Rate limiting, API keys",
+      "data_validation": "Zod schemas",
+      "cors": "Configured for API access"
+    },
+    "monitoring": {
+      "analytics": "Google Analytics 4 / Plausible",
+      "error_tracking": "Sentry",
+      "performance": "Web Vitals",
+      "uptime": "Status page"
+    },
+    "testing": {
+      "unit": "Jest with 80% coverage",
+      "integration": "Testing Library",
+      "e2e": "Cypress or Playwright",
+      "visual": "Percy or Chromatic"
+    },
+    "ci_cd": {
+      "pipeline": "GitHub Actions",
+      "stages": ["Lint", "Test", "Build", "Deploy"],
+      "environments": ["Development", "Staging", "Production"]
+    }
+  },
+  
+  "data_management": {
+    "sources": {
+      "primary": "NASA Exoplanet Archive API",
+      "update_frequency": "Daily sync",
+      "fallback": "Local cache"
+    },
+    "storage": {
+      "database": "PostgreSQL with PostGIS",
+      "cache": "Redis",
+      "files": "S3 or Cloudinary",
+      "search_index": "ElasticSearch or Algolia"
+    },
+    "processing": {
+      "etl_pipeline": "Scheduled jobs",
+      "data_validation": "Schema enforcement",
+      "transformations": "Normalized units"
+    }
+  }
+}

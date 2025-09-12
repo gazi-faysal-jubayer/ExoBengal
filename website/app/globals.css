@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-dark-blue: #355381;
+    --primary-light-blue: #82b2d7;
+    --primary-cyan: #b6e2f4;
+    --primary-reddish-orange: #ef7454;
+    --primary-very-dark-blue: #2b3952;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-light-background text-light-text-primary;
+    @apply transition-colors duration-200;
+  }
+
+  .dark body {
+    @apply bg-dark-background text-dark-text-primary;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+
+  .card {
+    @apply bg-light-card border border-light-border rounded-lg shadow-sm;
+    @apply transition-all duration-200;
+  }
+
+  .dark .card {
+    @apply bg-dark-card border-dark-border;
+  }
+
+  .card-hover {
+    @apply hover:shadow-lg hover:scale-[1.02];
+  }
+
+  .btn-primary {
+    @apply bg-primary-dark-blue text-white px-4 py-2 rounded-md;
+    @apply hover:bg-primary-very-dark-blue transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-light-blue focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-light-surface text-light-text-primary border border-light-border px-4 py-2 rounded-md;
+    @apply hover:bg-light-hover transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-light-blue focus:ring-offset-2;
+  }
+
+  .dark .btn-secondary {
+    @apply bg-dark-surface text-dark-text-primary border-dark-border;
+    @apply hover:bg-dark-hover;
+  }
+
+  .input-base {
+    @apply w-full px-3 py-2 bg-light-surface border border-light-border rounded-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-light-blue focus:border-transparent;
+    @apply placeholder-light-text-secondary;
+  }
+
+  .dark .input-base {
+    @apply bg-dark-surface border-dark-border text-dark-text-primary;
+    @apply placeholder-dark-text-secondary;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-dark-blue to-primary-light-blue bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 0.6s;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(130, 178, 215, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 40px rgba(130, 178, 215, 0.8);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Loading states */
+.skeleton {
+  @apply animate-pulse bg-gradient-to-r from-light-surface via-light-hover to-light-surface bg-[length:200%_100%];
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.dark .skeleton {
+  @apply from-dark-surface via-dark-hover to-dark-surface;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
