@@ -27,7 +27,8 @@ export interface NASAAPIResponse {
   query_time: string
 }
 
-const NASA_BASE_URL = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync'
+// Use a CORS proxy for static deployment
+const NASA_BASE_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://exoplanetarchive.ipac.caltech.edu/TAP/sync')
 
 // Build NASA API query
 function buildQuery(filters: {
@@ -120,11 +121,12 @@ export async function fetchExoplanets(filters: {
   try {
     const query = buildQuery(filters)
     const encodedQuery = encodeURIComponent(query)
-    const url = `${NASA_BASE_URL}?query=${encodedQuery}&format=json`
+    const nasaUrl = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=${encodedQuery}&format=json`
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(nasaUrl)}`
     
-    console.log('Fetching from NASA API:', url)
+    console.log('Fetching from NASA API via proxy:', proxyUrl)
     
-    const response = await fetch(url, {
+    const response = await fetch(proxyUrl, {
       headers: {
         'Accept': 'application/json',
       },
@@ -134,7 +136,8 @@ export async function fetchExoplanets(filters: {
       throw new Error(`NASA API error: ${response.status} ${response.statusText}`)
     }
 
-    const data: ExoplanetData[] = await response.json()
+    const proxyData = await response.json()
+    const data: ExoplanetData[] = JSON.parse(proxyData.contents)
     
     // Process and clean the data
     const processedData = data.map(planet => ({
