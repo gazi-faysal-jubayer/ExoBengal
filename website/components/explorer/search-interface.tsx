@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, createContext, useContext } from 'react'
 import { Search, X, Clock, Mic, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 

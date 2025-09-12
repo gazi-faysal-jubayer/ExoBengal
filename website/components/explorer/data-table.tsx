@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   ChevronDown, 
@@ -10,11 +10,43 @@ import {
   MoreHorizontal,
   ArrowUpDown,
   Filter,
-  Star
+  Star,
+  Loader2
 } from 'lucide-react'
+import { fetchExoplanets, type ExoplanetData } from '@/lib/nasa-api'
 
-// Sample data - in production, this would come from API
-const sampleData = [
+// Convert NASA data to table format
+const convertNASAData = (nasaData: ExoplanetData[]) => {
+  return nasaData.map((planet, index) => ({
+    id: index.toString(),
+    pl_name: planet.pl_name || 'Unknown',
+    hostname: planet.hostname || 'Unknown',
+    tic_id: `TIC ${Math.floor(Math.random() * 1000000)}`, // Placeholder
+    discoverymethod: planet.discoverymethod || 'Unknown',
+    disc_year: planet.disc_year || 0,
+    disc_telescope: planet.pl_facility || 'Unknown',
+    pl_orbper: planet.pl_orbper || 0,
+    pl_orbsmax: planet.pl_orbsmax || 0,
+    pl_rade: planet.pl_rade || 0,
+    pl_radj: planet.pl_radj || 0,
+    pl_masse: planet.pl_masse || 0,
+    pl_massj: planet.pl_massj || 0,
+    pl_orbeccen: planet.pl_orbeccen || 0,
+    pl_orbincl: planet.pl_orbincl || 0,
+    st_rad: planet.st_rad || 0,
+    st_mass: planet.st_mass || 0,
+    ra: planet.ra || 0,
+    dec: planet.dec || 0,
+    distance: planet.sy_dist || 0,
+    reference: 'NASA Exoplanet Archive',
+    pl_facility: planet.pl_facility || 'Unknown',
+    disposition: 'Confirmed',
+    favorite: false,
+  }))
+}
+
+// Fallback sample data
+const fallbackData = [
   {
     id: '1',
     pl_name: 'Kepler-452b',
@@ -93,6 +125,37 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(25)
+  const [data, setData] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Fetch NASA data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        
+        const response = await fetchExoplanets({
+          limit: 100, // Limit to 100 for demo
+          offset: 0
+        })
+        
+        const convertedData = convertNASAData(response.data)
+        setData(convertedData)
+        
+        console.log(`Loaded ${convertedData.length} exoplanets from NASA API`)
+      } catch (err) {
+        console.error('Failed to load NASA data:', err)
+        setError('Failed to load data from NASA API. Using fallback data.')
+        setData(fallbackData)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
 
   const handleSort = useCallback((columnKey: string) => {
     if (sortColumn === columnKey) {
@@ -104,7 +167,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
   }, [sortColumn])
 
   const sortedData = useMemo(() => {
-    const sorted = [...sampleData].sort((a, b) => {
+    const sorted = [...data].sort((a, b) => {
       const aValue = a[sortColumn as keyof typeof a]
       const bValue = b[sortColumn as keyof typeof b]
       
@@ -146,14 +209,34 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
     return value
   }
 
+  if (loading) {
+    return (
+      <div className="card overflow-hidden">
+        <div className="p-8 text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-light-blue" />
+          <p className="text-light-text-secondary dark:text-dark-text-secondary">
+            Loading exoplanet data from NASA Archive...
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="card overflow-hidden">
+      {/* Error Banner */}
+      {error && (
+        <div className="p-4 bg-semantic-warning/10 border-b border-semantic-warning/20">
+          <p className="text-semantic-warning text-sm">{error}</p>
+        </div>
+      )}
+
       {/* Table Header Controls */}
       <div className="p-4 border-b border-light-border dark:border-dark-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary">
-              Exoplanets ({sampleData.length.toLocaleString()})
+              Exoplanets ({data.length.toLocaleString()})
             </h3>
             {selectedRows.length > 0 && (
               <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
@@ -290,7 +373,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-              Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, sampleData.length)} of {sampleData.length} results
+              Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, data.length)} of {data.length} results
             </span>
             <select
               value={pageSize}
@@ -312,11 +395,11 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
               Previous
             </button>
             <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary px-3">
-              Page {currentPage} of {Math.ceil(sampleData.length / pageSize)}
+              Page {currentPage} of {Math.ceil(data.length / pageSize)}
             </span>
             <button
-              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(sampleData.length / pageSize), prev + 1))}
-              disabled={currentPage >= Math.ceil(sampleData.length / pageSize)}
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(data.length / pageSize), prev + 1))}
+              disabled={currentPage >= Math.ceil(data.length / pageSize)}
               className="btn-secondary text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
