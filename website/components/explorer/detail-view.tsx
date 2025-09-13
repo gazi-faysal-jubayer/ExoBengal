@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Star, Orbit, Thermometer, Ruler, Weight, Clock, ExternalLink, Heart, Share2 } from 'lucide-react'
 import { useExplorerStore } from '@/lib/explorer-store'
@@ -75,6 +75,8 @@ function ArtistConception({
   eccentricity,
   inclination,
   period,
+  starName,
+  planetName,
 }: {
   starRadius?: number
   starTeff?: number
@@ -83,20 +85,39 @@ function ArtistConception({
   eccentricity?: number
   inclination?: number
   period?: number
+  starName?: string
+  planetName?: string
 }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [tooltip, setTooltip] = useState<{ x: number; y: number; title: string; subtitle?: string; lines: string[]; visible: boolean }>({ x: 0, y: 0, title: '', subtitle: '', lines: [], visible: false })
+
+  const showTip = (e: React.MouseEvent, title: string, subtitle: string | undefined, lines: string[]) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    const cx = e.clientX - (rect?.left || 0)
+    const cy = e.clientY - (rect?.top || 0)
+    setTooltip({ x: cx + 10, y: cy + 10, title, subtitle, lines, visible: true })
+  }
+  const moveTip = (e: React.MouseEvent) => {
+    if (!tooltip.visible) return
+    const rect = containerRef.current?.getBoundingClientRect()
+    const cx = e.clientX - (rect?.left || 0)
+    const cy = e.clientY - (rect?.top || 0)
+    setTooltip(t => ({ ...t, x: cx + 10, y: cy + 10 }))
+  }
+  const hideTip = () => setTooltip(t => ({ ...t, visible: false }))
   const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
 
   // Visual scaling to fit a wide range of systems nicely into the 100x100 viewBox
   const aAU = clamp(semiMajorAxis || 1, 0.05, 30)
-  const e = clamp(eccentricity || 0, 0, 0.95)
+  const ecc = clamp(eccentricity || 0, 0, 0.95)
   const srSolar = clamp(starRadius || 1, 0.1, 20)
   const prEarth = clamp(planetRadius || 1, 0.2, 20)
 
   // Determine scene scale so that apoapsis fits with some padding
-  const apo = aAU * (1 + e)
+  const apo = aAU * (1 + ecc)
   const scale = 34 / (apo + srSolar * 0.7 + 1.5) // px per AU in the 100x100 box
   const aPx = aAU * scale
-  const bPx = aPx * Math.sqrt(1 - e * e)
+  const bPx = aPx * Math.sqrt(1 - ecc * ecc)
   const incRad = clamp((inclination || 0) * Math.PI / 180, 0, Math.PI)
   const ry = bPx * Math.cos(incRad)
 
@@ -122,7 +143,7 @@ function ArtistConception({
   const planetR = clamp(prEarth * scale * 0.3 + 0.6, 0.5, 5)
 
   // Orbit and position
-  const cx = 50 + e * aPx
+  const cx = 50 + ecc * aPx
   const cy = 50
   const now = Date.now() / 1000
   const T = clamp((period || 365) / 10, 4, 50) // visual period seconds
@@ -159,7 +180,8 @@ function ArtistConception({
   }))
 
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
+    <div ref={containerRef} className="relative w-full h-full" onMouseMove={moveTip}>
+      <svg viewBox="0 0 100 100" className="w-full h-full">
       <defs>
         <radialGradient id="bgGlow" cx="50%" cy="50%" r="75%">
           <stop offset="0%" stopColor="#0b1220" />
@@ -191,13 +213,27 @@ function ArtistConception({
       ))}
 
       {/* Star */}
-      <g filter="url(#softGlow)">
+      <g filter="url(#softGlow)"
+         onMouseEnter={(e) => showTip(e, 'Star', starName, [
+           `Teff: ${Math.round(teff)} K`,
+           `Radius: ${srSolar.toFixed(2)} R☉`,
+         ])}
+         onMouseLeave={hideTip}
+      >
         <circle cx="50" cy="50" r={starR * 2.6} fill="url(#starCore)" opacity="0.6" />
         <circle cx="50" cy="50" r={starR} fill={starColor} />
       </g>
 
       {/* Orbit ellipse */}
-      <ellipse cx={cx} cy={cy} rx={aPx} ry={ry} fill="none" stroke="#4b5d88" strokeWidth="0.35" />
+      <ellipse cx={cx} cy={cy} rx={aPx} ry={ry} fill="none" stroke="#4b5d88" strokeWidth="0.35"
+        onMouseEnter={(e) => showTip(e, 'Orbit', undefined, [
+          `a: ${aAU.toFixed(3)} AU`,
+          `e: ${ecc.toFixed(3)}`,
+          `i: ${(inclination || 0).toFixed(2)}°`,
+          `P: ${(period || 0).toFixed(2)} d`,
+        ])}
+        onMouseLeave={hideTip}
+      />
       {/* Periapsis & Apoapsis */}
       <g>
         <circle cx={peri.x} cy={peri.y} r={0.7} fill="#9fb3ff" />
@@ -212,10 +248,33 @@ function ArtistConception({
       </g>
 
       {/* Planet */}
-      <g filter="url(#softGlow)">
+      <g filter="url(#softGlow)"
+        onMouseEnter={(e) => showTip(e, 'Planet', planetName, [
+          `Radius: ${prEarth.toFixed(2)} R⊕`,
+          `a: ${aAU.toFixed(3)} AU`,
+          `P: ${(period || 0).toFixed(2)} d`,
+        ])}
+        onMouseLeave={hideTip}
+      >
         <circle cx={px} cy={py} r={planetR} fill={`url(#${gradId})`} stroke="#bde1ff" strokeWidth="0.15" />
       </g>
-    </svg>
+      </svg>
+
+      {tooltip.visible && (
+        <div
+          className="absolute z-10 rounded-md bg-black/75 text-white text-xs px-3 py-2 pointer-events-none shadow-lg border border-white/10 max-w-[220px]"
+          style={{ left: tooltip.x, top: tooltip.y }}
+        >
+          <div className="font-semibold mb-1">{tooltip.title}</div>
+          {tooltip.subtitle && (
+            <div className="text-[10px] opacity-80 mb-1">{tooltip.subtitle}</div>
+          )}
+          {tooltip.lines.map((l, i) => (
+            <div key={i} className="leading-snug">{l}</div>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -261,6 +320,8 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
                 eccentricity={planet.pl_orbeccen}
                 inclination={planet.pl_orbincl}
                 period={planet.pl_orbper}
+                starName={planet.hostname}
+                planetName={planet.pl_name}
               />
             </div>
             
