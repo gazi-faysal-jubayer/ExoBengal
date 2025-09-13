@@ -23,11 +23,18 @@ export interface ExplorerState {
   filters: ExplorerFilters
   selectedPlanetName: string | null
 
+  // notes keyed by planet name
+  notesByPlanet?: Record<string, string[]>
+
   // actions
   loadRows: (path?: string) => Promise<void>
   setSearchQuery: (q: string) => void
   setFilters: (f: ExplorerFilters) => void
   setSelectedPlanetName: (name: string | null) => void
+
+  // notes actions
+  addNote: (planetName: string, note: string) => void
+  deleteNote: (planetName: string, index: number) => void
 }
 
 const defaultFilters: ExplorerFilters = {
@@ -47,8 +54,9 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
   searchQuery: '',
   filters: defaultFilters,
   selectedPlanetName: null,
+  notesByPlanet: undefined,
 
-  loadRows: async (path = '/PS_2025.09.12_13.49.08.csv') => {
+  loadRows: async (path = '/PS_2025.09.12_22.39.25.csv') => {
     if (get().isLoaded || get().isLoading) return
     set({ isLoading: true, error: null })
     try {
@@ -63,6 +71,25 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
   setSearchQuery: (q) => set({ searchQuery: q }),
   setFilters: (f) => set({ filters: f }),
   setSelectedPlanetName: (name) => set({ selectedPlanetName: name }),
+
+  addNote: (planetName, note) => {
+    const key = 'exobengal.notes'
+    const current = get().notesByPlanet || JSON.parse(typeof localStorage !== 'undefined' ? (localStorage.getItem(key) || '{}') : '{}')
+    const updated = { ...current }
+    const list = Array.isArray(updated[planetName]) ? updated[planetName] : []
+    updated[planetName] = [...list, note]
+    try { if (typeof localStorage !== 'undefined') localStorage.setItem(key, JSON.stringify(updated)) } catch {}
+    set({ notesByPlanet: updated })
+  },
+  deleteNote: (planetName, index) => {
+    const key = 'exobengal.notes'
+    const current = get().notesByPlanet || JSON.parse(typeof localStorage !== 'undefined' ? (localStorage.getItem(key) || '{}') : '{}')
+    const list = Array.isArray(current[planetName]) ? current[planetName] : []
+    const updatedList = list.filter((_, i) => i !== index)
+    const updated = { ...current, [planetName]: updatedList }
+    try { if (typeof localStorage !== 'undefined') localStorage.setItem(key, JSON.stringify(updated)) } catch {}
+    set({ notesByPlanet: updated })
+  },
 }))
 
 // Selector helper to derive filtered rows

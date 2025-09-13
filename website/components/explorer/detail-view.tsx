@@ -5,9 +5,61 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Star, Orbit, Thermometer, Ruler, Weight, Clock, ExternalLink, Heart, Share2 } from 'lucide-react'
 import { useExplorerStore } from '@/lib/explorer-store'
 
+function NotesPanel({ planetName }: { planetName: string }) {
+  const notesByPlanet = useExplorerStore(s => s.notesByPlanet)
+  const addNote = useExplorerStore(s => s.addNote)
+  const deleteNote = useExplorerStore(s => s.deleteNote)
+  const [text, setText] = useState('')
+  const notes = (notesByPlanet && notesByPlanet[planetName]) || []
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-2">
+        <input
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder="Add a note about this planet..."
+          className="flex-1 input-base py-2"
+        />
+        <button
+          onClick={() => { if (text.trim()) { addNote(planetName, text.trim()); setText('') } }}
+          className="btn-primary text-sm"
+        >
+          Add
+        </button>
+      </div>
+      {notes.length === 0 ? (
+        <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">No notes yet.</p>
+      ) : (
+        <ul className="space-y-2">
+          {notes.map((n, i) => (
+            <li key={i} className="flex items-start justify-between gap-3 p-3 rounded border border-light-border dark:border-dark-border">
+              <span className="text-sm">{n}</span>
+              <button onClick={() => deleteNote(planetName, i)} className="text-xs text-light-text-secondary hover:text-semantic-warning">Delete</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 interface DetailViewProps {
   planetId: string
   onClose: () => void
+}
+
+function stripHtml(input?: string): string {
+  if (!input) return ''
+  return input.replace(/<[^>]*>/g, '').trim()
+}
+
+function extractAtUrl(ref?: string): string | null {
+  if (!ref) return null
+  const hrefMatch = ref.match(/href\s*=\s*['"]?([^'">\s]+)['"]?/i)
+  if (hrefMatch && hrefMatch[1]) return `${hrefMatch[1]}`
+  const urlMatch = ref.match(/https?:\/\/[^\s'">]+/i)
+  if (urlMatch && urlMatch[0]) return `${urlMatch[0]}`
+  return null
 }
 
 function formatNum(n?: number, unit?: string) {
@@ -15,8 +67,160 @@ function formatNum(n?: number, unit?: string) {
   return `${n}${unit ? ` ${unit}` : ''}`
 }
 
+function ArtistConception({
+  starRadius,
+  starTeff,
+  planetRadius,
+  semiMajorAxis,
+  eccentricity,
+  inclination,
+  period,
+}: {
+  starRadius?: number
+  starTeff?: number
+  planetRadius?: number
+  semiMajorAxis?: number
+  eccentricity?: number
+  inclination?: number
+  period?: number
+}) {
+  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
+
+  // Visual scaling to fit a wide range of systems nicely into the 100x100 viewBox
+  const aAU = clamp(semiMajorAxis || 1, 0.05, 30)
+  const e = clamp(eccentricity || 0, 0, 0.95)
+  const srSolar = clamp(starRadius || 1, 0.1, 20)
+  const prEarth = clamp(planetRadius || 1, 0.2, 20)
+
+  // Determine scene scale so that apoapsis fits with some padding
+  const apo = aAU * (1 + e)
+  const scale = 34 / (apo + srSolar * 0.7 + 1.5) // px per AU in the 100x100 box
+  const aPx = aAU * scale
+  const bPx = aPx * Math.sqrt(1 - e * e)
+  const incRad = clamp((inclination || 0) * Math.PI / 180, 0, Math.PI)
+  const ry = bPx * Math.cos(incRad)
+
+  // Star appearance by temperature (approximate color interpolation)
+  function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
+  function lerpColor(c1: string, c2: string, t: number) {
+    const h = (c: string) => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]
+    const [r1, g1, b1] = h(c1)
+    const [r2, g2, b2] = h(c2)
+    const r = Math.round(lerp(r1, r2, t))
+    const g = Math.round(lerp(g1, g2, t))
+    const b = Math.round(lerp(b1, b2, t))
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+  }
+  const teff = clamp(starTeff || 5800, 3000, 10000)
+  // keypoints: 3000K->orange, 5800K->yellow-white, 10000K->blue-white
+  const starColor = teff < 5800
+    ? lerpColor('#ffb36b', '#fff1b2', (teff - 3000) / (5800 - 3000))
+    : lerpColor('#fff1b2', '#a9c8ff', (teff - 5800) / (10000 - 5800))
+
+  // Sizes in px
+  const starR = clamp(srSolar * scale * 0.9 + 2, 2, 12)
+  const planetR = clamp(prEarth * scale * 0.3 + 0.6, 0.5, 5)
+
+  // Orbit and position
+  const cx = 50 + e * aPx
+  const cy = 50
+  const now = Date.now() / 1000
+  const T = clamp((period || 365) / 10, 4, 50) // visual period seconds
+  const theta = ((now % T) / T) * 2 * Math.PI
+  const px = cx + aPx * Math.cos(theta)
+  const py = cy + ry * Math.sin(theta)
+
+  // Planet shading: gradient pointing away from star
+  const dx = px - 50
+  const dy = py - 50
+  const dist = Math.max(0.0001, Math.sqrt(dx * dx + dy * dy))
+  const lx = dx / dist
+  const ly = dy / dist
+  const gradId = `planetShade-${Math.round(px * 100)}-${Math.round(py * 100)}`
+
+  // Trail points
+  const trailSteps = 14
+  const trail: { x: number; y: number; o: number }[] = []
+  for (let i = 1; i <= trailSteps; i++) {
+    const t = theta - (i * 2 * Math.PI) / (trailSteps * 18)
+    trail.push({ x: cx + aPx * Math.cos(t), y: cy + ry * Math.sin(t), o: 1 - i / (trailSteps + 1) })
+  }
+
+  // Periapsis/Apoapsis markers
+  const peri = { x: cx - aPx, y: cy }
+  const apoP = { x: cx + aPx, y: cy }
+
+  // Background stars
+  const bgStars = Array.from({ length: 60 }, (_, i) => ({
+    x: (i * 131) % 100,
+    y: (i * 197) % 100,
+    r: ((i * 37) % 3) * 0.12 + 0.25,
+    o: 0.35 + (((i * 53) % 10) / 40),
+  }))
+
+  return (
+    <svg viewBox="0 0 100 100" className="w-full h-full">
+      <defs>
+        <radialGradient id="bgGlow" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stopColor="#0b1220" />
+          <stop offset="100%" stopColor="#070c16" />
+        </radialGradient>
+        <radialGradient id="starCore" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stopColor={starColor} />
+          <stop offset="70%" stopColor={starColor} />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id={gradId} cx={`${50 - lx * 30}%`} cy={`${50 - ly * 30}%`} r="60%">
+          <stop offset="0%" stopColor="#d1ecff" />
+          <stop offset="60%" stopColor="#6eb7ff" />
+          <stop offset="100%" stopColor="#2b74b8" />
+        </radialGradient>
+        <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Background */}
+      <rect x="0" y="0" width="100" height="100" fill="url(#bgGlow)" />
+      {bgStars.map((s, i) => (
+        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#cbd5e1" opacity={s.o} />
+      ))}
+
+      {/* Star */}
+      <g filter="url(#softGlow)">
+        <circle cx="50" cy="50" r={starR * 2.6} fill="url(#starCore)" opacity="0.6" />
+        <circle cx="50" cy="50" r={starR} fill={starColor} />
+      </g>
+
+      {/* Orbit ellipse */}
+      <ellipse cx={cx} cy={cy} rx={aPx} ry={ry} fill="none" stroke="#4b5d88" strokeWidth="0.35" />
+      {/* Periapsis & Apoapsis */}
+      <g>
+        <circle cx={peri.x} cy={peri.y} r={0.7} fill="#9fb3ff" />
+        <circle cx={apoP.x} cy={apoP.y} r={0.7} fill="#9fb3ff" />
+      </g>
+
+      {/* Trail */}
+      <g>
+        {trail.map((t, i) => (
+          <circle key={i} cx={t.x} cy={t.y} r={planetR * 0.6} fill="#7cc0ff" opacity={0.08 * t.o} />
+        ))}
+      </g>
+
+      {/* Planet */}
+      <g filter="url(#softGlow)">
+        <circle cx={px} cy={py} r={planetR} fill={`url(#${gradId})`} stroke="#bde1ff" strokeWidth="0.15" />
+      </g>
+    </svg>
+  )
+}
+
 export function DetailView({ planetId, onClose }: DetailViewProps) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'physical' | 'orbital' | 'host-star' | 'habitability' | 'references'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'physical' | 'orbital' | 'host-star' | 'habitability' | 'references' | 'notes'>('overview')
   const [isFavorite, setIsFavorite] = useState(false)
   const rows = useExplorerStore(s => s.rows)
   const planet = useMemo(() => rows.find(r => r.pl_name === planetId), [rows, planetId])
@@ -32,6 +236,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
     { id: 'host-star' as const, label: 'Host Star', icon: Star },
     { id: 'habitability' as const, label: 'Habitability', icon: Thermometer },
     { id: 'references' as const, label: 'References', icon: ExternalLink },
+    { id: 'notes' as const, label: 'Notes', icon: Heart },
   ]
 
   const formatValue = (value: any) => {
@@ -47,15 +252,31 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
         return (
           <div className="space-y-6">
             {/* Artist Conception */}
-            <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <p className="text-white text-lg">Artist&apos;s Conception</p>
+            <div className="aspect-video rounded-lg overflow-hidden bg-dark-surface">
+              <ArtistConception
+                starRadius={planet.st_rad}
+                starTeff={(planet as any).st_teff}
+                planetRadius={planet.pl_rade}
+                semiMajorAxis={planet.pl_orbsmax}
+                eccentricity={planet.pl_orbeccen}
+                inclination={planet.pl_orbincl}
+                period={planet.pl_orbper}
+              />
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-2">Discovery Story</h3>
               <p className="text-light-text-secondary dark:text-dark-text-secondary">
-                {planet.disc_refname || 'Discovered and cataloged in the NASA Exoplanet Archive.'}
+                {stripHtml(planet.disc_refname) || 'Discovered and cataloged in the NASA Exoplanet Archive.'}
               </p>
+              {extractAtUrl(planet.disc_refname) && (
+                <button
+                  onClick={() => window.open(extractAtUrl(planet.disc_refname)!, '_blank', 'noopener,noreferrer')}
+                  className="btn-secondary text-sm inline-flex items-center gap-2 mt-2"
+                >
+                  Open Reference <ExternalLink className="h-3 w-3" />
+                </button>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -76,6 +297,14 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
                   <div className="flex justify-between">
                     <span className="text-light-text-secondary dark:text-dark-text-secondary">Telescope:</span>
                     <span>{planet.disc_telescope || planet.disc_facility || '—'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-light-text-secondary dark:text-dark-text-secondary">Instrument:</span>
+                    <span>{(planet as any).disc_instrument || '—'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-light-text-secondary dark:text-dark-text-secondary">Solution Type:</span>
+                    <span>{(planet as any).soltype || '—'}</span>
                   </div>
                 </div>
               </div>
@@ -164,18 +393,26 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
               <div className="card p-4">
                 <h4 className="font-medium mb-2">Reference</h4>
                 <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">
-                  {planet.disc_refname || '—'}
+                  {stripHtml(planet.disc_refname) || '—'}
                 </p>
-                {planet.disc_refname && (
-                  <a 
-                    href="#"
-                    className="text-primary-dark-blue dark:text-primary-light-blue hover:underline text-sm flex items-center gap-1"
+                {extractAtUrl(planet.disc_refname) && (
+                  <button
+                    onClick={() => window.open(extractAtUrl(planet.disc_refname)!, '_blank', 'noopener,noreferrer')}
+                    className="btn-secondary text-sm inline-flex items-center gap-2"
                   >
                     Open Reference <ExternalLink className="h-3 w-3" />
-                  </a>
+                  </button>
                 )}
               </div>
             </div>
+          </div>
+        )
+
+      case 'notes':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Notes for {planet.pl_name}</h3>
+            <NotesPanel planetName={planet.pl_name} />
           </div>
         )
 

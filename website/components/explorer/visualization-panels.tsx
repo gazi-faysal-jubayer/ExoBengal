@@ -23,6 +23,11 @@ const SkyMapViewer = dynamic(() => import('./sky-map-viewer'), {
   loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface rounded-lg animate-pulse" />
 })
 
+const ParameterCorrelations = dynamic(() => import('./parameter-correlations'), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface rounded-lg animate-pulse" />
+})
+
 type VisualizationType = '3d-orbital' | 'statistics' | 'sky-map' | 'correlations'
 
 const visualizationTypes = [
@@ -66,16 +71,7 @@ export default function VisualizationPanels() {
       case 'sky-map':
         return <SkyMapViewer />
       case 'correlations':
-        return (
-          <div className="h-96 flex items-center justify-center bg-light-surface dark:bg-dark-surface rounded-lg">
-            <div className="text-center">
-              <TrendingUp className="h-16 w-16 mx-auto mb-4 text-light-text-secondary dark:text-dark-text-secondary" />
-              <p className="text-light-text-secondary dark:text-dark-text-secondary">
-                Parameter correlation visualization coming soon
-              </p>
-            </div>
-          </div>
-        )
+        return <ParameterCorrelations />
       default:
         return null
     }

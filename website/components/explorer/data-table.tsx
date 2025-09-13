@@ -40,7 +40,7 @@ const convertNASAData = (nasaData: ExplorerPlanetRow[]) => {
     distance: planet.sy_dist || 0,
     reference: 'NASA Exoplanet Archive',
     pl_facility: planet.disc_facility || 'Unknown',
-    disposition: planet.default_flag === 1 ? 'Confirmed' : 'Candidate',
+    soltype: (planet as any).soltype || '—',
     favorite: false,
   }))
 }
@@ -55,6 +55,8 @@ const fallbackData = [
     discoverymethod: 'Transit',
     disc_year: 2015,
     disc_telescope: 'Kepler',
+    pl_facility: 'Kepler',
+    soltype: 'Published',
     pl_orbper: 384.843,
     pl_orbsmax: 1.046,
     pl_rade: 1.6,
@@ -78,6 +80,8 @@ const fallbackData = [
     discoverymethod: 'Radial Velocity',
     disc_year: 2016,
     disc_telescope: 'ESO 3.6m',
+    pl_facility: 'ESO 3.6m',
+    soltype: 'Published',
     pl_orbper: 11.186,
     pl_orbsmax: 0.0485,
     pl_rade: 1.17,
@@ -110,8 +114,8 @@ const columns: Column[] = [
   { key: 'discoverymethod', label: 'Method', sortable: true, width: 'w-32' },
   { key: 'disc_year', label: 'Year', sortable: true, width: 'w-20' },
   { key: 'pl_orbper', label: 'Period', sortable: true, unit: 'days', width: 'w-24' },
-  { key: 'pl_rade', label: 'Radius', sortable: true, unit: 'R⊕', width: 'w-24' },
-  { key: 'pl_masse', label: 'Mass', sortable: true, unit: 'M⊕', width: 'w-24' },
+  { key: 'pl_facility', label: 'Discovery Facility', sortable: true, width: 'w-40' },
+  { key: 'soltype', label: 'Solution Type', sortable: true, width: 'w-28' },
   { key: 'distance', label: 'Distance', sortable: true, unit: 'ly', width: 'w-28' },
 ]
 
@@ -137,7 +141,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
         setLoading(true)
         setError(null)
         
-        await store.loadRows()
+        await store.loadRows('/PS_2025.09.12_22.39.25.csv')
         const exoplanets = selectFilteredRows(store)
         
         const convertedData = convertNASAData(exoplanets)
@@ -194,7 +198,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
     
     const startIndex = (currentPage - 1) * pageSize
     return sorted.slice(startIndex, startIndex + pageSize)
-  }, [sortColumn, sortDirection, currentPage, pageSize])
+  }, [data, sortColumn, sortDirection, currentPage, pageSize])
 
   const toggleRowSelection = useCallback((id: string) => {
     setSelectedRows(prev => 

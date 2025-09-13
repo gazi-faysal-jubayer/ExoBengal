@@ -123,6 +123,8 @@ export interface ExplorerPlanetRow {
   disc_locale?: string
   disc_facility?: string
   disc_telescope?: string
+  disc_instrument?: string
+  soltype?: string
   pl_orbper?: number
   pl_orbsmax?: number
   pl_rade?: number
@@ -155,6 +157,8 @@ export async function loadExoplanetsFromCSV(
     disc_locale: r['disc_locale'] as string | undefined,
     disc_facility: r['disc_facility'] as string | undefined,
     disc_telescope: r['disc_telescope'] as string | undefined,
+    disc_instrument: r['disc_instrument'] as string | undefined,
+    soltype: r['soltype'] as string | undefined,
     pl_orbper: toNumber(r['pl_orbper'] as string),
     pl_orbsmax: toNumber(r['pl_orbsmax'] as string),
     pl_rade: toNumber(r['pl_rade'] as string),

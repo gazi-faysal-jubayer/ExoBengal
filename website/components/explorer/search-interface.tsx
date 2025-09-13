@@ -34,6 +34,8 @@ export function SearchInterface() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
   const setSearchQuery = useExplorerStore(s => s.setSearchQuery)
   const loadRows = useExplorerStore(s => s.loadRows)
+  const setFilters = useExplorerStore(s => s.setFilters)
+  const filters = useExplorerStore(s => s.filters)
 
   useEffect(() => {
     loadRows()
@@ -45,14 +47,33 @@ export function SearchInterface() {
   }, [])
 
   const addFilter = useCallback((filter: string) => {
-    if (!selectedFilters.includes(filter)) {
-      setSelectedFilters(prev => [...prev, filter])
+    if (selectedFilters.includes(filter)) return
+    setSelectedFilters(prev => [...prev, filter])
+    if (filter.startsWith('disposition:')) {
+      const disp = filter.split(':')[1]
+      const mapped = disp.charAt(0).toUpperCase() + disp.slice(1)
+      setFilters({ ...filters, disposition: [mapped as any] })
+    } else if (filter.startsWith('year:')) {
+      const range = filter.split(':')[1]
+      const [min, max] = range.split('-').map(n => parseInt(n, 10))
+      if (!Number.isNaN(min) && !Number.isNaN(max)) setFilters({ ...filters, yearRange: [min, max] })
+    } else if (filter.startsWith('radius:')) {
+      const range = filter.split(':')[1]
+      const [min, max] = range.split('-').map(n => parseFloat(n))
+      if (Number.isFinite(min) && Number.isFinite(max)) setFilters({ ...filters, radiusRange: [min, max] })
     }
-  }, [selectedFilters])
+  }, [selectedFilters, setFilters, filters])
 
   const removeFilter = useCallback((filter: string) => {
     setSelectedFilters(prev => prev.filter(f => f !== filter))
-  }, [])
+    if (filter.startsWith('disposition:')) {
+      setFilters({ ...filters, disposition: [] })
+    } else if (filter.startsWith('year:')) {
+      setFilters({ ...filters, yearRange: [1992, new Date().getFullYear()] })
+    } else if (filter.startsWith('radius:')) {
+      setFilters({ ...filters, radiusRange: [0, 100] })
+    }
+  }, [setFilters, filters])
 
   const filteredSuggestions = searchSuggestions.filter(suggestion =>
     suggestion.toLowerCase().includes(query.toLowerCase())
@@ -67,7 +88,11 @@ export function SearchInterface() {
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value
+              setQuery(val)
+              setSearchQuery(val)
+            }}
             onFocus={() => setShowSuggestions(true)}
             placeholder="Search by planet name, star system, or use natural language..."
             className="w-full pl-12 pr-20 py-4 text-lg input-base rounded-lg shadow-sm"
@@ -203,7 +228,10 @@ export function SearchInterface() {
             </div>
           ))}
           <button
-            onClick={() => setSelectedFilters([])}
+            onClick={() => {
+              setSelectedFilters([])
+              setFilters({ ...filters, disposition: [], yearRange: [1992, new Date().getFullYear()], radiusRange: [0, 100] })
+            }}
             className="text-xs text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary transition-colors"
           >
             Clear all
