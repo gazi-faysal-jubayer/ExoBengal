@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { ChevronRight, Copy, Terminal, CheckCircle, ExternalLink } from 'lucide-react'
+import { ChevronRight, Terminal, CheckCircle, ExternalLink } from 'lucide-react'
+import { CodeBlock } from '@/components/docs/code-block'
 
 const steps = [
   {
@@ -12,75 +13,28 @@ const steps = [
   },
   {
     title: 'Import the Package',
-    content: `Import ExoBengal in your Python script:`,
-    code: `import exobengal as exo\nfrom exobengal import plotting, analysis`,
+    content: `Import DetectExoplanet in your Python script:`,
+    code: `from exobengal.exobengal import DetectExoplanet`,
   },
   {
-    title: 'Create a Client',
-    content: `Initialize the NASA client to access exoplanet data:`,
-    code: `# Create client with default settings
-client = exo.NASAClient()
-
-# Or with custom configuration
-client = exo.NASAClient(
-    cache_dir='./data_cache',
-    timeout=30,
-    api_key='your_nasa_api_key'  # Optional for higher rate limits
-)`,
+    title: 'Create a Detector',
+    content: `Initialize the detector (paths default to repository models/):`,
+    code: `detector = DetectExoplanet()`,
   },
   {
-    title: 'Search for Exoplanets',
-    content: `Start exploring the exoplanet catalog:`,
-    code: `# Get all confirmed exoplanets
-all_planets = client.get_confirmed_planets()
-
-# Search for Earth-like planets
-earth_like = client.search(
-    radius_min=0.8,
-    radius_max=1.2,
-    habitable_zone=True,
-    limit=100
-)
-
-# Find planets discovered by specific missions
-kepler_planets = client.search(
-    discovery_facility='Kepler',
-    discovery_year_min=2009
-)`,
+    title: 'Make a Prediction',
+    content: `Use the saved RandomForest model to classify a sample:`,
+    code: `sample = [365.0, 1.0, 288.0, 1.0, 4.44, 5778, 0.1, 5.0, 100.0]\nprint(detector.random_forest(sample))`,
   },
   {
-    title: 'Explore Planet Properties',
-    content: `Access detailed information about discovered planets:`,
-    code: `for planet in earth_like[:5]:
-    print(f"Name: {planet.name}")
-    print(f"Radius: {planet.radius:.2f} Earth radii")
-    print(f"Mass: {planet.mass:.2f} Earth masses") 
-    print(f"Distance: {planet.distance:.1f} light-years")
-    print(f"Habitable Zone: {planet.in_habitable_zone}")
-    print("---")`,
+    title: 'Compute ESI',
+    content: `Calculate Earth Similarity Index for a candidate planet:`,
+    code: `print(detector.calculate_esi(koi_prad=1.05, koi_teq=290))`,
   },
   {
-    title: 'Create Visualizations',
-    content: `Generate beautiful plots to explore the data:`,
-    code: `import matplotlib.pyplot as plt
-
-# Mass-radius diagram
-exo.plotting.mass_radius_diagram(earth_like)
-plt.show()
-
-# Discovery timeline
-exo.plotting.discovery_timeline(
-    planets=client.get_all_planets(),
-    group_by='discovery_method'
-)
-plt.show()
-
-# 3D scatter plot
-exo.plotting.parameter_space_3d(
-    planets=earth_like,
-    x='mass', y='radius', z='orbital_period'
-)
-plt.show()`,
+    title: 'Train Models',
+    content: `Optionally retrain the bundled models:`,
+    code: `detector.train_random_forest("data/cumulative_2025.09.20_12.15.37.csv")\n# detector.train_cnn()\n# detector.train_knn()`,
   }
 ]
 
@@ -135,14 +89,7 @@ export default function GettingStartedPage() {
                       </p>
                       
                       {step.code && (
-                        <div className="relative">
-                          <pre className="bg-slate-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm font-mono">
-                            <code>{step.code}</code>
-                          </pre>
-                          <button className="absolute top-2 right-2 p-2 text-gray-400 hover:text-white transition-colors">
-                            <Copy className="h-4 w-4" />
-                          </button>
-                        </div>
+                        <CodeBlock language={index === 0 ? 'bash' : 'python'} code={step.code} />
                       )}
                       
                       {step.note && (

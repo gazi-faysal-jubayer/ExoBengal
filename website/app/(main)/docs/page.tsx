@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { BookOpen, Download, Github, Rocket, Code, Star, Users, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { CodeBlock } from '@/components/docs/code-block'
 
 const quickLinks = [
   {
@@ -14,7 +15,7 @@ const quickLinks = [
   },
   {
     title: 'API Reference',
-    description: 'Complete documentation of all functions and classes',
+    description: 'DetectExoplanet class, training and inference methods',
     href: '/docs/api',
     icon: Code,
     color: 'from-blue-500 to-cyan-600',
@@ -179,29 +180,11 @@ export default function DocsPage() {
           </h2>
           <div className="max-w-4xl mx-auto">
             <div className="bg-slate-900 rounded-lg p-6 overflow-x-auto">
-              <pre className="text-green-400 font-mono text-sm">
-{`# Import the ExoBengal package
-import exobengal as exo
+              <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
 
-# Create a client to access NASA data
-client = exo.NASAClient()
-
-# Search for Earth-like planets
-earth_like = client.search(
-    radius_min=0.8,
-    radius_max=1.2,
-    habitable_zone=True,
-    confirmed=True
-)
-
-# Get detailed information
-for planet in earth_like[:5]:
-    print(f"{planet.name}: {planet.radius:.2f} R⊕")
-    
-# Create visualizations
-exo.plot.mass_radius_diagram(earth_like)
-exo.plot.discovery_timeline(earth_like)`}
-              </pre>
+detector = DetectExoplanet()
+sample = [365.0, 1.0, 288.0, 1.0, 4.44, 5778, 0.1, 5.0, 100.0]
+print(detector.random_forest(sample))`} />
             </div>
           </div>
         </motion.div>
