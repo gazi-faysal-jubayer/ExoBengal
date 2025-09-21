@@ -4,6 +4,7 @@ import { useMemo, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Star, Orbit, Thermometer, Ruler, Weight, Clock, ExternalLink, Heart, Share2 } from 'lucide-react'
 import { useExplorerStore } from '@/lib/explorer-store'
+import dynamic from 'next/dynamic'
 
 function NotesPanel({ planetName }: { planetName: string }) {
   const notesByPlanet = useExplorerStore(s => s.notesByPlanet)
@@ -66,6 +67,8 @@ function formatNum(n?: number, unit?: string) {
   if (n === undefined || n === null) return '—'
   return `${n}${unit ? ` ${unit}` : ''}`
 }
+
+const OrbitalSystemViewer = dynamic(() => import('./orbital-system-viewer'), { ssr: false })
 
 function ArtistConception({
   starRadius,
@@ -310,19 +313,9 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
       case 'overview':
         return (
           <div className="space-y-6">
-            {/* Artist Conception */}
-            <div className="aspect-video rounded-lg overflow-hidden bg-dark-surface">
-              <ArtistConception
-                starRadius={planet.st_rad}
-                starTeff={(planet as any).st_teff}
-                planetRadius={planet.pl_rade}
-                semiMajorAxis={planet.pl_orbsmax}
-                eccentricity={planet.pl_orbeccen}
-                inclination={planet.pl_orbincl}
-                period={planet.pl_orbper}
-                starName={planet.hostname}
-                planetName={planet.pl_name}
-              />
+            {/* 3D Orbital System Viewer */}
+            <div className="aspect-video rounded-lg overflow-hidden bg-black">
+              <OrbitalSystemViewer hostName={planet.hostname} />
             </div>
             
             <div>
