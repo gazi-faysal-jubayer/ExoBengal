@@ -1,0 +1,1 @@
+from .exobengal import DetectExoplanet
