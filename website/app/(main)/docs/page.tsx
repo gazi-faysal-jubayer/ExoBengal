@@ -14,6 +14,13 @@ const quickLinks = [
     color: 'from-green-500 to-emerald-600',
   },
   {
+    title: 'Installation',
+    description: 'Python versions, install steps, and dependencies',
+    href: '/docs/installation',
+    icon: Download,
+    color: 'from-gray-500 to-slate-600',
+  },
+  {
     title: 'API Reference',
     description: 'DetectExoplanet class, training and inference methods',
     href: '/docs/api',
@@ -33,6 +40,27 @@ const quickLinks = [
     href: '/docs/examples',
     icon: Star,
     color: 'from-orange-500 to-red-600',
+  },
+  {
+    title: 'Data Reference',
+    description: 'Dataset columns, labels, and preprocessing',
+    href: '/docs/data-reference',
+    icon: BookOpen,
+    color: 'from-teal-500 to-emerald-600',
+  },
+  {
+    title: 'Models',
+    description: 'Artifacts, loading behavior, and retraining',
+    href: '/docs/models',
+    icon: Code,
+    color: 'from-indigo-500 to-blue-600',
+  },
+  {
+    title: 'Notebook',
+    description: 'Walkthrough of test.ipynb and outputs',
+    href: '/docs/notebook',
+    icon: BookOpen,
+    color: 'from-pink-500 to-rose-600',
   },
 ]
 

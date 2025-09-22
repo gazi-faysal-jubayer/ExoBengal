@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { CodeBlock } from '@/components/docs/code-block'
+import { PrevNext } from '@/components/docs/prev-next'
 
 export default function PredictionTutorialPage() {
   return (
@@ -18,7 +19,7 @@ export default function PredictionTutorialPage() {
         <h1 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary">Making Predictions</h1>
         <p className="text-light-text-secondary dark:text-dark-text-secondary">Load trained models and classify new samples.</p>
 
-        <div className="card p-6">
+        <div className="prose-docs space-y-4">
           <h2 className="text-xl font-semibold mb-2 text-light-text-primary dark:text-dark-text-primary">RandomForest</h2>
           <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
 
@@ -27,7 +28,7 @@ sample = [365.0, 1.0, 288.0, 1.0, 4.44, 5778, 0.1, 5.0, 100.0]
 print(detector.random_forest(sample))`} />
         </div>
 
-        <div className="card p-6">
+        <div className="prose-docs space-y-4">
           <h2 className="text-xl font-semibold mb-2 text-light-text-primary dark:text-dark-text-primary">CNN</h2>
           <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
 
@@ -36,7 +37,7 @@ sample = [365.0, 1.0, 288.0, 1.0, 4.44, 5778, 0.1, 5.0, 100.0]
 print(detector.cnn(sample))`} />
         </div>
 
-        <div className="card p-6">
+        <div className="prose-docs space-y-4">
           <h2 className="text-xl font-semibold mb-2 text-light-text-primary dark:text-dark-text-primary">kNN</h2>
           <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
 
@@ -44,6 +45,8 @@ detector = DetectExoplanet()
 sample = [365.0, 1.0, 288.0, 1.0, 4.44, 5778, 0.1, 5.0, 100.0]
 print(detector.knn(sample))`} />
         </div>
+
+        <PrevNext prev={{ title: 'Training', href: '/docs/tutorials/training' }} next={{ title: 'Docs Home', href: '/docs' }} />
       </div>
     </div>
   )

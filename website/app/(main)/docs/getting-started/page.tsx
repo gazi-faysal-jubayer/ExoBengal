@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { ChevronRight, Terminal, CheckCircle, ExternalLink } from 'lucide-react'
 import { CodeBlock } from '@/components/docs/code-block'
+import { PrevNext } from '@/components/docs/prev-next'
 
 const steps = [
   {
@@ -40,11 +41,13 @@ const steps = [
 
 const requirements = [
   'Python 3.8+',
-  'NumPy >= 1.19.0',
-  'Pandas >= 1.3.0',
-  'Matplotlib >= 3.3.0',
-  'Requests >= 2.25.0',
-  'Astropy >= 4.2.0 (optional)',
+  'numpy',
+  'pandas',
+  'matplotlib',
+  'seaborn',
+  'scikit-learn',
+  'joblib',
+  'tensorflow',
 ]
 
 export default function GettingStartedPage() {
@@ -63,92 +66,34 @@ export default function GettingStartedPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-8">
-            <div>
-              <h1 className="text-4xl font-bold text-light-text-primary dark:text-dark-text-primary mb-4">
-                Getting Started with ExoBengal
-              </h1>
-              <p className="text-lg text-light-text-secondary dark:text-dark-text-secondary">
-                Learn how to install and use ExoBengal to explore NASA&apos;s exoplanet data in just a few minutes.
-              </p>
-            </div>
+            <div className="prose-docs">
+              <h1>Getting Started with ExoBengal</h1>
+              <p>Learn how to install and use ExoBengal to explore NASA&apos;s exoplanet data in just a few minutes.</p>
 
-            {/* Installation Steps */}
-            <div className="space-y-8">
               {steps.map((step, index) => (
-                <div key={index} className="card p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 bg-primary-dark-blue text-white rounded-full flex items-center justify-center font-bold text-sm">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h2 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-                        {step.title}
-                      </h2>
-                      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-                        {step.content}
-                      </p>
-                      
-                      {step.code && (
-                        <CodeBlock language={index === 0 ? 'bash' : 'python'} code={step.code} />
-                      )}
-                      
-                      {step.note && (
-                        <p className="text-sm text-semantic-info mt-2 flex items-center gap-2">
-                          <CheckCircle className="h-4 w-4" />
-                          {step.note}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                <div key={index} className="space-y-3">
+                  <h2>{index + 1}. {step.title}</h2>
+                  <p>{step.content}</p>
+                  {step.code && (
+                    <CodeBlock language={index === 0 ? 'bash' : 'python'} code={step.code} />
+                  )}
+                  {step.note && (
+                    <p className="text-sm text-semantic-info mt-1 flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      {step.note}
+                    </p>
+                  )}
                 </div>
               ))}
-            </div>
 
-            {/* Next Steps */}
-            <div className="card p-6">
-              <h2 className="text-2xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
-                What&apos;s Next?
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Link 
-                  href="/docs/tutorials"
-                  className="p-4 border border-light-border dark:border-dark-border rounded-lg hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
-                      <Terminal className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-light-text-primary dark:text-dark-text-primary">
-                        Follow Tutorials
-                      </h3>
-                      <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                        Step-by-step guides for common tasks
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-
-                <Link 
-                  href="/docs/api"
-                  className="p-4 border border-light-border dark:border-dark-border rounded-lg hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center">
-                      <ExternalLink className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-light-text-primary dark:text-dark-text-primary">
-                        API Reference
-                      </h3>
-                      <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                        Complete documentation of all functions
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
+              <h2>What&apos;s Next?</h2>
+              <p>Continue with tutorials or jump to the API reference:</p>
+              <ul>
+                <li><Link className="underline" href="/docs/tutorials">Follow Tutorials</Link></li>
+                <li><Link className="underline" href="/docs/api">API Reference</Link></li>
+              </ul>
             </div>
+            <PrevNext prev={{ title: 'Installation', href: '/docs/installation' }} next={{ title: 'API Reference', href: '/docs/api' }} />
           </div>
 
           {/* Sidebar */}

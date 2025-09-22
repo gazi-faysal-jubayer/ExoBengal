@@ -1,12 +1,23 @@
-# ExoBengal – NASA Exoplanet ML Toolkit and Web Demo
+# ExoBengal
 
-ExoBengal is a Python package and website for exploring NASA exoplanet data and running
-ML-based classification of exoplanet candidates. It includes:
+Standardized tools for ML-based exoplanet candidate classification on NASA data, plus a companion docs website.
 
-- A Python library `exobengal` with a `DetectExoplanet` class that can train and run
-  RandomForest, CNN, and kNN models
-- Pretrained models under `models/`
-- A Next.js static website (in `website/`) with documentation, examples, and visualizations
+This repo contains:
+
+- Python package `exobengal`:
+  - `DetectExoplanet` for training/inference (RandomForest, CNN, kNN)
+  - `ExoParams` convenience container for feature inputs
+- Pretrained model artifacts in `models/`
+- Example dataset(s) in `data/`
+- Next.js docs site in `website/`
+
+Full documentation is in `docs/`:
+
+- Installation and requirements: `docs/installation.md`
+- API reference: `docs/api.md`
+- Data reference and preprocessing: `docs/data.md`
+- Models and artifacts: `docs/models.md`
+- Notebook walkthrough: `docs/notebook.md`
 
 ## Quick Start
 
@@ -36,7 +47,7 @@ data/                # Dataset CSVs
 website/             # Next.js static website + docs
 ```
 
-## DetectExoplanet API (Python)
+## Python API (quick view)
 
 Constructor:
 
@@ -46,6 +57,7 @@ DetectExoplanet(
   cnn_model_path="models/cnn_model.h5",
   knn_model_path="models/knn_model.pkl",
   scaler_path="models/scaler.pkl",
+  imputer_path="models/imputer.pkl",
 )
 ```
 
@@ -60,10 +72,16 @@ detector.train_knn(data_path="data/cumulative_2025.09.20_12.15.37.csv")
 Inference (all return the same schema):
 
 ```python
+from exobengal.exobengal import ExoParams
+
 sample = [koi_period, koi_prad, koi_teq, koi_srad, koi_slogg, koi_steff, koi_impact, koi_duration, koi_depth]
 detector.random_forest(sample)
 detector.cnn(sample)
 detector.knn(sample)
+
+# Or use ExoParams for clarity
+params = ExoParams(period=365.0, prad=1.0, teq=288.0, srad=1.0, slog_g=4.44, steff=5778, impact=0.1, duration=5.0, depth=100.0)
+detector.random_forest(params)
 ```
 
 Utility:
@@ -72,15 +90,19 @@ Utility:
 detector.calculate_esi(koi_prad=1.05, koi_teq=290)
 ```
 
-## Website Docs
+For full API and feature details, see `docs/api.md`.
 
-The static docs site is built with Next.js and lives under `website/`. Key sections:
+## Models
 
-- `/docs` – overview
-- `/docs/getting-started` – install and first prediction
-- `/docs/api` – full API; see `DetectExoplanet`
-- `/docs/tutorials` – training and prediction guides
-- `/docs/examples` – copy-paste snippets
+Artifacts live in `models/`. See `docs/models.md` for details and retraining notes.
+
+## Requirements
+
+Python 3.8+. See `docs/installation.md` or `requirements.txt`.
+
+## Website
+
+The Next.js site (in `website/`) includes a docs experience. See its `README.md` for running locally.
 
 ## Development
 

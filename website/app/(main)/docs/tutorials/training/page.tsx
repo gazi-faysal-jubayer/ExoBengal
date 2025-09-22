@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { CodeBlock } from '@/components/docs/code-block'
+import { PrevNext } from '@/components/docs/prev-next'
 
 export default function TrainingTutorialPage() {
   return (
@@ -18,7 +19,7 @@ export default function TrainingTutorialPage() {
         <h1 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary">Training Models</h1>
         <p className="text-light-text-secondary dark:text-dark-text-secondary">Train the three bundled classifiers using the dataset in <code>data/</code>.</p>
 
-        <div className="card p-6">
+        <div className="prose-docs space-y-4">
           <h2 className="text-xl font-semibold mb-2 text-light-text-primary dark:text-dark-text-primary">RandomForest</h2>
           <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
 
@@ -26,7 +27,7 @@ detector = DetectExoplanet()
 detector.train_random_forest(data_path="data/cumulative_2025.09.20_12.15.37.csv")`} />
         </div>
 
-        <div className="card p-6">
+        <div className="prose-docs space-y-4">
           <h2 className="text-xl font-semibold mb-2 text-light-text-primary dark:text-dark-text-primary">CNN</h2>
           <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
 
@@ -34,13 +35,15 @@ detector = DetectExoplanet()
 detector.train_cnn(data_path="data/cumulative_2025.09.20_12.15.37.csv")`} />
         </div>
 
-        <div className="card p-6">
+        <div className="prose-docs space-y-4">
           <h2 className="text-xl font-semibold mb-2 text-light-text-primary dark:text-dark-text-primary">kNN</h2>
           <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
 
 detector = DetectExoplanet()
 detector.train_knn(data_path="data/cumulative_2025.09.20_12.15.37.csv")`} />
         </div>
+
+        <PrevNext prev={{ title: 'API Reference', href: '/docs/api' }} next={{ title: 'Prediction', href: '/docs/tutorials/prediction' }} />
       </div>
     </div>
   )

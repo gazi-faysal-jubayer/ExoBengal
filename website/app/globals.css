@@ -74,6 +74,16 @@
   .text-gradient {
     @apply bg-gradient-to-r from-primary-dark-blue to-primary-light-blue bg-clip-text text-transparent;
   }
+
+  /* Docs prose styling - refined spacing & typography */
+  .prose-docs h1 { @apply text-4xl font-bold mb-4; }
+  .prose-docs h2 { @apply text-2xl font-semibold mt-8 mb-3; }
+  .prose-docs h3 { @apply text-xl font-semibold mt-6 mb-2; }
+  .prose-docs p { @apply text-light-text-secondary dark:text-dark-text-secondary leading-7 mb-4; }
+  .prose-docs ul { @apply list-disc ml-6 space-y-2 mb-4; }
+  .prose-docs code { @apply font-mono text-sm bg-light-surface dark:bg-dark-surface px-1.5 py-0.5 rounded border border-light-border dark:border-dark-border; }
+  .prose-docs pre { @apply bg-slate-900 text-slate-100; }
+  .prose-docs a { @apply text-primary-dark-blue dark:text-primary-light-blue underline; }
 }
 
 @layer utilities {
