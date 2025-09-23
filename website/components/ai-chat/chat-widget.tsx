@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Sparkles, Loader2, Copy, ThumbsUp, ThumbsDown } from 'lucide-react'
+import { generateResponse } from '@/lib/chatbot';
 // import { useChat } from 'ai/react' // Disabled for static export
 
 interface Message {
@@ -34,7 +35,7 @@ export function ChatWidget() {
 
   const handleInputChange = (e: any) => setInput(e.target.value)
   
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
     if (!input.trim()) return
     
@@ -43,18 +44,41 @@ export function ChatWidget() {
     setMessages(prev => [...prev, userMessage])
     
     // Simulate AI response for GitHub Pages demo
-    setIsLoading(true)
-    setTimeout(() => {
+    setIsLoading(true);
+    setError(null);
+
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: input }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch response');
+      }
+
+      const data = await res.json();
+      const jsonMatch = data.response.match(/```json\s*\n([\s\S]*?)\n```/);
+      const jsonString = jsonMatch ? jsonMatch[1] : data.response;
+    
+      const jsonResponse = JSON.parse(jsonString);
+ 
+
       const botResponse = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `Thank you for your question about "${input}". This is a demo response since the AI chat requires server-side functionality. In the full version, I would help you explore exoplanets, explain detection methods, and generate Python code for data analysis.`
-      }
-      setMessages(prev => [...prev, botResponse])
-      setIsLoading(false)
-    }, 1000)
-    
-    setInput('')
+        content: jsonResponse.response,
+      };
+      setMessages(prev => [...prev, botResponse]);
+    } catch (err) {
+      console.error('Error:', err);
+      setError(err);
+    } finally {
+      setIsLoading(false);
+      setInput('');
+    }
   }
 
   const scrollToBottom = () => {
@@ -127,7 +151,7 @@ export function ChatWidget() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5" />
                   <div>
-                    <h3 className="font-semibold">ExoBot</h3>
+                    <h3 className="font-semibold">Cosmo</h3>
                     <p className="text-xs opacity-90">Your Exoplanet Assistant</p>
                   </div>
                 </div>
@@ -223,7 +247,7 @@ export function ChatWidget() {
                     <div className="flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                        ExoBot is thinking...
+                        Cosmo is thinking...
                       </span>
                     </div>
                   </div>
