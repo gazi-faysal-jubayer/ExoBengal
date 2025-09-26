@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Github, Twitter, Linkedin, Mail, Telescope } from 'lucide-react'
+import Image from 'next/image'
 
 const footerLinks = {
   explore: {
@@ -55,8 +56,13 @@ export function Footer() {
           {/* Brand Section */}
           <div className="space-y-8 xl:col-span-1">
             <div className="flex items-center gap-2">
-              <Telescope className="h-8 w-8 text-primary-dark-blue" />
-              <span className="text-xl font-bold text-gradient">ExoBengal</span>
+              <Image 
+                            src={"/logo_exobengal.png"}
+                            alt="ExoBengal Logo"
+                            width={32}
+                            height={32}
+                            className="h-8 w-48 shadow-sm "
+                            />
             </div>
             <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
               Explore the universe of exoplanets with our interactive visualization platform. 

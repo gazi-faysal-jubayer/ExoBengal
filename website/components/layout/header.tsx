@@ -9,6 +9,7 @@ import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
+
 const leftNavigation = [
   { name: 'Home', href: '/' },
   { name: 'Explorer', href: '/explorer' },
