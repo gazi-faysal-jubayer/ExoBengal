@@ -39,40 +39,46 @@ export function Header() {
         {/* Left glass panel - extends to screen edge */}
         <div className="hidden lg:block absolute left-0 top-0 h-16 z-10">
           <div className="glass-panel glass-left h-full flex items-center gap-x-2 pl-8 pr-6">
-            {leftNavigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  'navlink text-sm font-medium',
-                  pathname === item.href
-                    ? 'active'
-                    : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {leftNavigation.map((item) => {
+              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    'navlink text-sm font-medium',
+                    isActive
+                      ? 'active'
+                      : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
+                  )}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
 
         {/* Right glass panel - extends to screen edge */}
         <div className="hidden lg:block absolute right-0 top-0 h-16 z-10">
           <div className="glass-panel glass-right h-full flex items-center justify-end gap-x-2 pl-6 pr-8">
-            {rightNavigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  'navlink text-sm font-medium',
-                  pathname === item.href
-                    ? 'active'
-                    : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {rightNavigation.map((item) => {
+              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    'navlink text-sm font-medium',
+                    isActive
+                      ? 'active'
+                      : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
+                  )}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
 
             <div className="nav-separator mx-2" />
 
@@ -167,21 +173,24 @@ export function Header() {
             className="lg:hidden"
           >
             <div className="space-y-1 px-4 pb-3 pt-2">
-              {[...leftNavigation, ...rightNavigation].map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'block rounded-md px-3 py-2 text-base font-medium',
-                    pathname === item.href
-                      ? 'bg-primary-dark-blue text-white'
-                      : 'text-light-text-primary hover:bg-light-hover dark:text-dark-text-primary dark:hover:bg-dark-hover'
-                  )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {[...leftNavigation, ...rightNavigation].map((item) => {
+                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'block rounded-md px-3 py-2 text-base font-medium transition-all duration-200',
+                      isActive
+                        ? 'bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white shadow-lg'
+                        : 'text-light-text-primary hover:bg-primary-dark-blue/10 hover:text-primary-dark-blue dark:text-dark-text-primary dark:hover:bg-primary-light-blue/10 dark:hover:text-primary-light-blue'
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
           </motion.div>
         )}
