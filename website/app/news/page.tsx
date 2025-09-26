@@ -169,9 +169,16 @@ export default function NewsPage() {
   const getSourceIcon = (source: string) => {
     switch (source.toLowerCase()) {
       case 'nasa': return '🚀'
+      case 'nasa apod': return '🌠'
       case 'esa': return '🛰️'
       case 'space.com': return '🌌'
       case 'universe today': return '⭐'
+      case 'nasa astrobiology': return '🧬'
+      case 'phys.org': return '⚗️'
+      case 'science news': return '🔬'
+      case 'astronomy magazine': return '🌟'
+      case 'scientific american': return '📊'
+      case 'new scientist': return '🔍'
       default: return '📡'
     }
   }
