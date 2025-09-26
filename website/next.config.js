@@ -6,7 +6,7 @@ const repoBasePath = isProd && isGithubActions && repoName ? `/${repoName}` : ''
 
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
+  // output: 'export',
   trailingSlash: true,
   basePath: repoBasePath,
   assetPrefix: repoBasePath ? `${repoBasePath}/` : '',
