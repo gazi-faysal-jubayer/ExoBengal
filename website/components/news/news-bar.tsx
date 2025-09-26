@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, Clock, Globe, Rss, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
+import { ExternalLink, Clock, Globe, Rss, ChevronLeft, ChevronRight, Pause, Play, Rocket, Satellite, Telescope, Star, Atom, Beaker, Microscope, BookOpen, BarChart3, Search } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import Link from 'next/link'
 
@@ -97,18 +97,18 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
 
   const getSourceIcon = (source: string) => {
     switch (source.toLowerCase()) {
-      case 'nasa': return '🚀'
-      case 'nasa apod': return '🌠'
-      case 'esa': return '🛰️'
-      case 'space.com': return '🌌'
-      case 'universe today': return '⭐'
-      case 'nasa astrobiology': return '🧬'
-      case 'phys.org': return '⚗️'
-      case 'science news': return '🔬'
-      case 'astronomy magazine': return '🌟'
-      case 'scientific american': return '📊'
-      case 'new scientist': return '🔍'
-      default: return '📡'
+      case 'nasa': return <Rocket className="h-4 w-4" />
+      case 'nasa apod': return <Star className="h-4 w-4" />
+      case 'esa': return <Satellite className="h-4 w-4" />
+      case 'space.com': return <Telescope className="h-4 w-4" />
+      case 'universe today': return <Star className="h-4 w-4" />
+      case 'nasa astrobiology': return <Atom className="h-4 w-4" />
+      case 'phys.org': return <Beaker className="h-4 w-4" />
+      case 'science news': return <Microscope className="h-4 w-4" />
+      case 'astronomy magazine': return <BookOpen className="h-4 w-4" />
+      case 'scientific american': return <BarChart3 className="h-4 w-4" />
+      case 'new scientist': return <Search className="h-4 w-4" />
+      default: return <Rss className="h-4 w-4" />
     }
   }
 
@@ -170,7 +170,7 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
               >
                 {/* Source and category */}
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className="text-lg">{getSourceIcon(currentNews.source)}</span>
+                  <div className="text-primary-light-blue">{getSourceIcon(currentNews.source)}</div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(currentNews.category)}`}>
                     {currentNews.category}
                   </span>

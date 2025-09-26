@@ -17,7 +17,15 @@ import {
   Grid,
   List,
   ChevronDown,
-  RefreshCw
+  RefreshCw,
+  Rocket,
+  Satellite,
+  Telescope,
+  Atom,
+  Beaker,
+  Microscope,
+  BookOpen,
+  BarChart3
 } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import { NewsCategories } from '@/components/news/news-categories'
@@ -168,18 +176,18 @@ export default function NewsPage() {
 
   const getSourceIcon = (source: string) => {
     switch (source.toLowerCase()) {
-      case 'nasa': return '🚀'
-      case 'nasa apod': return '🌠'
-      case 'esa': return '🛰️'
-      case 'space.com': return '🌌'
-      case 'universe today': return '⭐'
-      case 'nasa astrobiology': return '🧬'
-      case 'phys.org': return '⚗️'
-      case 'science news': return '🔬'
-      case 'astronomy magazine': return '🌟'
-      case 'scientific american': return '📊'
-      case 'new scientist': return '🔍'
-      default: return '📡'
+      case 'nasa': return <Rocket className="h-4 w-4" />
+      case 'nasa apod': return <Star className="h-4 w-4" />
+      case 'esa': return <Satellite className="h-4 w-4" />
+      case 'space.com': return <Telescope className="h-4 w-4" />
+      case 'universe today': return <Star className="h-4 w-4" />
+      case 'nasa astrobiology': return <Atom className="h-4 w-4" />
+      case 'phys.org': return <Beaker className="h-4 w-4" />
+      case 'science news': return <Microscope className="h-4 w-4" />
+      case 'astronomy magazine': return <BookOpen className="h-4 w-4" />
+      case 'scientific american': return <BarChart3 className="h-4 w-4" />
+      case 'new scientist': return <Search className="h-4 w-4" />
+      default: return <Rss className="h-4 w-4" />
     }
   }
 
@@ -415,7 +423,7 @@ export default function NewsPage() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-lg">{getSourceIcon(article.source)}</span>
+                        <div className="text-primary-light-blue">{getSourceIcon(article.source)}</div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(article.category)}`}>
                           {article.category}
                         </span>
@@ -510,7 +518,7 @@ export default function NewsPage() {
                   {uniqueSources.map(source => (
                     <div key={source} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm">{getSourceIcon(source)}</span>
+                        <div className="text-primary-light-blue">{getSourceIcon(source)}</div>
                         <span className="text-sm">{source}</span>
                       </div>
                       <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
