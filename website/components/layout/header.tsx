@@ -7,6 +7,7 @@ import { Menu, X, Search, Moon, Sun, Telescope } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -35,8 +36,14 @@ export function Header() {
           {/* Logo */}
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-              <Telescope className="h-8 w-8 text-primary-dark-blue" />
-              <span className="text-xl font-bold text-gradient">ExoBengal</span>
+              <Image 
+              src={"/logo_exobengal.png"}
+              alt="ExoBengal Logo"
+              width={32}
+              height={32}
+              className="h-8 w-40 shadow-sm "
+              />
+             
             </Link>
           </div>
 
@@ -47,10 +54,10 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary-light-blue',
+                  ' text-md font-medium transition-colors hover:scale-105 hover:text-primary-light-blue transition duration-300',
                   pathname === item.href
-                    ? 'text-primary-dark-blue dark:text-primary-light-blue'
-                    : 'text-light-text-secondary dark:text-dark-text-secondary'
+                    ? 'bg-gradient-to-r from-sky-400 to-purple-800 bg-clip-text text-transparent light:bg-gradient-to-r from-sky-400 to-purple-200 bg-clip-text text-transparent bg-red-200 border-lime-500 rounded-r-lg'
+                    : 'bg-gradient-to-r from-sky-400 to-purple-800 bg-clip-text text-transparent light:bg-gradient-to-r from-sky-400 to-purple-200 bg-clip-text text-transparent bg-red-200'
                 )}
               >
                 {item.name}
