@@ -111,8 +111,14 @@ export function StatsCounter() {
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="card p-6 hover:shadow-lg transition-shadow duration-200 h-full">
-                <p className="text-4xl font-bold text-primary-dark-blue mb-2">
+              <div className="card p-6 hover:shadow-lg transition-shadow duration-200 h-full" 
+              style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1',
+                  
+                }}
+              >
+                <p className="text-4xl font-bold bg-gradient-to-r from-sky-400 to-purple-200 bg-clip-text text-transparent mb-2">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} decimals={stat.decimals} />
                 </p>
                 <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">

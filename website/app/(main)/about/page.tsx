@@ -185,7 +185,7 @@ const page = () => {
         </motion.section>
 
         {/* Features Grid */}
-        <motion.section
+        {/* <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -226,16 +226,73 @@ const page = () => {
               </p>
             </div>
           </div>
+        </motion.section> */}
+
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mb-16"
+        >
+          <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary text-center mb-12">
+            What We Offer
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="card p-6 text-center bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+                style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1'
+                }}>
+              <Database className="h-12 w-12 mx-auto mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
+                Real-time Data
+              </h3>
+              <p className="text-light-text-secondary dark:text-dark-text-secondary">
+                Direct access to NASA&apos;s Exoplanet Archive with daily updates and comprehensive planet catalogs.
+              </p>
+            </div>
+
+            <div className="card p-6 text-center bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+                style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1'
+                }}>
+              <Users className="h-12 w-12 mx-auto mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
+                Educational Tools
+              </h3>
+              <p className="text-light-text-secondary dark:text-dark-text-secondary">
+                Interactive learning modules, simulations, and resources for students and educators.
+              </p>
+            </div>
+
+            <div className="card p-6 text-center bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+                style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1',
+                  
+                }}>
+              <Heart className="h-12 w-12 mx-auto mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
+                Open Source
+              </h3>
+              <p className="text-light-text-secondary dark:text-dark-text-secondary">
+                Free, open-source software that encourages collaboration and community contributions.
+              </p>
+            </div>
+          </div>
         </motion.section>
 
-        
       <div className="container relative z-2">
         {/* <Heading
           classname="md:max-w-md lg:max-w-2xl"
           title="Chat Smarter, Not Harder with Brainwave"
         /> */}
 
-        <div className="flex flex-wrap gap-8 mb-10">
+        <h4 className='text-4xl font-bold text-center mb-10'>Team ExoBengal</h4>
+        <div className="flex flex-wrap gap-4 mb-10">
+          
           {teamMembers.map((item) => (
             <div
               className="block relative p-0.5 bg-no-repeat bg-[length:100%_100%] md:max-w-[24rem]"
@@ -245,17 +302,19 @@ const page = () => {
               key={item.name}
             >
               <div className="relative z-2 flex flex-col min-h-[22rem] p-[2.4rem] pointer-events-none">
-                <h5 className="h5 mb-5">{item.name}</h5>
-                <p className="body-2 mb-6 text-n-3"> {item.bio} </p>
-                <div>
+                
+                <div className='flex flex-row items-center'>
                       <Image
                       src={"/shihab.png"}
                       alt={item.name}
                       width={100}
                       height={100}
-                      className="w-24 h-24 rounded-full object-cover mb-4"
+                      className="w-24 h-48 rounded-md object-cover mb-4"
                     />  
+                    <p className="body-2 mb-6 text-n-3 px-4"> {item.bio} </p>
                   </div>
+                  <h5 className="h5 mb-5 items-center font-bold text-lg bg-gradient-to-r from-sky-400 to-purple-200 bg-clip-text text-transparent text-center">{item.name}</h5>
+                
                 <div className="flex items-center mt-auto">
                   {/* <img
                     src={item.iconUrl}

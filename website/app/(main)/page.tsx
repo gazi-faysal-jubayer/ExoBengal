@@ -11,7 +11,10 @@ import Hero from '@/components/home/hero'
 export default function HomePage() {
   return (
     <>
+    <div className="min-h-screen pt-60 pb-10">
       <Hero />
+    </div>
+      
       {/* <HeroSection /> */}
       <StatsCounter />
       <FeaturedDiscoveries />
