@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 const leftNavigation = [
   { name: 'Home', href: '/' },
   { name: 'Explorer', href: '/explorer' },
+  { name: 'News', href: '/news' },
   { name: 'Visualizations', href: '/visualizations' },
 ]
 

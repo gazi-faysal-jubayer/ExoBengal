@@ -7,6 +7,7 @@ import { Providers } from '@/components/providers'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { ChatWidget } from '@/components/ai-chat/chat-widget'
+import { NewsBar } from '@/components/news/news-bar'
 import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ 
@@ -57,6 +58,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Header />
+            <NewsBar />
             <main className="flex-1">
               {children}
             </main>
