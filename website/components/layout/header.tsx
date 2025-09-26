@@ -62,7 +62,7 @@ export function Header() {
 
           <div className="absolute left-1/2 -translate-x-1/2">
             <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
-              <Image src="/logo.png" alt="ExoBengal logo" width={120} height={32} priority />
+              <Image src="/full logo.png" alt="ExoBengal logo" width={140} height={36} priority />
             </Link>
           </div>
 
@@ -123,7 +123,7 @@ export function Header() {
             </button>
 
             <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
-              <Image src="/logo.png" alt="ExoBengal logo" width={110} height={28} />
+              <Image src="/full logo.png" alt="ExoBengal logo" width={120} height={30} />
             </Link>
 
             <button

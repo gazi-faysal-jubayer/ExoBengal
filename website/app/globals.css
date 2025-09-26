@@ -32,7 +32,7 @@
 
   /* Glass panels for navbar halves */
   .glass-panel {
-    @apply relative rounded-xl border border-white/10 dark:border-white/10 backdrop-blur-xl;
+    @apply relative border border-white/10 dark:border-white/10 backdrop-blur-xl;
     background: linear-gradient(
       135deg,
       rgba(255,255,255,0.18) 0%,
@@ -44,11 +44,13 @@
 
   /* Angled chevron ends */
   .glass-left {
-    clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 50%, calc(100% - 28px) 100%, 0 100%);
+    /* Only bottom-right chamfer */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%);
   }
 
   .glass-right {
-    clip-path: polygon(28px 0, 100% 0, 100% 100%, 28px 100%, 0 50%);
+    /* Only bottom-left chamfer */
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 28px 100%, 0 calc(100% - 28px), 0 0);
   }
 
   /* Subtle sheen */
@@ -56,7 +58,6 @@
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: inherit;
     background: radial-gradient(120% 100% at 0% 0%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 60%);
     pointer-events: none;
     mix-blend-mode: screen;
@@ -64,7 +65,7 @@
 
   /* Navbar link aesthetic */
   .navlink {
-    @apply rounded-md px-3 py-1.5 transition-all duration-200;
+    @apply px-3 py-1.5 transition-all duration-200;
   }
   .navlink:hover {
     @apply bg-white/20 dark:bg-white/10 shadow-sm;
