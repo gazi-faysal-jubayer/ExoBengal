@@ -116,13 +116,21 @@ export function NewsPreview() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="card group hover:shadow-lg transition-all duration-300"
+                className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group hover:shadow-xl hover:border-primary-light-blue/30 transition-all duration-300 backdrop-blur-sm"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))'
+                }}
               >
                 <div className="p-6">
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-4">
                     <div className="text-primary-light-blue">{getSourceIcon(article.source)}</div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(article.category)}`}>
+                    <span 
+                      className={`px-3 py-1 text-xs font-medium transition-all duration-200 ${getCategoryColor(article.category)}`}
+                      style={{
+                        clipPath: 'polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)'
+                      }}
+                    >
                       {article.category}
                     </span>
                   </div>

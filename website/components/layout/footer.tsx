@@ -57,7 +57,7 @@ export function Footer() {
           <div className="space-y-8 xl:col-span-1">
             <div className="flex items-center gap-2">
               <Image 
-                            src={"/logo_exobengal.png"}
+                            src={"/exobengal.png"}
                             alt="ExoBengal Logo"
                             width={32}
                             height={32}

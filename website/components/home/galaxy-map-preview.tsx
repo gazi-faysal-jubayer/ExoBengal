@@ -177,7 +177,7 @@ export function GalaxyMapPreview() {
           </div>
 
           <div className="relative max-w-6xl mx-auto">
-            <div className="card p-4 overflow-hidden">
+            <div className="card p-4 overflow-hidden card-hover">
               {/* Map Container */}
               <div className="relative h-[500px] rounded-lg overflow-hidden">
                 <svg

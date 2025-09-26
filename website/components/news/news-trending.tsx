@@ -76,7 +76,12 @@ export function NewsTrending({ news, className = '' }: NewsTrendingProps) {
   if (trendingNews.length === 0) return null
 
   return (
-    <div className={`card ${className}`}>
+    <div 
+      className={`relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border backdrop-blur-sm ${className}`}
+      style={{
+        clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))'
+      }}
+    >
       <div className="p-6">
         <div className="flex items-center gap-2 mb-6">
           <Flame className="h-5 w-5 text-primary-reddish-orange" />
@@ -97,11 +102,19 @@ export function NewsTrending({ news, className = '' }: NewsTrendingProps) {
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-lg hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
+                className="block p-3 hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))'
+                }}
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-dark-blue to-primary-light-blue flex items-center justify-center text-white text-sm font-bold">
+                    <div 
+                      className="w-8 h-8 bg-gradient-to-br from-primary-dark-blue to-primary-light-blue flex items-center justify-center text-white text-sm font-bold"
+                      style={{
+                        clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)'
+                      }}
+                    >
                       {index + 1}
                     </div>
                   </div>

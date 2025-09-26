@@ -124,7 +124,12 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
 
   if (isLoading) {
     return (
-      <div className={`border-b border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card ${className}`}>
+      <div 
+        className={`relative border-b border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card backdrop-blur-sm ${className}`}
+        style={{
+          clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 4px))'
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className={`flex items-center ${compact ? 'py-2' : 'py-3'}`}>
             <div className="flex items-center gap-2 text-primary-dark-blue dark:text-primary-light-blue">
@@ -144,7 +149,12 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
   const currentNews = news[currentIndex]
 
   return (
-    <div className={`border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-card via-light-surface to-light-card dark:from-dark-card dark:via-dark-surface dark:to-dark-card ${className}`}>
+    <div 
+      className={`relative border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-card via-light-surface to-light-card dark:from-dark-card dark:via-dark-surface dark:to-dark-card backdrop-blur-sm ${className}`}
+      style={{
+        clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 4px))'
+      }}
+    >
       <div className="container mx-auto px-4">
         <div className={`flex items-center justify-between ${compact ? 'py-2' : 'py-3'}`}>
           {/* News Content */}

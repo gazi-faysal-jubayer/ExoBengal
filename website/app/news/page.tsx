@@ -287,7 +287,7 @@ export default function NewsPage() {
               <select
                 value={filters.category}
                 onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                className="input-base"
+                className="select-base"
               >
                 <option value="all">All Categories</option>
                 {uniqueCategories.map(category => (
@@ -301,7 +301,7 @@ export default function NewsPage() {
               <select
                 value={filters.source}
                 onChange={(e) => setFilters(prev => ({ ...prev, source: e.target.value }))}
-                className="input-base"
+                className="select-base"
               >
                 <option value="all">All Sources</option>
                 {uniqueSources.map(source => (
@@ -315,7 +315,7 @@ export default function NewsPage() {
               <select
                 value={filters.dateRange}
                 onChange={(e) => setFilters(prev => ({ ...prev, dateRange: e.target.value }))}
-                className="input-base"
+                className="select-base"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -410,9 +410,15 @@ export default function NewsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={`card group hover:shadow-lg transition-all duration-300 ${
-                    viewMode === 'list' ? 'flex gap-6' : ''
-                  }`}
+                  className={`
+                    relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border
+                    group hover:shadow-xl hover:border-primary-light-blue/30 transition-all duration-300
+                    clip-path-polygon backdrop-blur-sm
+                    ${viewMode === 'list' ? 'flex gap-6' : ''}
+                  `}
+                  style={{
+                    clipPath: 'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))'
+                  }}
                 >
                   {/* Image placeholder for list view */}
                   {viewMode === 'list' && (
@@ -424,7 +430,12 @@ export default function NewsPage() {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <div className="text-primary-light-blue">{getSourceIcon(article.source)}</div>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(article.category)}`}>
+                        <span 
+                          className={`px-3 py-1 text-xs font-medium border transition-all duration-200 ${getCategoryColor(article.category)}`}
+                          style={{
+                            clipPath: 'polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)'
+                          }}
+                        >
                           {article.category}
                         </span>
                       </div>
@@ -489,7 +500,12 @@ export default function NewsPage() {
               <NewsTrending news={news} />
               
               {/* Quick Stats */}
-              <div className="card p-6">
+              <div 
+                className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 backdrop-blur-sm"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))'
+                }}
+              >
                 <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
@@ -512,7 +528,12 @@ export default function NewsPage() {
               </div>
 
               {/* Recent Sources */}
-              <div className="card p-6">
+              <div 
+                className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 backdrop-blur-sm"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))'
+                }}
+              >
                 <h3 className="text-lg font-semibold mb-4">News Sources</h3>
                 <div className="space-y-2">
                   {uniqueSources.map(source => (

@@ -33,7 +33,7 @@ function NotesPanel({ planetName }: { planetName: string }) {
       ) : (
         <ul className="space-y-2">
           {notes.map((n, i) => (
-            <li key={i} className="flex items-start justify-between gap-3 p-3 rounded border border-light-border dark:border-dark-border">
+            <li key={i} className="flex items-start justify-between gap-3 p-3 border border-light-border dark:border-dark-border clip-angled-tag bg-light-surface/50 dark:bg-dark-surface/50">
               <span className="text-sm">{n}</span>
               <button onClick={() => deleteNote(planetName, i)} className="text-xs text-light-text-secondary hover:text-semantic-warning">Delete</button>
             </li>
@@ -265,7 +265,7 @@ function ArtistConception({
 
       {tooltip.visible && (
         <div
-          className="absolute z-10 rounded-md bg-black/75 text-white text-xs px-3 py-2 pointer-events-none shadow-lg border border-white/10 max-w-[220px]"
+          className="absolute z-10 bg-black/80 text-white text-xs px-3 py-2 pointer-events-none shadow-lg border border-white/20 max-w-[220px] clip-angled-tag backdrop-blur-sm"
           style={{ left: tooltip.x, top: tooltip.y }}
         >
           <div className="font-semibold mb-1">{tooltip.title}</div>
@@ -334,7 +334,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="card p-4">
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   Discovery Details
@@ -363,7 +363,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
                 </div>
               </div>
 
-              <div className="card p-4">
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200">
                 <h4 className="font-medium mb-2">Quick Facts</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
@@ -389,11 +389,11 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Physical Properties</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="card p-4"><h4 className="font-medium mb-2">Radius</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_rade, 'R⊕')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Mass</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_masse, 'M⊕')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Radius (Jupiter)</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_radj, 'R♃')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Mass (Jupiter)</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_massj, 'M♃')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Equilibrium Temp</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum((planet as any).pl_eqt, 'K')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Radius</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_rade, 'R⊕')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Mass</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_masse, 'M⊕')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Radius (Jupiter)</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_radj, 'R♃')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Mass (Jupiter)</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_massj, 'M♃')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Equilibrium Temp</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum((planet as any).pl_eqt, 'K')}</p></div>
             </div>
           </div>
         )
@@ -403,10 +403,10 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Orbital Characteristics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="card p-4"><h4 className="font-medium mb-2">Period</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbper, 'days')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Semi-Major Axis</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbsmax, 'AU')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Eccentricity</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbeccen)}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Inclination</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbincl, '°')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Period</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbper, 'days')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Semi-Major Axis</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbsmax, 'AU')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Eccentricity</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbeccen)}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Inclination</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.pl_orbincl, '°')}</p></div>
             </div>
           </div>
         )
@@ -416,9 +416,9 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Host Star: {planet.hostname}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="card p-4"><h4 className="font-medium mb-2">Stellar Radius</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_rad, 'R☉')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Stellar Mass</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_mass, 'M☉')}</p></div>
-              <div className="card p-4"><h4 className="font-medium mb-2">Effective Temperature</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_teff, 'K')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Stellar Radius</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_rad, 'R☉')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Stellar Mass</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_mass, 'M☉')}</p></div>
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200"><h4 className="font-medium mb-2">Effective Temperature</h4><p className="text-xl font-bold text-primary-dark-blue">{formatNum(planet.st_teff, 'K')}</p></div>
             </div>
           </div>
         )
@@ -428,7 +428,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Habitability Assessment</h3>
             <div className="space-y-4">
-              <div className="card p-4">
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200">
                 <h4 className="font-medium mb-2">Habitable Zone Status</h4>
                 <div className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full bg-gray-500`}></div>
@@ -444,7 +444,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Scientific References</h3>
             <div className="space-y-4">
-              <div className="card p-4">
+              <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 clip-corner-cut backdrop-blur-sm hover:border-primary-light-blue/30 transition-all duration-200">
                 <h4 className="font-medium mb-2">Reference</h4>
                 <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">
                   {stripHtml(planet.disc_refname) || '—'}
@@ -488,7 +488,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="bg-light-card dark:bg-dark-card rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-light-card dark:bg-dark-card shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden clip-corner-cut backdrop-blur-lg border border-light-border dark:border-dark-border"
           onClick={e => e.stopPropagation()}
         >
           {/* Header */}
@@ -527,7 +527,7 @@ export function DetailView({ planetId, onClose }: DetailViewProps) {
           </div>
 
           {/* Tabs */}
-          <div className="border-b border-light-border dark:border-dark-border">
+          <div className="border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-surface/30 via-light-card to-light-surface/30 dark:from-dark-surface/30 dark:via-dark-card dark:to-dark-surface/30">
             <div className="flex overflow-x-auto scrollbar-hide">
               {tabs.map((tab) => (
                 <button

@@ -111,7 +111,7 @@ export function StatsCounter() {
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="card p-6 hover:shadow-lg transition-shadow duration-200 h-full">
+              <div className="card p-6 card-hover h-full">
                 <p className="text-4xl font-bold text-primary-dark-blue mb-2">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} decimals={stat.decimals} />
                 </p>

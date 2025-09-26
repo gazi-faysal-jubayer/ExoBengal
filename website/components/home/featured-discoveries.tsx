@@ -90,7 +90,7 @@ export function FeaturedDiscoveries() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.5 }}
-                className="card p-0 lg:flex"
+                className="card p-0 lg:flex card-hover"
               >
                 {/* Image Section */}
                 <div className="lg:w-1/2 h-64 lg:h-auto relative bg-gradient-to-br from-primary-dark-blue to-primary-light-blue">

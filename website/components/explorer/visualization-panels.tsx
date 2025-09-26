@@ -10,22 +10,22 @@ import dynamic from 'next/dynamic'
 // Dynamically import Three.js components to avoid SSR issues
 const OrbitalSystemViewer = dynamic(() => import('./orbital-system-viewer'), {
   ssr: false,
-  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface rounded-lg animate-pulse" />
+  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface animate-pulse clip-corner-cut" />
 })
 
 const StatisticalCharts = dynamic(() => import('./statistical-charts'), {
   ssr: false,
-  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface rounded-lg animate-pulse" />
+  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface animate-pulse clip-corner-cut" />
 })
 
 const SkyMapViewer = dynamic(() => import('./sky-map-viewer'), {
   ssr: false,
-  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface rounded-lg animate-pulse" />
+  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface animate-pulse clip-corner-cut" />
 })
 
 const ParameterCorrelations = dynamic(() => import('./parameter-correlations'), {
   ssr: false,
-  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface rounded-lg animate-pulse" />
+  loading: () => <div className="h-96 bg-light-surface dark:bg-dark-surface animate-pulse clip-corner-cut" />
 })
 
 type VisualizationType = '3d-orbital' | 'statistics' | 'sky-map' | 'correlations'
@@ -87,10 +87,10 @@ export default function VisualizationPanels() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setActiveVisualization(type.id)}
-            className={`p-4 rounded-lg border text-left transition-all ${
+            className={`p-4 border text-left transition-all clip-corner-cut backdrop-blur-sm ${
               activeVisualization === type.id
-                ? 'border-primary-dark-blue bg-primary-dark-blue/5 dark:bg-primary-dark-blue/10'
-                : 'border-light-border dark:border-dark-border hover:border-primary-light-blue'
+                ? 'border-primary-dark-blue bg-primary-dark-blue/10 dark:bg-primary-dark-blue/20 shadow-lg'
+                : 'border-light-border dark:border-dark-border hover:border-primary-light-blue hover:bg-light-hover dark:hover:bg-dark-hover'
             }`}
           >
             <type.icon className={`h-6 w-6 mb-2 ${
@@ -118,7 +118,7 @@ export default function VisualizationPanels() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="card overflow-hidden"
+        className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
       >
         {/* Header */}
         <div className="p-4 border-b border-light-border dark:border-dark-border">
@@ -143,19 +143,19 @@ export default function VisualizationPanels() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="card p-4 text-center">
+        <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 text-center clip-corner-cut backdrop-blur-sm">
           <p className="text-2xl font-bold text-primary-dark-blue">5,565</p>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
             Confirmed Exoplanets
           </p>
         </div>
-        <div className="card p-4 text-center">
+        <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 text-center clip-corner-cut backdrop-blur-sm">
           <p className="text-2xl font-bold text-primary-dark-blue">4,140</p>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
             Planetary Systems
           </p>
         </div>
-        <div className="card p-4 text-center">
+        <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-4 text-center clip-corner-cut backdrop-blur-sm">
           <p className="text-2xl font-bold text-primary-dark-blue">15</p>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
             Detection Methods

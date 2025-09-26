@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ChevronRight, Terminal, CheckCircle, ExternalLink } from 'lucide-react'
 import { CodeBlock } from '@/components/docs/code-block'
 import { PrevNext } from '@/components/docs/prev-next'
+import TerminalCard from '@/components/docs/terminal-card'
 
 const steps = [
   {
@@ -75,7 +76,11 @@ export default function GettingStartedPage() {
                   <h2>{index + 1}. {step.title}</h2>
                   <p>{step.content}</p>
                   {step.code && (
-                    <CodeBlock language={index === 0 ? 'bash' : 'python'} code={step.code} />
+                    index === 0 ? (
+                      <TerminalCard command={step.code} />
+                    ) : (
+                      <CodeBlock language="python" code={step.code} />
+                    )
                   )}
                   {step.note && (
                     <p className="text-sm text-semantic-info mt-1 flex items-center gap-2">
