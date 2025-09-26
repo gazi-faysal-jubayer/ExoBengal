@@ -74,7 +74,7 @@ export function QuickSearch() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleQuickFilter(filter.query)}
-                className="card p-6 text-center hover:shadow-lg transition-all duration-200 group"
+                className="card p-6 text-center card-hover group"
               >
                 <filter.icon className="h-8 w-8 mx-auto mb-3 text-primary-light-blue group-hover:text-primary-dark-blue transition-colors" />
                 <p className="font-medium text-light-text-primary dark:text-dark-text-primary">

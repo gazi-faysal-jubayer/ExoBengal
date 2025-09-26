@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, Clock, Globe, Rss, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
+import { ExternalLink, Clock, Globe, Rss, ChevronLeft, ChevronRight, Pause, Play, Rocket, Satellite, Telescope, Star, Atom, Beaker, Microscope, BookOpen, BarChart3, Search } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import Link from 'next/link'
 
@@ -97,11 +97,18 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
 
   const getSourceIcon = (source: string) => {
     switch (source.toLowerCase()) {
-      case 'nasa': return '🚀'
-      case 'esa': return '🛰️'
-      case 'space.com': return '🌌'
-      case 'universe today': return '⭐'
-      default: return '📡'
+      case 'nasa': return <Rocket className="h-4 w-4" />
+      case 'nasa apod': return <Star className="h-4 w-4" />
+      case 'esa': return <Satellite className="h-4 w-4" />
+      case 'space.com': return <Telescope className="h-4 w-4" />
+      case 'universe today': return <Star className="h-4 w-4" />
+      case 'nasa astrobiology': return <Atom className="h-4 w-4" />
+      case 'phys.org': return <Beaker className="h-4 w-4" />
+      case 'science news': return <Microscope className="h-4 w-4" />
+      case 'astronomy magazine': return <BookOpen className="h-4 w-4" />
+      case 'scientific american': return <BarChart3 className="h-4 w-4" />
+      case 'new scientist': return <Search className="h-4 w-4" />
+      default: return <Rss className="h-4 w-4" />
     }
   }
 
@@ -117,7 +124,12 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
 
   if (isLoading) {
     return (
-      <div className={`border-b border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card ${className}`}>
+      <div 
+        className={`relative border-b border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card backdrop-blur-sm ${className}`}
+        style={{
+          clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 4px))'
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className={`flex items-center ${compact ? 'py-2' : 'py-3'}`}>
             <div className="flex items-center gap-2 text-primary-dark-blue dark:text-primary-light-blue">
@@ -137,7 +149,12 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
   const currentNews = news[currentIndex]
 
   return (
-    <div className={`border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-card via-light-surface to-light-card dark:from-dark-card dark:via-dark-surface dark:to-dark-card ${className}`}>
+    <div 
+      className={`relative border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-card via-light-surface to-light-card dark:from-dark-card dark:via-dark-surface dark:to-dark-card backdrop-blur-sm ${className}`}
+      style={{
+        clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 4px))'
+      }}
+    >
       <div className="container mx-auto px-4">
         <div className={`flex items-center justify-between ${compact ? 'py-2' : 'py-3'}`}>
           {/* News Content */}
@@ -163,7 +180,7 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
               >
                 {/* Source and category */}
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className="text-lg">{getSourceIcon(currentNews.source)}</span>
+                  <div className="text-primary-light-blue">{getSourceIcon(currentNews.source)}</div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(currentNews.category)}`}>
                     {currentNews.category}
                   </span>

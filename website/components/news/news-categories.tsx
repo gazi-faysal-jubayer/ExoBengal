@@ -104,14 +104,14 @@ export function NewsCategories({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
             onClick={() => onCategorySelect(category.id)}
-            className={`group relative p-4 rounded-xl transition-all duration-300 ${
+            className={`group relative p-4 transition-all duration-300 clip-corner-cut ${
               isSelected
                 ? 'ring-2 ring-primary-light-blue shadow-lg scale-105'
                 : 'hover:scale-105 hover:shadow-md'
             }`}
           >
             {/* Background gradient */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${category.color} rounded-xl transition-opacity ${
+            <div className={`absolute inset-0 bg-gradient-to-br ${category.color} clip-corner-cut transition-opacity ${
               isSelected ? 'opacity-20' : 'opacity-10 group-hover:opacity-15'
             }`} />
             

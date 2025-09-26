@@ -95,7 +95,7 @@ export function SearchInterface() {
             }}
             onFocus={() => setShowSuggestions(true)}
             placeholder="Search by planet name, star system, or use natural language..."
-            className="w-full pl-12 pr-20 py-4 text-lg input-base rounded-lg shadow-sm"
+            className="w-full pl-12 pr-20 py-4 text-lg input-base shadow-sm"
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSearch(query)
             }}
@@ -128,7 +128,7 @@ export function SearchInterface() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 mt-2 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg shadow-lg z-50"
+              className="absolute top-full left-0 right-0 mt-2 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg shadow-lg z-50 backdrop-blur-sm"
             >
               <div className="p-4 space-y-4">
                 {/* Quick Suggestions */}
@@ -145,7 +145,7 @@ export function SearchInterface() {
                             setQuery(suggestion)
                             handleSearch(suggestion)
                           }}
-                          className="w-full text-left px-3 py-2 rounded-md hover:bg-light-hover dark:hover:bg-dark-hover transition-colors text-sm"
+                          className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover transition-colors text-sm rounded-md"
                         >
                           {suggestion}
                         </button>
@@ -168,7 +168,7 @@ export function SearchInterface() {
                           setQuery(search)
                           handleSearch(search)
                         }}
-                        className="w-full text-left px-3 py-2 rounded-md hover:bg-light-hover dark:hover:bg-dark-hover transition-colors text-sm text-light-text-secondary dark:text-dark-text-secondary"
+                        className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover transition-colors text-sm text-light-text-secondary dark:text-dark-text-secondary rounded-md"
                       >
                         {search}
                       </button>
@@ -199,7 +199,7 @@ export function SearchInterface() {
             key={filter.value}
             onClick={() => addFilter(filter.value)}
             disabled={selectedFilters.includes(filter.value)}
-            className="px-3 py-1 text-xs rounded-full border border-light-border dark:border-dark-border hover:bg-light-hover dark:hover:bg-dark-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 py-1 text-xs border border-light-border dark:border-dark-border hover:bg-light-hover dark:hover:bg-dark-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-full"
           >
             {filter.label}
           </button>

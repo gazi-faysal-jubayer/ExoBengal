@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, ExternalLink, Clock, Globe } from 'lucide-react'
+import { ArrowRight, ExternalLink, Clock, Globe, Rocket, Satellite, Telescope, Star, Atom, Beaker, Microscope, BookOpen, BarChart3, Search, Rss } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import Link from 'next/link'
 
@@ -51,12 +51,18 @@ export function NewsPreview() {
 
   const getSourceIcon = (source: string) => {
     switch (source.toLowerCase()) {
-      case 'nasa': return '🚀'
-      case 'esa': return '🛰️'
-      case 'space.com': return '🌌'
-      case 'universe today': return '⭐'
-      case 'nasa astrobiology': return '🧬'
-      default: return '📡'
+      case 'nasa': return <Rocket className="h-4 w-4" />
+      case 'nasa apod': return <Star className="h-4 w-4" />
+      case 'esa': return <Satellite className="h-4 w-4" />
+      case 'space.com': return <Telescope className="h-4 w-4" />
+      case 'universe today': return <Star className="h-4 w-4" />
+      case 'nasa astrobiology': return <Atom className="h-4 w-4" />
+      case 'phys.org': return <Beaker className="h-4 w-4" />
+      case 'science news': return <Microscope className="h-4 w-4" />
+      case 'astronomy magazine': return <BookOpen className="h-4 w-4" />
+      case 'scientific american': return <BarChart3 className="h-4 w-4" />
+      case 'new scientist': return <Search className="h-4 w-4" />
+      default: return <Rss className="h-4 w-4" />
     }
   }
 
@@ -110,13 +116,21 @@ export function NewsPreview() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="card group hover:shadow-lg transition-all duration-300"
+                className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group hover:shadow-xl hover:border-primary-light-blue/30 transition-all duration-300 backdrop-blur-sm"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))'
+                }}
               >
                 <div className="p-6">
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="text-lg">{getSourceIcon(article.source)}</span>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(article.category)}`}>
+                    <div className="text-primary-light-blue">{getSourceIcon(article.source)}</div>
+                    <span 
+                      className={`px-3 py-1 text-xs font-medium transition-all duration-200 ${getCategoryColor(article.category)}`}
+                      style={{
+                        clipPath: 'polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)'
+                      }}
+                    >
                       {article.category}
                     </span>
                   </div>

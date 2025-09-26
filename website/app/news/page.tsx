@@ -17,7 +17,15 @@ import {
   Grid,
   List,
   ChevronDown,
-  RefreshCw
+  RefreshCw,
+  Rocket,
+  Satellite,
+  Telescope,
+  Atom,
+  Beaker,
+  Microscope,
+  BookOpen,
+  BarChart3
 } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import { NewsCategories } from '@/components/news/news-categories'
@@ -168,11 +176,18 @@ export default function NewsPage() {
 
   const getSourceIcon = (source: string) => {
     switch (source.toLowerCase()) {
-      case 'nasa': return '🚀'
-      case 'esa': return '🛰️'
-      case 'space.com': return '🌌'
-      case 'universe today': return '⭐'
-      default: return '📡'
+      case 'nasa': return <Rocket className="h-4 w-4" />
+      case 'nasa apod': return <Star className="h-4 w-4" />
+      case 'esa': return <Satellite className="h-4 w-4" />
+      case 'space.com': return <Telescope className="h-4 w-4" />
+      case 'universe today': return <Star className="h-4 w-4" />
+      case 'nasa astrobiology': return <Atom className="h-4 w-4" />
+      case 'phys.org': return <Beaker className="h-4 w-4" />
+      case 'science news': return <Microscope className="h-4 w-4" />
+      case 'astronomy magazine': return <BookOpen className="h-4 w-4" />
+      case 'scientific american': return <BarChart3 className="h-4 w-4" />
+      case 'new scientist': return <Search className="h-4 w-4" />
+      default: return <Rss className="h-4 w-4" />
     }
   }
 
@@ -200,6 +215,13 @@ export default function NewsPage() {
     <div className="min-h-screen bg-light-background dark:bg-dark-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-dark-blue via-primary-light-blue to-primary-cyan text-white">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/exobengal-news.webp)',
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-dark-blue/40 via-primary-light-blue/30 to-primary-cyan/40" />
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative container mx-auto px-4 py-16">
           <motion.div
@@ -265,7 +287,7 @@ export default function NewsPage() {
               <select
                 value={filters.category}
                 onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                className="input-base"
+                className="select-base"
               >
                 <option value="all">All Categories</option>
                 {uniqueCategories.map(category => (
@@ -279,7 +301,7 @@ export default function NewsPage() {
               <select
                 value={filters.source}
                 onChange={(e) => setFilters(prev => ({ ...prev, source: e.target.value }))}
-                className="input-base"
+                className="select-base"
               >
                 <option value="all">All Sources</option>
                 {uniqueSources.map(source => (
@@ -293,7 +315,7 @@ export default function NewsPage() {
               <select
                 value={filters.dateRange}
                 onChange={(e) => setFilters(prev => ({ ...prev, dateRange: e.target.value }))}
-                className="input-base"
+                className="select-base"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -388,9 +410,15 @@ export default function NewsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={`card group hover:shadow-lg transition-all duration-300 ${
-                    viewMode === 'list' ? 'flex gap-6' : ''
-                  }`}
+                  className={`
+                    relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border
+                    group hover:shadow-xl hover:border-primary-light-blue/30 transition-all duration-300
+                    clip-path-polygon backdrop-blur-sm
+                    ${viewMode === 'list' ? 'flex gap-6' : ''}
+                  `}
+                  style={{
+                    clipPath: 'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))'
+                  }}
                 >
                   {/* Image placeholder for list view */}
                   {viewMode === 'list' && (
@@ -401,8 +429,13 @@ export default function NewsPage() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-lg">{getSourceIcon(article.source)}</span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(article.category)}`}>
+                        <div className="text-primary-light-blue">{getSourceIcon(article.source)}</div>
+                        <span 
+                          className={`px-3 py-1 text-xs font-medium border transition-all duration-200 ${getCategoryColor(article.category)}`}
+                          style={{
+                            clipPath: 'polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)'
+                          }}
+                        >
                           {article.category}
                         </span>
                       </div>
@@ -467,7 +500,12 @@ export default function NewsPage() {
               <NewsTrending news={news} />
               
               {/* Quick Stats */}
-              <div className="card p-6">
+              <div 
+                className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 backdrop-blur-sm"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))'
+                }}
+              >
                 <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
@@ -490,13 +528,18 @@ export default function NewsPage() {
               </div>
 
               {/* Recent Sources */}
-              <div className="card p-6">
+              <div 
+                className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 backdrop-blur-sm"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))'
+                }}
+              >
                 <h3 className="text-lg font-semibold mb-4">News Sources</h3>
                 <div className="space-y-2">
                   {uniqueSources.map(source => (
                     <div key={source} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm">{getSourceIcon(source)}</span>
+                        <div className="text-primary-light-blue">{getSourceIcon(source)}</div>
                         <span className="text-sm">{source}</span>
                       </div>
                       <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary">

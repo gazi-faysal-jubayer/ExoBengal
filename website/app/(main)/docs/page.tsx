@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { BookOpen, Download, Github, Rocket, Code, Star, Users, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { CodeBlock } from '@/components/docs/code-block'
+import TerminalCard from '@/components/docs/terminal-card'
 
 const quickLinks = [
   {
@@ -126,13 +127,11 @@ export default function DocsPage() {
             </div>
 
             {/* Installation Command */}
-            <div className="bg-light-surface dark:bg-dark-surface rounded-lg p-4 max-w-lg mx-auto">
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">
+            <div className="max-w-lg mx-auto">
+              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4 text-center">
                 Install via pip:
               </p>
-              <code className="text-primary-dark-blue dark:text-primary-light-blue font-mono">
-                pip install exobengal
-              </code>
+              <TerminalCard command="pip install exobengal" />
             </div>
           </motion.div>
         </div>

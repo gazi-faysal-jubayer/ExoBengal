@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { TrendingUp, Clock, ExternalLink, Flame } from 'lucide-react'
+import { TrendingUp, Clock, ExternalLink, Flame, Rocket, Satellite, Telescope, Star, Atom, Beaker, Microscope, BookOpen, BarChart3, Search, Rss } from 'lucide-react'
 import { type NewsItem } from '@/lib/news-api'
 import Link from 'next/link'
 
@@ -58,19 +58,30 @@ export function NewsTrending({ news, className = '' }: NewsTrendingProps) {
 
   const getSourceIcon = (source: string) => {
     switch (source.toLowerCase()) {
-      case 'nasa': return '🚀'
-      case 'esa': return '🛰️'
-      case 'space.com': return '🌌'
-      case 'universe today': return '⭐'
-      case 'nasa astrobiology': return '🧬'
-      default: return '📡'
+      case 'nasa': return <Rocket className="h-3 w-3" />
+      case 'nasa apod': return <Star className="h-3 w-3" />
+      case 'esa': return <Satellite className="h-3 w-3" />
+      case 'space.com': return <Telescope className="h-3 w-3" />
+      case 'universe today': return <Star className="h-3 w-3" />
+      case 'nasa astrobiology': return <Atom className="h-3 w-3" />
+      case 'phys.org': return <Beaker className="h-3 w-3" />
+      case 'science news': return <Microscope className="h-3 w-3" />
+      case 'astronomy magazine': return <BookOpen className="h-3 w-3" />
+      case 'scientific american': return <BarChart3 className="h-3 w-3" />
+      case 'new scientist': return <Search className="h-3 w-3" />
+      default: return <Rss className="h-3 w-3" />
     }
   }
 
   if (trendingNews.length === 0) return null
 
   return (
-    <div className={`card ${className}`}>
+    <div 
+      className={`relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border backdrop-blur-sm ${className}`}
+      style={{
+        clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))'
+      }}
+    >
       <div className="p-6">
         <div className="flex items-center gap-2 mb-6">
           <Flame className="h-5 w-5 text-primary-reddish-orange" />
@@ -91,18 +102,26 @@ export function NewsTrending({ news, className = '' }: NewsTrendingProps) {
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-lg hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
+                className="block p-3 hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
+                style={{
+                  clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))'
+                }}
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-dark-blue to-primary-light-blue flex items-center justify-center text-white text-sm font-bold">
+                    <div 
+                      className="w-8 h-8 bg-gradient-to-br from-primary-dark-blue to-primary-light-blue flex items-center justify-center text-white text-sm font-bold"
+                      style={{
+                        clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)'
+                      }}
+                    >
                       {index + 1}
                     </div>
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm">{getSourceIcon(article.source)}</span>
+                      <div className="text-primary-light-blue">{getSourceIcon(article.source)}</div>
                       <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
                         {article.source}
                       </span>

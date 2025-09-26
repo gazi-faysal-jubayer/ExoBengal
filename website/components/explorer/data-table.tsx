@@ -223,7 +223,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
 
   if (loading) {
     return (
-      <div className="card overflow-hidden">
+      <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm">
         <div className="p-8 text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-light-blue" />
           <p className="text-light-text-secondary dark:text-dark-text-secondary">
@@ -235,7 +235,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
   }
 
   return (
-    <div className="card overflow-hidden">
+    <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm">
       {/* Error Banner */}
       {error && (
         <div className="p-4 bg-semantic-warning/10 border-b border-semantic-warning/20">
@@ -278,7 +278,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
               <th className="w-12 p-3 text-left">
                 <input
                   type="checkbox"
-                  className="rounded border-light-border dark:border-dark-border"
+                  className="border-light-border dark:border-dark-border clip-angled-tag"
                   onChange={(e) => {
                     if (e.target.checked) {
                       setSelectedRows(sortedData.map(row => row.id))
@@ -334,7 +334,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
                     type="checkbox"
                     checked={selectedRows.includes(row.id)}
                     onChange={() => toggleRowSelection(row.id)}
-                    className="rounded border-light-border dark:border-dark-border"
+                    className="border-light-border dark:border-dark-border clip-angled-tag"
                   />
                 </td>
                 <td className="p-3">
@@ -368,7 +368,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
                 <td className="p-3">
                   <button
                     onClick={() => onPlanetSelect(row.id)}
-                    className="p-1 rounded hover:bg-light-surface dark:hover:bg-dark-surface transition-colors"
+                    className="p-1 hover:bg-light-surface dark:hover:bg-dark-surface transition-colors clip-angled-tag"
                     aria-label="View details"
                   >
                     <Eye className="h-4 w-4" />

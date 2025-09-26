@@ -132,7 +132,7 @@ export default function ParameterCorrelations() {
       <div className="flex flex-wrap gap-3 items-end">
         <div>
           <label className="block text-xs mb-1 text-light-text-secondary dark:text-dark-text-secondary">X Axis</label>
-          <select value={selectedX} onChange={e => setSelectedX(e.target.value as NumericKey)} className="input-base text-sm py-1">
+          <select value={selectedX} onChange={e => setSelectedX(e.target.value as NumericKey)} className="select-base text-sm py-1">
             {PARAMS.map(p => (
               <option key={p.key} value={p.key}>{p.label}</option>
             ))}
@@ -140,7 +140,7 @@ export default function ParameterCorrelations() {
         </div>
         <div>
           <label className="block text-xs mb-1 text-light-text-secondary dark:text-dark-text-secondary">Y Axis</label>
-          <select value={selectedY} onChange={e => setSelectedY(e.target.value as NumericKey)} className="input-base text-sm py-1">
+          <select value={selectedY} onChange={e => setSelectedY(e.target.value as NumericKey)} className="select-base text-sm py-1">
             {PARAMS.map(p => (
               <option key={p.key} value={p.key}>{p.label}</option>
             ))}

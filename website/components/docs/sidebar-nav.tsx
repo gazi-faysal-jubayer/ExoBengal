@@ -51,7 +51,7 @@ export const docsNav: NavItem[] = [
 export function SidebarNav() {
   const pathname = usePathname()
   return (
-    <nav className="text-sm">
+    <nav className="text-sm relative z-10">
       {docsNav.map((section) => (
         <div key={section.title} className="mb-6">
           <div className="uppercase tracking-wide text-xs text-light-text-secondary dark:text-dark-text-secondary mb-2">
@@ -65,10 +65,10 @@ export function SidebarNav() {
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className={`block rounded px-2 py-1 transition-colors border ${
+                      className={`block rounded px-2 py-1 transition-colors border relative z-10 cursor-pointer ${
                         active
                           ? 'bg-light-hover dark:bg-dark-hover text-light-text-primary dark:text-dark-text-primary border-primary-light-blue/60'
-                          : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary border-transparent hover:border-light-border dark:hover:border-dark-border'
+                          : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary border-transparent hover:border-light-border dark:hover:border-dark-border hover:bg-light-hover/50 dark:hover:bg-dark-hover/50'
                       }`}
                     >
                       {item.title}

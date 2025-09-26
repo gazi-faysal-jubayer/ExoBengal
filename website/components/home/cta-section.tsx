@@ -64,7 +64,7 @@ export function CTASection() {
                 rel={card.external ? 'noopener noreferrer' : undefined}
                 className="block h-full"
               >
-                <div className="card p-8 h-full hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] relative overflow-hidden">
+                <div className="card p-8 h-full card-hover relative overflow-hidden">
                   {/* Background gradient on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
                   
