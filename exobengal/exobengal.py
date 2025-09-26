@@ -9,12 +9,15 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 import joblib
+
 import tensorflow as tf
 from tensorflow.keras.models import load_model, Sequential
 from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -58,18 +61,21 @@ class ExoParams:
 class DetectExoplanet:
     def __init__(self,
                  rf_model_path=str(MODELS_DIR / "random_forest_classifier.pkl"),
+                 dt_model_path=str(MODELS_DIR / "decision_tree_classifier.pkl"),
                  cnn_model_path=str(MODELS_DIR / "cnn_model.h5"),
                  knn_model_path=str(MODELS_DIR / "knn_model.pkl"),
                  scaler_path=str(MODELS_DIR / "scaler.pkl"),
                  imputer_path=str(MODELS_DIR / "imputer.pkl")):
 
         self.model_path = rf_model_path
+        self.dt_model_path = dt_model_path
         self.cnn_path = cnn_model_path
         self.knn_model_path = knn_model_path
         self.scaler_path = scaler_path
         self.imputer_path = imputer_path
 
         self.model = None
+        self.dt_model = None
         self.cnn_model = None
         self.knn_model = None
         self.scaler = None
@@ -99,10 +105,17 @@ class DetectExoplanet:
             input_array = self.scaler.transform(input_array)
         return input_array
 
-    # ---------------- Random Forest ----------------
-    def train_random_forest(self, data_path=str(DATA_DIR / "cumulative_2025.09.20_12.15.37.csv")):
+    # ============================================================
+    # Random Forest
+    # ============================================================
+    def train_random_forest(self, 
+                        data_path=str(DATA_DIR / "cumulative.csv"),
+                        n_estimators=100,
+                        max_depth=None):
+        # --- Load data ---
         koi_table = pd.read_csv(data_path, skiprows=1, delimiter=",", comment="#")
-        koi_table['koi_insol'] = ((koi_table['koi_steff'] / 5778) ** 4) * (koi_table['koi_srad'] ** 2) / (koi_table['koi_period'] ** (4 / 3))
+        koi_table['koi_insol'] = ((koi_table['koi_steff'] / 5778) ** 4) * \
+                                (koi_table['koi_srad'] ** 2) / (koi_table['koi_period'] ** (4 / 3))
 
         features = ["koi_period", "koi_prad", "koi_teq", "koi_srad", "koi_slogg",
                     "koi_steff", "koi_impact", "koi_duration", "koi_depth"]
@@ -124,17 +137,16 @@ class DetectExoplanet:
         X_train, X_test, y_train, y_test = train_test_split(
             X_scaled, y, test_size=0.2, random_state=42)
 
-        param_grid = {'n_estimators': [50, 100, 200],
-                      'max_depth': [None, 10, 20],
-                      'min_samples_split': [2, 5, 10]}
-        model = RandomForestClassifier(random_state=42)
-        grid_search = GridSearchCV(model, param_grid, cv=3,
-                                   scoring='roc_auc', n_jobs=-1)
-        grid_search.fit(X_train, y_train)
-        self.model = grid_search.best_estimator_
+        # --- Train Random Forest with user-specified hyperparameters ---
+        self.model = RandomForestClassifier(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            random_state=42
+        )
+        self.model.fit(X_train, y_train)
         joblib.dump(self.model, self.model_path)
 
-        # Evaluate
+        # --- Evaluate ---
         y_pred = self.model.predict(X_test)
         print(classification_report(y_test, y_pred))
         cm = confusion_matrix(y_test, y_pred)
@@ -143,6 +155,7 @@ class DetectExoplanet:
         plt.show()
         auc_roc = roc_auc_score(y_test, self.model.predict_proba(X_test)[:, 1])
         print(f"AUC-ROC: {auc_roc:.2f}")
+
 
     def load_rf_model(self):
         self.model = joblib.load(self.model_path)
@@ -160,15 +173,153 @@ class DetectExoplanet:
         result = {"prediction": label, "probability": float(probability)}
         if label == "Planet":
             result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
-            print(f"Prediction: {label}, Probability: {probability:.2f}, ESI: {result['ESI']}")
-        else:
-            print(f"Prediction: {label}, Probability: {probability:.2f}")
         return result
 
-    # ---------------- CNN ----------------
-    def train_cnn(self, data_path=str(DATA_DIR / "cumulative_2025.09.20_12.15.37.csv")):
+    # ============================================================
+    # Decision Tree
+    # ============================================================
+    def train_decision_tree(self, 
+                        data_path=str(DATA_DIR / "cumulative.csv"),
+                        max_depth=None,
+                        criterion="gini"):
+        # --- Load data ---
         koi_table = pd.read_csv(data_path, skiprows=1, delimiter=",", comment="#")
-        koi_table['koi_insol'] = ((koi_table['koi_steff'] / 5778) ** 4) * (koi_table['koi_srad'] ** 2) / (koi_table['koi_period'] ** (4 / 3))
+        koi_table['koi_insol'] = ((koi_table['koi_steff'] / 5778) ** 4) * \
+                                (koi_table['koi_srad'] ** 2) / (koi_table['koi_period'] ** (4 / 3))
+
+        features = ["koi_period", "koi_prad", "koi_teq", "koi_srad", "koi_slogg",
+                    "koi_steff", "koi_impact", "koi_duration", "koi_depth"]
+        koi_table["label"] = koi_table["koi_disposition"].map(
+            {"CONFIRMED": 1, "FALSE POSITIVE": 0, "CANDIDATE": 1})
+
+        self.imputer = SimpleImputer(strategy='mean')
+        koi_table[features] = self.imputer.fit_transform(koi_table[features])
+        joblib.dump(self.imputer, self.imputer_path)
+
+        koi_table = koi_table.dropna(subset=["label"])
+        X = koi_table[features]
+        y = koi_table["label"]
+
+        self.scaler = StandardScaler()
+        X_scaled = self.scaler.fit_transform(X)
+        joblib.dump(self.scaler, self.scaler_path)
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_scaled, y, test_size=0.2, random_state=42, stratify=y)
+
+        # --- Train Decision Tree with user-specified hyperparameters ---
+        self.dt_model = DecisionTreeClassifier(
+            max_depth=max_depth,
+            criterion=criterion,
+            random_state=42
+        )
+        self.dt_model.fit(X_train, y_train)
+        joblib.dump(self.dt_model, self.dt_model_path)
+
+        # --- Evaluate ---
+        y_pred = self.dt_model.predict(X_test)
+        print("Decision Tree Report:\n", classification_report(y_test, y_pred))
+        cm = confusion_matrix(y_test, y_pred)
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Greens')
+        plt.title(f'Decision Tree Confusion Matrix (criterion={criterion}, max_depth={max_depth})')
+        plt.show()
+        auc_roc = roc_auc_score(y_test, self.dt_model.predict_proba(X_test)[:, 1])
+        print(f"AUC-ROC (Decision Tree): {auc_roc:.2f}")
+
+    def load_decision_tree(self):
+        self.dt_model = joblib.load(self.dt_model_path)
+        self.scaler = joblib.load(self.scaler_path)
+        self.imputer = joblib.load(self.imputer_path)
+
+    def decision_tree(self, input_data):
+        if self.dt_model is None:
+            self.load_decision_tree()
+        input_array = self._prepare_input(input_data)
+        probability = self.dt_model.predict_proba(input_array)[0][1]
+        label = "Planet" if probability >= 0.6 else "Not a Planet"
+        result = {"prediction": label, "probability": float(probability)}
+        if label == "Planet":
+            result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
+        return result
+
+    # ============================================================
+    # kNN
+    # ============================================================
+    def train_knn(self, data_path=str(DATA_DIR / "cumulative.csv"), n_neighbors=5):
+        # --- Load data ---
+        koi_table = pd.read_csv(data_path, skiprows=1, delimiter=",", comment="#")
+        koi_table['koi_insol'] = ((koi_table['koi_steff'] / 5778) ** 4) * \
+                                (koi_table['koi_srad'] ** 2) / (koi_table['koi_period'] ** (4 / 3))
+
+        features = ["koi_period", "koi_prad", "koi_teq", "koi_srad", "koi_slogg",
+                    "koi_steff", "koi_impact", "koi_duration", "koi_depth"]
+        koi_table["label"] = koi_table["koi_disposition"].map(
+            {"CONFIRMED": 1, "FALSE POSITIVE": 0, "CANDIDATE": 1})
+
+        self.imputer = SimpleImputer(strategy='mean')
+        koi_table[features] = self.imputer.fit_transform(koi_table[features])
+        joblib.dump(self.imputer, self.imputer_path)
+
+        koi_table = koi_table.dropna(subset=["label"])
+        X = koi_table[features]
+        y = koi_table["label"]
+
+        self.scaler = StandardScaler()
+        X_scaled = self.scaler.fit_transform(X)
+        joblib.dump(self.scaler, self.scaler_path)
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            X_scaled, y, test_size=0.2, random_state=42, stratify=y)
+
+        # --- Train kNN with user-specified hyperparameter ---
+        self.knn_model = KNeighborsClassifier(n_neighbors=n_neighbors)
+        self.knn_model.fit(X_train, y_train)
+        joblib.dump(self.knn_model, self.knn_model_path)
+
+        # --- Evaluate ---
+        y_pred = self.knn_model.predict(X_test)
+        print(classification_report(y_test, y_pred))
+        cm = confusion_matrix(y_test, y_pred)
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+        plt.title(f'kNN Confusion Matrix (k={n_neighbors})')
+        plt.show()
+        auc_roc = roc_auc_score(y_test, self.knn_model.predict_proba(X_test)[:, 1])
+        print(f"AUC-ROC: {auc_roc:.2f}")
+
+
+    def load_knn(self):
+        self.knn_model = joblib.load(self.knn_model_path)
+        self.scaler = joblib.load(self.scaler_path)
+        self.imputer = joblib.load(self.imputer_path)
+
+    def knn(self, input_data):
+        if self.knn_model is None:
+            self.load_knn()
+        input_array = self._prepare_input(input_data)
+        probability = self.knn_model.predict_proba(input_array)[0][1]
+        label = "Planet" if probability >= 0.6 else "Not a Planet"
+        result = {"prediction": label, "probability": float(probability)}
+        if label == "Planet":
+            result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
+        return result
+
+    # ============================================================
+    # CNN
+    # ============================================================
+    def train_cnn(self, 
+                  data_path=str(DATA_DIR / "cumulative.csv"),
+                  hidden_layers=[64, 32, 16],
+                  dropout_rate=0.3,
+                  optimizer="adam",
+                  loss="binary_crossentropy",
+                  metrics=["accuracy"],
+                  epochs=50,
+                  batch_size=32,
+                  patience=5):
+        # --- Load data ---
+        koi_table = pd.read_csv(data_path, skiprows=1, delimiter=",", comment="#")
+        koi_table['koi_insol'] = ((koi_table['koi_steff'] / 5778) ** 4) * \
+                                 (koi_table['koi_srad'] ** 2) / (koi_table['koi_period'] ** (4 / 3))
         features = ["koi_period", "koi_prad", "koi_teq", "koi_srad", "koi_slogg",
                     "koi_steff", "koi_impact", "koi_duration", "koi_depth"]
         koi_table["label"] = koi_table["koi_disposition"].map(
@@ -189,17 +340,30 @@ class DetectExoplanet:
         X_train, X_test, y_train, y_test = train_test_split(
             X_scaled, y, test_size=0.2, random_state=42, stratify=y)
 
-        model = Sequential([
-            Dense(64, activation="relu", input_shape=(X_train.shape[1],)),
-            Dropout(0.3),
-            Dense(32, activation="relu"),
-            Dropout(0.3),
-            Dense(16, activation="relu"),
-            Dense(1, activation="sigmoid")
-        ])
-        model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
-        model.fit(X_train, y_train, epochs=50, batch_size=32,
-                  validation_data=(X_test, y_test), verbose=1)
+        # --- Build CNN dynamically ---
+        model = Sequential()
+        for i, units in enumerate(hidden_layers):
+            if i == 0:
+                model.add(Dense(units, activation="relu", input_shape=(X_train.shape[1],)))
+            else:
+                model.add(Dense(units, activation="relu"))
+            model.add(Dropout(dropout_rate))
+        model.add(Dense(1, activation="sigmoid"))
+
+        model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
+
+        # --- Callbacks (EarlyStopping + ModelCheckpoint) ---
+        callbacks = [
+            EarlyStopping(monitor="val_loss", patience=patience, restore_best_weights=True),
+            ModelCheckpoint(self.cnn_path, save_best_only=True)
+        ]
+
+        model.fit(X_train, y_train,
+                  epochs=epochs,
+                  batch_size=batch_size,
+                  validation_data=(X_test, y_test),
+                  callbacks=callbacks,
+                  verbose=1)
 
         self.cnn_model = model
         model.save(self.cnn_path)
@@ -216,51 +380,6 @@ class DetectExoplanet:
         input_array = self._prepare_input(input_data)
         probability = self.cnn_model.predict(input_array)[0][0]
         label = "Planet" if probability > 0.6 else "Not a Planet"
-        result = {"prediction": label, "probability": float(probability)}
-        if label == "Planet":
-            result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
-        return result
-
-    # ---------------- kNN ----------------
-    def train_knn(self, data_path=str(DATA_DIR / "cumulative_2025.09.20_12.15.37.csv")):
-        koi_table = pd.read_csv(data_path, skiprows=1, delimiter=",", comment="#")
-        koi_table['koi_insol'] = ((koi_table['koi_steff'] / 5778) ** 4) * (koi_table['koi_srad'] ** 2) / (koi_table['koi_period'] ** (4 / 3))
-        features = ["koi_period", "koi_prad", "koi_teq", "koi_srad", "koi_slogg",
-                    "koi_steff", "koi_impact", "koi_duration", "koi_depth"]
-        koi_table["label"] = koi_table["koi_disposition"].map(
-            {"CONFIRMED": 1, "FALSE POSITIVE": 0, "CANDIDATE": 1})
-
-        self.imputer = SimpleImputer(strategy='mean')
-        koi_table[features] = self.imputer.fit_transform(koi_table[features])
-        joblib.dump(self.imputer, self.imputer_path)
-        koi_table = koi_table.dropna(subset=["label"])
-
-        X = koi_table[features]
-        y = koi_table["label"]
-
-        self.scaler = StandardScaler()
-        X_scaled = self.scaler.fit_transform(X)
-        joblib.dump(self.scaler, self.scaler_path)
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X_scaled, y, test_size=0.2, random_state=42, stratify=y)
-
-        self.knn_model = KNeighborsClassifier(n_neighbors=5)
-        self.knn_model.fit(X_train, y_train)
-        joblib.dump(self.knn_model, self.knn_model_path)
-        print(f"kNN model saved to {self.knn_model_path}")
-
-    def load_knn(self):
-        self.knn_model = joblib.load(self.knn_model_path)
-        self.scaler = joblib.load(self.scaler_path)
-        self.imputer = joblib.load(self.imputer_path)
-
-    def knn(self, input_data):
-        if self.knn_model is None:
-            self.load_knn()
-        input_array = self._prepare_input(input_data)
-        probability = self.knn_model.predict_proba(input_array)[0][1]
-        label = "Planet" if probability >= 0.6 else "Not a Planet"
         result = {"prediction": label, "probability": float(probability)}
         if label == "Planet":
             result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
