@@ -207,6 +207,13 @@ export default function NewsPage() {
     <div className="min-h-screen bg-light-background dark:bg-dark-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-dark-blue via-primary-light-blue to-primary-cyan text-white">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/exobengal-news.webp)',
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-dark-blue/40 via-primary-light-blue/30 to-primary-cyan/40" />
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative container mx-auto px-4 py-16">
           <motion.div
