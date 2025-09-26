@@ -238,6 +238,7 @@
       rgba(130, 178, 215, 0.15) 100%
     );
     clip-path: inherit;
+    pointer-events: none;
   }
 
   .card:hover::before {
