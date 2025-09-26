@@ -111,12 +111,11 @@ export function Header() {
           <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
             <div className="relative">
               <Image 
-                src="/full logo.png" 
+                src="/exobengal.png" 
                 alt="ExoBengal logo" 
                 width={280} 
                 height={76} 
                 priority 
-                className="logo-glass-stroke"
               />
             </div>
           </Link>
@@ -140,11 +139,10 @@ export function Header() {
 
             <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
               <Image 
-                src="/full logo.png" 
+                src="/exobengal.png" 
                 alt="ExoBengal logo" 
                 width={150} 
                 height={38} 
-                className="logo-glass-stroke-mobile"
               />
             </Link>
 
