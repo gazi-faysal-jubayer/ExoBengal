@@ -9,6 +9,7 @@ import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { LiquidButton } from '@/components/ui/liquid-glass-button'
+import StarWarsToggle from '@/components/ui/star-wars-toggle-switch'
 
 
 const leftNavigation = [
@@ -155,17 +156,7 @@ export function Header() {
                 <Search className="h-5 w-5" />
               </LiquidButton>
 
-              <LiquidButton
-                size="icon"
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                aria-label="Toggle theme"
-              >
-                {mounted && theme === 'dark' ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Moon className="h-5 w-5" />
-                )}
-              </LiquidButton>
+              <StarWarsToggle />
             </div>
           </div>
         </div>
@@ -194,17 +185,7 @@ export function Header() {
               />
             </Link>
 
-            <LiquidButton
-              size="icon"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              aria-label="Toggle theme"
-            >
-              {mounted && theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </LiquidButton>
+            <StarWarsToggle />
             </div>
           </div>
         </nav>

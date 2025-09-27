@@ -5,57 +5,57 @@ import { Github, Linkedin } from "lucide-react";
 const testimonials = [
   {
     quote:
-      "ExoBengal has revolutionized how we approach exoplanet research. The intuitive interface and comprehensive data visualization tools have significantly accelerated our discovery process.",
+      "Expert in full-stack web development, with strong skills in both frontend and backend. He built the entire website infrastructure for ExoBengal and also led the team with effective management and coordination.",
     name: "Gazi Faysal Jubayer",
-    designation: "Lead Developer & Astrophysics Researcher",
+    designation: "Team Lead",
     src: "/gazi.webp",
     github: "https://github.com/gazi-faysal-jubayer",
-    linkedin: "https://www.linkedin.com/in/gazi-faysal-jubayer",
+    linkedin: "https://www.linkedin.com/in/gazi-faysal-jubayer/",
   },
   {
     quote:
-      "The platform's machine learning algorithms and data processing capabilities have transformed our ability to identify potentially habitable exoplanets from NASA's vast datasets.",
-    name: "ZHRifat",
-    designation: "Data Science Engineer & ML Specialist",
-    src: "/rifat.webp",
-    github: "https://github.com/zhrifat",
-    linkedin: "https://www.linkedin.com/in/zhrifat",
-  },
-  {
-    quote:
-      "As an educator, ExoBengal has become an invaluable resource for teaching astronomy. The interactive visualizations make complex concepts accessible to students at all levels.",
-    name: "Shihab Ahemed",
-    designation: "Backend Developer & Astronomy Education Specialist",
-    src: "/shihab.webp",
-    github: "https://github.com/shihab-ahemed",
-    linkedin: "https://www.linkedin.com/in/shihab-ahemed",
-  },
-  {
-    quote:
-      "The real-time data integration and advanced analytics features have enabled our research team to process and analyze exoplanet data with unprecedented efficiency and accuracy.",
-    name: "KM ShariatUllah",
-    designation: "Full Stack Developer & Research Scientist",
+       "With years of experience in exoplanet research, he has led the study, resource collection, and scientific foundation of ExoBengal. He is also the creator of the project’s complete Python package.",
+    name: "K M Shariat Ullah",
+    designation: "Research Lead",
     src: "/shariat.webp",
-    github: "https://github.com/km-shariatullah",
-    linkedin: "https://www.linkedin.com/in/km-shariatullah",
+    github: "https://github.com/kmshariat",
+    linkedin: "https://www.linkedin.com/in/kmshariat/",
   },
   {
     quote:
-      "ExoBengal's collaborative features and open-source approach have fostered a vibrant community of researchers, making astronomical discoveries more accessible to the global scientific community.",
+      'Is a software developer. Built the AI chatbot assistant "Cosmo."',
+    name: "Zahid Hasan Rifat", 
+    designation: "Full stack developer",
+    src: "/rifat.webp",
+    github: "https://github.com/zh-rifat",
+    linkedin: "https://www.linkedin.com/in/zh-rifat/",
+  },
+  {
+    quote:
+      "I am a skilled full-stack web developer proficient in modern web technologies like React, Node.js, and Machine Learning.",
+    name: "Shihab Ahemed",
+    designation: "ML Developer",
+    src: "/shihab.webp",
+    github: "https://github.com/Shihab221",
+    linkedin: "https://www.linkedin.com/in/shihab-ahemed/",
+  },
+  {
+    quote:
+       "She generated and structured the core ideas and mission plan for ExoBengal, from defining website features to preparing the project script and voiceover. She also leads the documentation and content development for the team.",
     name: "Sauda Fatima",
-    designation: "Frontend Developer & UI/UX Designer",
+    designation: "Ideation & Documentation Lead",
     src: "/sauda.webp",
     github: "https://github.com/sauda-fatima",
     linkedin: "https://www.linkedin.com/in/sauda-fatima",
   },
   {
     quote:
-      "The platform's robust infrastructure and scalable architecture ensure reliable access to mission-critical astronomical data, supporting breakthrough research in exoplanet science.",
-    name: "Shabiq", 
-    designation: "DevOps Engineer & System Architect",
+      "Expert in graphic design and visual storytelling, he is responsible for all creative visuals of ExoBengal. He also takes full charge of video design and production for the team.",
+    name: "Shabique Islam",
+    designation: "Graphic Designer",
     src: "/sabiq.webp",
     github: "https://github.com/shabiq",
-    linkedin: "https://www.linkedin.com/in/shabiq",
+    linkedin: "https://www.linkedin.com/in/shabique-islam-8b9b501b3/",
   },
 ];
 

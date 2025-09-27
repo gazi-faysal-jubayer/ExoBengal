@@ -49,6 +49,7 @@
     "react-just-parallax": "^3.1.16",
     "react-plotly.js": "^2.6.0",
     "recharts": "^2.12.7",
+    "styled-components": "^6.1.19",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.167.1",
