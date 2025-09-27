@@ -127,7 +127,7 @@ export function ChatWidget() {
     <>
       {/* Chat Widget Button */}
       <motion.div
-        className={`fixed bottom-6 right-6 z-40 ${
+        className={`fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 ${
           isOpen ? 'scale-0' : 'scale-100'
         } transition-all duration-300`}
         whileHover={{ scale: 1.1 }}
@@ -150,10 +150,10 @@ export function ChatWidget() {
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="fixed bottom-6 right-6 z-50 w-96 h-[500px] bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg shadow-2xl flex flex-col"
+            className="fixed bottom-4 right-4 left-4 md:bottom-6 md:right-6 md:left-auto z-50 w-auto md:w-[480px] h-[80vh] md:h-[500px] max-h-[600px] bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg shadow-2xl flex flex-col"
           >
             {/* Header */}
-            <div className="p-4 border-b border-light-border dark:border-dark-border bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white rounded-t-lg">
+            <div className="p-3 md:p-4 border-b border-light-border dark:border-dark-border bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white rounded-t-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5" />
@@ -173,7 +173,7 @@ export function ChatWidget() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4">
               {messages.length === 0 && (
                 <div className="text-center py-8">
                   <Sparkles className="h-12 w-12 mx-auto mb-4 text-primary-light-blue" />
@@ -209,7 +209,7 @@ export function ChatWidget() {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
+                    className={`max-w-[85%] md:max-w-[80%] p-2 md:p-3 rounded-lg text-sm md:text-base ${
                       message.role === 'user'
                         ? 'bg-primary-dark-blue text-white'
                         : 'bg-light-surface dark:bg-dark-surface text-light-text-primary dark:text-dark-text-primary'
@@ -280,7 +280,7 @@ export function ChatWidget() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-light-border dark:border-dark-border">
+            <form onSubmit={handleSubmit} className="p-3 md:p-4 border-t border-light-border dark:border-dark-border">
               <div className="flex gap-2">
                 <TerminalSearchInput
                   value={input}
@@ -295,7 +295,7 @@ export function ChatWidget() {
                   user="ai"
                   host="assistant"
                   dir="/chat"
-                  className="flex-1 text-sm"
+                  className="flex-1 text-xs md:text-sm"
                   disabled={isLoading}
                 />
                 <LiquidButton
@@ -307,7 +307,7 @@ export function ChatWidget() {
                   <Send className="h-4 w-4" />
                 </LiquidButton>
               </div>
-              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-2">
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-2 hidden md:block">
                 Powered by AI • May occasionally provide incorrect information
               </p>
             </form>
