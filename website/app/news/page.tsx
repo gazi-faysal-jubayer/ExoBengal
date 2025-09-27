@@ -30,6 +30,7 @@ import {
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import { NewsCategories } from '@/components/news/news-categories'
 import { NewsTrending } from '@/components/news/news-trending'
+import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -261,13 +262,14 @@ export default function NewsPage() {
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-light-text-secondary dark:text-dark-text-secondary" />
-              <input
-                type="text"
-                placeholder="Search news articles..."
+              <TerminalSearchInput
                 value={filters.search}
-                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 input-base"
+                onChange={(val) => setFilters(prev => ({ ...prev, search: val }))}
+                placeholder="grep -r 'exoplanet' /news/articles/"
+                user="reporter"
+                host="newsroom"
+                dir="/archives"
+                className="w-full"
               />
             </div>
 

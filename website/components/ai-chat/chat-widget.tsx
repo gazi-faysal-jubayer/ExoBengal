@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Sparkles, Loader2, Copy, ThumbsUp, ThumbsDown } from 'lucide-react'
 import { generateResponse } from '@/lib/chatbot';
+import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
 // import { useChat } from 'ai/react' // Disabled for static export
 
 interface Message {
@@ -270,12 +271,20 @@ export function ChatWidget() {
             {/* Input */}
             <form onSubmit={handleSubmit} className="p-4 border-t border-light-border dark:border-dark-border">
               <div className="flex gap-2">
-                <input
-                  ref={inputRef}
+                <TerminalSearchInput
                   value={input}
-                  onChange={handleInputChange}
-                  placeholder="Ask about exoplanets..."
-                  className="flex-1 input-base text-sm"
+                  onChange={setInput}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      handleSubmit(e as any)
+                    }
+                  }}
+                  placeholder="query ai about exoplanets --help"
+                  user="ai"
+                  host="assistant"
+                  dir="/chat"
+                  className="flex-1 text-sm"
                   disabled={isLoading}
                 />
                 <button

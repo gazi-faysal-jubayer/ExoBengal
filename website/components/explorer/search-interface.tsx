@@ -4,6 +4,7 @@ import { useState, useCallback, createContext, useContext, useEffect } from 'rea
 import { Search, X, Clock, Mic, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useExplorerStore } from '@/lib/explorer-store'
+import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
 
 const searchSuggestions = [
   'Kepler-452b',
@@ -84,35 +85,35 @@ export function SearchInterface() {
       {/* Main Search Bar */}
       <div className="relative">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-light-text-secondary dark:text-dark-text-secondary" />
-          <input
-            type="text"
+          <TerminalSearchInput
             value={query}
-            onChange={(e) => {
-              const val = e.target.value
+            onChange={(val) => {
               setQuery(val)
               setSearchQuery(val)
             }}
             onFocus={() => setShowSuggestions(true)}
-            placeholder="Search by planet name, star system, or use natural language..."
-            className="w-full pl-12 pr-20 py-4 text-lg input-base shadow-sm"
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSearch(query)
             }}
+            placeholder="search exoplanets by name, type, or properties..."
+            user="explorer"
+            host="nasa"
+            dir="/data"
+            className="w-full"
           />
           
           {/* Voice Search & AI Assistant */}
           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
             <button
               type="button"
-              className="p-2 rounded-md text-light-text-secondary hover:text-primary-light-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue transition-colors"
+              className="p-2 rounded-md text-slate-400 hover:text-primary-light-blue transition-colors"
               aria-label="Voice search"
             >
               <Mic className="h-4 w-4" />
             </button>
             <button
               type="button"
-              className="p-2 rounded-md text-light-text-secondary hover:text-primary-reddish-orange dark:text-dark-text-secondary dark:hover:text-primary-reddish-orange transition-colors"
+              className="p-2 rounded-md text-slate-400 hover:text-primary-reddish-orange transition-colors"
               aria-label="AI assistant"
             >
               <Sparkles className="h-4 w-4" />
