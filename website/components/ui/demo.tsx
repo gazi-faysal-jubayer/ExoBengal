@@ -1,7 +1,11 @@
-import { Component } from "@/components/ui/horizon-hero-section";
+import { Component } from "@/components/ui/footer-taped-design";
 
 const DemoOne = () => {
-  return <Component />;
+  return (
+    <main className="w-screen min-h-screen mx-auto bg-light-background dark:bg-dark-background">
+      <Component />
+    </main>
+  );
 };
 
 export { DemoOne };
