@@ -138,7 +138,7 @@ export function ChatWidget() {
         <LiquidButton
           onClick={() => setIsOpen(true)}
           size="lg"
-          className="p-5 rounded-full shadow-2xl hover:shadow-3xl border border-cyan-400/40 bg-gradient-to-br from-cyan-400/10 via-blue-500/5 to-purple-600/10 backdrop-blur-md hover:border-cyan-300/60 transition-all duration-300 hover:scale-105"
+          className="p-5 rounded-full shadow-2xl hover:shadow-3xl border border-cyan-400/40 bg-gradient-to-br from-cyan-400/10 via-blue-500/5 to-purple-600/10 backdrop-blur-md hover:border-cyan-300/60 transition-all duration-300 hover:scale-105 cursor-target"
           style={{
             background: 'rgba(30, 41, 59, 0.4)',
             backdropFilter: 'blur(12px)',
@@ -186,7 +186,7 @@ export function ChatWidget() {
                 <LiquidButton
                   onClick={() => setIsOpen(false)}
                   size="icon"
-                  className="p-1 hover:bg-white/20 rounded-md"
+                  className="p-1 hover:bg-white/20 rounded-md cursor-target"
                 >
                   <X className="h-5 w-5" />
                 </LiquidButton>
@@ -221,7 +221,7 @@ export function ChatWidget() {
                         key={index}
                         onClick={() => handleSuggestedQuestion(question)}
                         size="sm"
-                        className="block w-full text-left text-xs p-2 bg-light-surface dark:bg-dark-surface hover:bg-light-hover dark:hover:bg-dark-hover rounded-md"
+                        className="block w-full text-left text-xs p-2 bg-light-surface dark:bg-dark-surface hover:bg-light-hover dark:hover:bg-dark-hover rounded-md cursor-target"
                       >
                         {question}
                       </LiquidButton>
@@ -252,21 +252,21 @@ export function ChatWidget() {
                           <LiquidButton
                             onClick={() => copyMessage(message.content)}
                             size="icon"
-                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary"
+                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary cursor-target"
                             title="Copy message"
                           >
                             <Copy className="h-3 w-3" />
                           </LiquidButton>
                           <LiquidButton
                             size="icon"
-                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-green-500"
+                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-green-500 cursor-target"
                             title="Helpful"
                           >
                             <ThumbsUp className="h-3 w-3" />
                           </LiquidButton>
                           <LiquidButton
                             size="icon"
-                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-red-500"
+                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-red-500 cursor-target"
                             title="Not helpful"
                           >
                             <ThumbsDown className="h-3 w-3" />
@@ -329,7 +329,7 @@ export function ChatWidget() {
                   type="submit"
                   disabled={isLoading || !input.trim()}
                   size="icon"
-                  className="p-2 bg-primary-dark-blue text-white rounded-md hover:bg-primary-very-dark-blue disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 bg-primary-dark-blue text-white rounded-md hover:bg-primary-very-dark-blue disabled:opacity-50 disabled:cursor-not-allowed cursor-target"
                 >
                   <Send className="h-4 w-4" />
                 </LiquidButton>

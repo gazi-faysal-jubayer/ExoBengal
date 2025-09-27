@@ -63,7 +63,7 @@ export function HeroSection() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/explorer"
-                className="group btn-primary px-8 py-3 text-lg font-semibold flex items-center gap-2"
+                className="group btn-primary px-8 py-3 text-lg font-semibold flex items-center gap-2 cursor-target"
               >
                 <Telescope className="h-5 w-5" />
                 Start Exploring
@@ -71,7 +71,7 @@ export function HeroSection() {
               </Link>
               <Link
                 href="/docs/getting-started"
-                className="btn-secondary px-8 py-3 text-lg font-semibold flex items-center gap-2"
+                className="btn-secondary px-8 py-3 text-lg font-semibold flex items-center gap-2 cursor-target"
               >
                 <Sparkles className="h-5 w-5" />
                 View Documentation

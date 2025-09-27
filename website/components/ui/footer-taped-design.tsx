@@ -26,7 +26,7 @@ export const Component = () => {
           <div className='flex flex-col items-start gap-2'>
             <Link
               href="/"
-              className="flex flex-row gap-2 items-center justify-start text-2xl font-display font-extrabold text-light-text-primary dark:text-dark-text-primary"
+              className="flex flex-row gap-2 items-center justify-start text-2xl font-display font-extrabold text-light-text-primary dark:text-dark-text-primary cursor-target"
             >
               <Telescope className="w-8 h-8 text-primary-light-blue" />
               ExoBengal
@@ -41,30 +41,30 @@ export const Component = () => {
           <div className='flex flex-col gap-1 md:gap-4'>
             <h4 className='uppercase font-display text-md text-light-text-secondary dark:text-dark-text-secondary font-semibold'>Explore</h4>
             <div className="flex flex-wrap md:flex-col gap-2 text-sm text-light-text-secondary dark:text-dark-text-secondary items-start">
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/explorer">Exoplanet Explorer</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/visualizations">3D Visualizations</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/visualizations/statistics">Statistics</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/visualizations/sky-map">Sky Map</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/explorer">Exoplanet Explorer</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/visualizations">3D Visualizations</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/visualizations/statistics">Statistics</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/visualizations/sky-map">Sky Map</Link>
             </div>
           </div>
 
           <div className='flex flex-col gap-1 md:gap-4'>
             <h4 className='uppercase whitespace-nowrap font-display text-md text-light-text-secondary dark:text-dark-text-secondary font-semibold'>Learn</h4>
             <div className="flex gap-2 flex-wrap md:flex-col text-sm text-light-text-secondary dark:text-dark-text-secondary items-start">
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/docs/getting-started">Getting Started</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/docs/api">API Documentation</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/learn">Educational Resources</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/docs/tutorials">Tutorials</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/docs/getting-started">Getting Started</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/docs/api">API Documentation</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/learn">Educational Resources</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/docs/tutorials">Tutorials</Link>
             </div>
           </div>
           
           <div className='flex flex-col gap-1 md:gap-4'>
             <h4 className='uppercase whitespace-nowrap font-display text-md text-light-text-secondary dark:text-dark-text-secondary font-semibold'>Community</h4>
             <div className="flex flex-col gap-2 text-sm text-light-text-secondary dark:text-dark-text-secondary items-start">
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="https://github.com/gazi-faysal-jubayer/ExoBengal" target="_blank" rel="noopener noreferrer">GitHub</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/docs/contributing">Contributing</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/api-access">API Access</Link>
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium' href="/support">Support</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="https://github.com/gazi-faysal-jubayer/ExoBengal" target="_blank" rel="noopener noreferrer">GitHub</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/docs/contributing">Contributing</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/api-access">API Access</Link>
+              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/support">Support</Link>
             </div>
           </div>
         </div>
@@ -91,14 +91,14 @@ export const Component = () => {
             target="_blank"
             rel="nofollow noopener"
             aria-label="ExoBengal GitHub Repository"
-            className="hover:text-primary-light-blue transition-colors"
+            className="hover:text-primary-light-blue transition-colors cursor-target"
           >
             <Github className="w-5 h-5 fill-current" />
           </a>
           <a
             href="mailto:contact@exobengal.com"
             aria-label="Contact ExoBengal"
-            className="hover:text-primary-light-blue transition-colors"
+            className="hover:text-primary-light-blue transition-colors cursor-target"
           >
             <Mail className="w-5 h-5 fill-current" />
           </a>
@@ -107,7 +107,7 @@ export const Component = () => {
             target="_blank"
             rel="nofollow noopener"
             aria-label="Follow ExoBengal on Twitter"
-            className="hover:text-primary-light-blue transition-colors"
+            className="hover:text-primary-light-blue transition-colors cursor-target"
           >
             <Twitter className="w-5 h-5 fill-current" />
           </a>

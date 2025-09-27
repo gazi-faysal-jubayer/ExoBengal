@@ -23,6 +23,7 @@ const rightNavigation = [
   { name: 'Documentation', href: '/docs' },
   { name: 'Learn', href: '/learn' },
   { name: 'API', href: '/api-access' },
+  { name: 'Demo', href: '/demo' },
   { name: 'About', href: '/about' },
 ]
 
@@ -98,7 +99,7 @@ export function Header() {
                     key={item.name}
                     href={item.href}
                     className={cn(
-                      'navlink text-sm font-medium',
+                      'navlink text-sm font-medium cursor-target',
                       isActive
                         ? 'active'
                         : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
@@ -113,7 +114,7 @@ export function Header() {
 
           {/* Center logo area */}
           <div className="flex-1 flex items-center justify-center min-w-0 z-20">
-            <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
+            <Link href="/" className="inline-flex items-center cursor-target" aria-label="ExoBengal home">
               <div className="relative">
                 <Image 
                   src={logoConfig.src}
@@ -136,7 +137,7 @@ export function Header() {
                     key={item.name}
                     href={item.href}
                     className={cn(
-                      'navlink text-sm font-medium',
+                      'navlink text-sm font-medium cursor-target',
                       isActive
                         ? 'active'
                         : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
@@ -152,6 +153,7 @@ export function Header() {
               <LiquidButton
                 size="icon"
                 aria-label="Search"
+                className="cursor-target"
               >
                 <Search className="h-5 w-5" />
               </LiquidButton>
@@ -167,6 +169,7 @@ export function Header() {
             <LiquidButton
               size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="cursor-target"
             >
               <span className="sr-only">Open main menu</span>
               {mobileMenuOpen ? (
@@ -176,7 +179,7 @@ export function Header() {
               )}
             </LiquidButton>
 
-            <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
+            <Link href="/" className="inline-flex items-center cursor-target" aria-label="ExoBengal home">
               <Image 
                 src={logoConfig.src}
                 alt="ExoBengal logo" 

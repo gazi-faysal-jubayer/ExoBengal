@@ -62,7 +62,7 @@ export function CTASection() {
                 href={card.href}
                 target={card.external ? '_blank' : undefined}
                 rel={card.external ? 'noopener noreferrer' : undefined}
-                className="block h-full"
+                className="block h-full cursor-target"
               >
                 <div className="card p-8 h-full card-hover relative overflow-hidden">
                   {/* Background gradient on hover */}

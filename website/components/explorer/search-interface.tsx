@@ -108,6 +108,7 @@ export function SearchInterface() {
             <LiquidButton
               type="button"
               size="icon"
+              className="cursor-target"
               className="p-2 rounded-md text-slate-400 hover:text-primary-light-blue"
               aria-label="Voice search"
             >
@@ -116,6 +117,7 @@ export function SearchInterface() {
             <LiquidButton
               type="button"
               size="icon"
+              className="cursor-target"
               className="p-2 rounded-md text-slate-400 hover:text-primary-reddish-orange"
               aria-label="AI assistant"
             >
@@ -151,7 +153,7 @@ export function SearchInterface() {
                           }}
                           variant="ghost"
                           size="sm"
-                          className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-sm rounded-md justify-start"
+                          className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-sm rounded-md justify-start cursor-target"
                         >
                           {suggestion}
                         </LiquidButton>
@@ -176,7 +178,7 @@ export function SearchInterface() {
                         }}
                         variant="ghost"
                         size="sm"
-                        className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-sm text-light-text-secondary dark:text-dark-text-secondary rounded-md justify-start"
+                        className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-sm text-light-text-secondary dark:text-dark-text-secondary rounded-md justify-start cursor-target"
                       >
                         {search}
                       </LiquidButton>
@@ -209,7 +211,7 @@ export function SearchInterface() {
             disabled={selectedFilters.includes(filter.value)}
             variant="outline"
             size="sm"
-            className="px-3 py-1 text-xs border border-light-border dark:border-dark-border hover:bg-light-hover dark:hover:bg-dark-hover disabled:opacity-50 disabled:cursor-not-allowed rounded-full"
+            className="px-3 py-1 text-xs border border-light-border dark:border-dark-border hover:bg-light-hover dark:hover:bg-dark-hover disabled:opacity-50 disabled:cursor-not-allowed rounded-full cursor-target"
           >
             {filter.label}
           </LiquidButton>
@@ -231,6 +233,7 @@ export function SearchInterface() {
               <LiquidButton
                 onClick={() => removeFilter(filter)}
                 size="icon"
+              className="cursor-target"
                 className="hover:bg-primary-very-dark-blue rounded-full p-0.5"
                 aria-label={`Remove ${filter} filter`}
               >

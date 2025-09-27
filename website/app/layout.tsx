@@ -9,6 +9,7 @@ import { Component as Footer } from '@/components/ui/footer-taped-design'
 import { ChatWidget } from '@/components/ai-chat/chat-widget'
 import { NewsBar } from '@/components/news/news-bar'
 import { Toaster } from 'react-hot-toast'
+import TargetCursor from '@/components/ui/target-cursor'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -80,6 +81,11 @@ export default function RootLayout({
             <Footer />
           </div>
           <ChatWidget />
+          <TargetCursor 
+            targetSelector=".cursor-target"
+            spinDuration={2}
+            hideDefaultCursor={true}
+          />
           <Toaster 
             position="bottom-right"
             toastOptions={{

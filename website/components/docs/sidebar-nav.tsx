@@ -65,7 +65,7 @@ export function SidebarNav() {
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className={`block rounded px-2 py-1 transition-colors border relative z-10 cursor-pointer ${
+                      className={`block rounded px-2 py-1 transition-colors border relative z-10 cursor-pointer cursor-target ${
                         active
                           ? 'bg-light-hover dark:bg-dark-hover text-light-text-primary dark:text-dark-text-primary border-primary-light-blue/60'
                           : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary border-transparent hover:border-light-border dark:hover:border-dark-border hover:bg-light-hover/50 dark:hover:bg-dark-hover/50'

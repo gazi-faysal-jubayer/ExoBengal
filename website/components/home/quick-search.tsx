@@ -69,7 +69,7 @@ export function QuickSearch() {
               <LiquidButton
                 type="submit"
                 size="default"
-                className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary rounded-full px-6 py-2 z-10"
+                className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary rounded-full px-6 py-2 z-10 cursor-target"
               >
                 Search
               </LiquidButton>
@@ -87,7 +87,7 @@ export function QuickSearch() {
                 <LiquidButton
                   onClick={() => handleQuickFilter(filter.query)}
                   size="lg"
-                  className="card p-6 text-center card-hover group w-full h-full"
+                  className="card p-6 text-center card-hover group w-full h-full cursor-target"
                 >
                   <div className="flex flex-col items-center">
                     <filter.icon className="h-8 w-8 mx-auto mb-3 text-primary-light-blue group-hover:text-primary-dark-blue transition-colors" />
@@ -105,7 +105,7 @@ export function QuickSearch() {
             <LiquidButton
               onClick={() => router.push('/explorer')}
               variant="ghost"
-              className="inline-flex items-center gap-2 text-primary-dark-blue hover:text-primary-light-blue"
+              className="inline-flex items-center gap-2 text-primary-dark-blue hover:text-primary-light-blue cursor-target"
             >
               <Filter className="h-4 w-4" />
               Advanced Search & Filters

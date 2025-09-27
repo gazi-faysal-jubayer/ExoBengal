@@ -94,7 +94,7 @@ export function FilterPanel() {
           <LiquidButton
             onClick={saveFilters}
             size="icon"
-            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue"
+            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue cursor-target"
             title="Save filters"
           >
             <Save className="h-4 w-4" />
@@ -102,7 +102,7 @@ export function FilterPanel() {
           <LiquidButton
             onClick={resetFilters}
             size="icon"
-            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-semantic-warning"
+            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-semantic-warning cursor-target"
             title="Reset filters"
           >
             <RotateCcw className="h-4 w-4" />
@@ -344,7 +344,7 @@ export function FilterPanel() {
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="w-full btn-primary"
+        className="w-full btn-primary cursor-target"
         onClick={() => {
           setStoreFilters(filters as unknown as ExplorerFilters)
         }}

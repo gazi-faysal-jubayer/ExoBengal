@@ -10,7 +10,7 @@ export function PrevNext({ prev, next }: { prev?: Nav; next?: Nav }) {
       {prev ? (
         <Link
           href={prev.href}
-          className="group flex-1 card p-4 hover:shadow-lg transition-all border-l-4 border-primary-light-blue dark:border-primary-light-blue/60"
+          className="group flex-1 card p-4 hover:shadow-lg transition-all border-l-4 border-primary-light-blue dark:border-primary-light-blue/60 cursor-target"
         >
           <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary">Previous</div>
           <div className="font-medium text-light-text-primary dark:text-dark-text-primary group-hover:underline">
@@ -23,7 +23,7 @@ export function PrevNext({ prev, next }: { prev?: Nav; next?: Nav }) {
       {next ? (
         <Link
           href={next.href}
-          className="group flex-1 text-right card p-4 hover:shadow-lg transition-all border-r-4 border-primary-dark-blue dark:border-primary-light-blue"
+          className="group flex-1 text-right card p-4 hover:shadow-lg transition-all border-r-4 border-primary-dark-blue dark:border-primary-light-blue cursor-target"
         >
           <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary">Next</div>
           <div className="font-medium text-light-text-primary dark:text-dark-text-primary group-hover:underline">
