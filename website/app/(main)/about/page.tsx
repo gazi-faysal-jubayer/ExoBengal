@@ -23,7 +23,7 @@ const testimonials = [
   },
   {
     quote:
-      'Is a software developer. Built the AI chatbot assistant "Cosmo."',
+     'Is a software developer. Integrated AI chatbot assistant "Cosmo". Integrated API from exobengal python package.',
     name: "Zahid Hasan Rifat", 
     designation: "Full stack developer",
     src: "/rifat.webp",

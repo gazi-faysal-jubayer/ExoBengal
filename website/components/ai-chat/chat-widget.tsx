@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Sparkles, Loader2, Copy, ThumbsUp, ThumbsDown } from 'lucide-react'
+import Image from 'next/image'
 import { generateResponse } from '@/lib/chatbot';
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
 import { LiquidButton } from '@/components/ui/liquid-glass-button'
@@ -137,9 +138,23 @@ export function ChatWidget() {
         <LiquidButton
           onClick={() => setIsOpen(true)}
           size="lg"
-          className="p-4 bg-gradient-to-r from-primary-reddish-orange to-semantic-warning text-white rounded-full shadow-lg hover:shadow-xl"
+          className="p-5 rounded-full shadow-2xl hover:shadow-3xl border border-cyan-400/40 bg-gradient-to-br from-cyan-400/10 via-blue-500/5 to-purple-600/10 backdrop-blur-md hover:border-cyan-300/60 transition-all duration-300 hover:scale-105"
+          style={{
+            background: 'rgba(30, 41, 59, 0.4)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 0 20px rgba(34, 211, 238, 0.3), 0 0 40px rgba(34, 211, 238, 0.1)'
+          }}
         >
-          <Sparkles className="h-6 w-6" />
+          <Image 
+            src="/cosmo.svg" 
+            alt="Cosmo AI Assistant" 
+            width={32} 
+            height={32} 
+            className="w-8 h-8 drop-shadow-lg"
+            style={{
+              filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.6))'
+            }}
+          />
         </LiquidButton>
       </motion.div>
 
@@ -156,7 +171,13 @@ export function ChatWidget() {
             <div className="p-3 md:p-4 border-b border-light-border dark:border-dark-border bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white rounded-t-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5" />
+                  <Image 
+                    src="/cosmo.svg" 
+                    alt="Cosmo AI Assistant" 
+                    width={24} 
+                    height={24} 
+                    className="w-6 h-6"
+                  />
                   <div>
                     <h3 className="font-semibold">Cosmo</h3>
                     <p className="text-xs opacity-90">Your Exoplanet Assistant</p>
@@ -176,9 +197,15 @@ export function ChatWidget() {
             <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4">
               {messages.length === 0 && (
                 <div className="text-center py-8">
-                  <Sparkles className="h-12 w-12 mx-auto mb-4 text-primary-light-blue" />
+                  <Image 
+                    src="/cosmo.svg" 
+                    alt="Cosmo AI Assistant" 
+                    width={64} 
+                    height={64} 
+                    className="h-16 w-16 mx-auto mb-4"
+                  />
                   <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                    Welcome to ExoBot!
+                    Welcome to Cosmo!
                   </h4>
                   <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4">
                     I&apos;m here to help you explore exoplanets, understand detection methods, and analyze data.
