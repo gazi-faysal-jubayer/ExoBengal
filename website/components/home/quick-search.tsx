@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Search, Filter, TrendingUp, Star, Orbit, Zap } from 'lucide-react'
+import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
 
 const quickFilters = [
   { label: 'Earth-like Planets', icon: Orbit, query: 'radius:0.8-1.2' },
@@ -49,17 +50,24 @@ export function QuickSearch() {
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="mb-8">
             <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-light-text-secondary dark:text-dark-text-secondary" />
-              <input
-                type="text"
+              <TerminalSearchInput
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by planet name, star system, or characteristics..."
-                className="w-full pl-12 pr-4 py-4 text-lg input-base rounded-full shadow-lg"
+                onChange={setSearchQuery}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleSearch(e as any)
+                  }
+                }}
+                placeholder="find exoplanets by name, characteristics, or system..."
+                user="seeker"
+                host="exobengal"
+                dir="/universe"
+                className="w-full"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary rounded-full px-6 py-2"
+                className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary rounded-full px-6 py-2 z-10"
               >
                 Search
               </button>
