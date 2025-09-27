@@ -5,12 +5,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Github, Linkedin } from "lucide-react";
+import { LiquidButton } from "./liquid-glass-button";
 
 type Testimonial = {
   quote: string;
   name: string;
   designation: string;
   src: string;
+  github?: string;
+  linkedin?: string;
 };
 
 export const AnimatedTestimonials = ({
@@ -148,6 +152,33 @@ export const AnimatedTestimonials = ({
                 </motion.span>
               ))}
             </motion.p>
+            
+            {/* Social Links */}
+            <motion.div 
+              className="flex gap-3 mt-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+            >
+              {testimonials[active].github && (
+                <LiquidButton 
+                  size="icon" 
+                  className="flex items-center justify-center"
+                  onClick={() => window.open(testimonials[active].github, '_blank')}
+                >
+                  <Github className="w-4 h-4" />
+                </LiquidButton>
+              )}
+              {testimonials[active].linkedin && (
+                <LiquidButton 
+                  size="icon" 
+                  className="flex items-center justify-center"
+                  onClick={() => window.open(testimonials[active].linkedin, '_blank')}
+                >
+                  <Linkedin className="w-4 h-4" />
+                </LiquidButton>
+              )}
+            </motion.div>
           </motion.div>
           <div className="flex gap-4 pt-12 md:pt-0">
             <button
