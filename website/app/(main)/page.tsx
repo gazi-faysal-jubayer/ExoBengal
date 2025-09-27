@@ -6,23 +6,24 @@ import { GalaxyMapPreview } from '@/components/home/galaxy-map-preview'
 import { NewsTicker } from '@/components/home/news-ticker'
 import { NewsPreview } from '@/components/home/news-preview'
 import { CTASection } from '@/components/home/cta-section'
-import Hero from '@/components/home/hero'
+import { Component as HorizonHero } from '@/components/ui/horizon-hero-section'
 
 export default function HomePage() {
   return (
     <>
-    <div className="min-h-screen pt-60 pb-10">
-      <Hero />
-    </div>
+      {/* New Horizon Hero Section */}
+      <HorizonHero />
       
-      {/* <HeroSection /> */}
-      <StatsCounter />
-      <FeaturedDiscoveries />
-      <QuickSearch />
-      <GalaxyMapPreview />
-      <NewsTicker />
-      <NewsPreview />
-      <CTASection />
+      {/* Original sections moved after the hero */}
+      <div className="relative z-10 bg-light-background dark:bg-dark-background">
+        <StatsCounter />
+        <FeaturedDiscoveries />
+        <QuickSearch />
+        <GalaxyMapPreview />
+        <NewsTicker />
+        <NewsPreview />
+        <CTASection />
+      </div>
     </>
   )
 }

@@ -493,3 +493,230 @@
   }
 }
 
+/* Horizon Hero Section Styles */
+.hero-container {
+  position: relative;
+  width: 100vw;
+  height: 300vh; /* Multiple sections for scrolling */
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+}
+
+.hero-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.side-menu {
+  position: fixed;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.menu-icon span {
+  width: 20px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.hero-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.hero-title {
+  font-size: clamp(4rem, 12vw, 12rem);
+  font-weight: 900;
+  line-height: 0.9;
+  margin: 0;
+  color: #ffffff;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #82b2d7 50%, #355381 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 300%;
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+
+.title-char {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.title-char:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.hero-subtitle {
+  margin-top: 2rem;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subtitle-line {
+  margin: 0.5rem 0;
+  opacity: 0.9;
+}
+
+.scroll-progress {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.scroll-text {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.progress-track {
+  width: 2px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(180deg, #82b2d7 0%, #355381 100%);
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+
+.section-counter {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.scroll-sections {
+  position: relative;
+  z-index: 5;
+}
+
+.content-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.content-section .hero-title {
+  font-size: clamp(3rem, 8vw, 8rem);
+  margin-bottom: 2rem;
+}
+
+.cosmos-style {
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+}
+
+.cosmos-content {
+  /* Additional styles for cosmic theme */
+}
+
+.cosmos-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .side-menu {
+    left: 20px;
+    gap: 20px;
+  }
+  
+  .scroll-progress {
+    right: 20px;
+    gap: 15px;
+  }
+  
+  .hero-content {
+    width: 95%;
+    padding: 0 1rem;
+  }
+  
+  .hero-title {
+    font-size: clamp(2.5rem, 8vw, 6rem);
+  }
+  
+  .hero-subtitle {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    margin-top: 1.5rem;
+  }
+  
+  .content-section {
+    padding: 0 1rem;
+  }
+  
+  .content-section .hero-title {
+    font-size: clamp(2rem, 6vw, 4rem);
+  }
+}
+
