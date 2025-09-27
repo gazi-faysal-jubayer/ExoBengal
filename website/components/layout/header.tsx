@@ -28,97 +28,147 @@ export function Header() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(0)
   const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
+    
+    // Set initial window width
+    if (typeof window !== 'undefined') {
+      setWindowWidth(window.innerWidth)
+      
+      // Listen for window resize
+      const handleResize = () => setWindowWidth(window.innerWidth)
+      window.addEventListener('resize', handleResize)
+      
+      return () => window.removeEventListener('resize', handleResize)
+    }
   }, [])
+
+  // Determine logo version and size based on window width
+  const getLogoConfig = () => {
+    if (windowWidth < 1024) {
+      // Mobile - use full logo but smaller size
+      return {
+        src: '/exobengal.png',
+        width: 180,
+        height: 48
+      }
+    } else if (windowWidth < 1280) {
+      // Medium desktop - use short version to avoid overlap
+      return {
+        src: '/exobengal-s.png',
+        width: 50,
+        height: 50
+      }
+    } else if (windowWidth < 1440) {
+      // Large desktop - use medium full logo
+      return {
+        src: '/exobengal.png',
+        width: 200,
+        height: 54
+      }
+    } else {
+      // Extra large desktop - use full logo
+      return {
+        src: '/exobengal.png',
+        width: 280,
+        height: 76
+      }
+    }
+  }
+
+  const logoConfig = getLogoConfig()
 
   return (
     <header className="sticky top-0 z-50 w-full">
       <div className="relative">
-        {/* Left glass panel - extends to screen edge */}
-        <div className="hidden lg:block absolute left-0 top-0 h-16 z-10">
-          <div className="glass-panel glass-left h-full flex items-center gap-x-2 pl-8 pr-6">
-            {leftNavigation.map((item) => {
-              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'navlink text-sm font-medium',
-                    isActive
-                      ? 'active'
-                      : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
-                  )}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right glass panel - extends to screen edge */}
-        <div className="hidden lg:block absolute right-0 top-0 h-16 z-10">
-          <div className="glass-panel glass-right h-full flex items-center justify-end gap-x-2 pl-6 pr-8">
-            {rightNavigation.map((item) => {
-              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'navlink text-sm font-medium',
-                    isActive
-                      ? 'active'
-                      : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
-                  )}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-
-            <div className="nav-separator mx-2" />
-
-            <button
-              type="button"
-              className="nav-button text-light-text-secondary hover:text-primary-dark-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue"
-              aria-label="Search"
-            >
-              <Search className="h-5 w-5" />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="nav-button text-light-text-secondary hover:text-primary-dark-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue"
-              aria-label="Toggle theme"
-            >
-              {mounted && theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Center logo with stroke - Desktop only */}
-        <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-          <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
-            <div className="relative">
-              <Image 
-                src="/exobengal.png" 
-                alt="ExoBengal logo" 
-                width={280} 
-                height={76} 
-                priority 
-              />
+        {/* Desktop three-column layout */}
+        <div className="hidden lg:flex h-16 w-full">
+          {/* Left panel */}
+          <div className="flex-shrink-0">
+            <div className="glass-panel glass-left h-full flex items-center gap-x-2 pl-8 pr-6">
+              {leftNavigation.map((item) => {
+                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'navlink text-sm font-medium',
+                      isActive
+                        ? 'active'
+                        : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
-          </Link>
+          </div>
+
+          {/* Center logo area */}
+          <div className="flex-1 flex items-center justify-center min-w-0 z-20">
+            <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
+              <div className="relative">
+                <Image 
+                  src={logoConfig.src}
+                  alt="ExoBengal logo" 
+                  width={logoConfig.width}
+                  height={logoConfig.height}
+                  priority 
+                />
+              </div>
+            </Link>
+          </div>
+
+          {/* Right panel */}
+          <div className="flex-shrink-0">
+            <div className="glass-panel glass-right h-full flex items-center justify-end gap-x-2 pl-6 pr-8">
+              {rightNavigation.map((item) => {
+                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'navlink text-sm font-medium',
+                      isActive
+                        ? 'active'
+                        : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue'
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+
+              <div className="nav-separator mx-2" />
+
+              <button
+                type="button"
+                className="nav-button text-light-text-secondary hover:text-primary-dark-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue"
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="nav-button text-light-text-secondary hover:text-primary-dark-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue"
+                aria-label="Toggle theme"
+              >
+                {mounted && theme === 'dark' ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </button>
+            </div>
+          </div>
         </div>
 
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
@@ -139,10 +189,10 @@ export function Header() {
 
             <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
               <Image 
-                src="/exobengal.png" 
+                src={logoConfig.src}
                 alt="ExoBengal logo" 
-                width={150} 
-                height={38} 
+                width={logoConfig.width}
+                height={logoConfig.height}
               />
             </Link>
 
