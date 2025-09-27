@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { X, RotateCcw, Save } from 'lucide-react'
 import { useExplorerStore, type ExplorerFilters } from '@/lib/explorer-store'
+import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
 interface FilterState {
   discoveryMethod: string[]
@@ -90,20 +91,22 @@ export function FilterPanel() {
           Filters
         </h3>
         <div className="flex items-center gap-2">
-          <button
+          <LiquidButton
             onClick={saveFilters}
-            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors"
+            size="icon"
+            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue"
             title="Save filters"
           >
             <Save className="h-4 w-4" />
-          </button>
-          <button
+          </LiquidButton>
+          <LiquidButton
             onClick={resetFilters}
-            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-semantic-warning transition-colors"
+            size="icon"
+            className="p-2 text-light-text-secondary dark:text-dark-text-secondary hover:text-semantic-warning"
             title="Reset filters"
           >
             <RotateCcw className="h-4 w-4" />
-          </button>
+          </LiquidButton>
         </div>
       </div>
 

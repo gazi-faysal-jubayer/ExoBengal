@@ -8,6 +8,7 @@ import { Menu, X, Search, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
 
 const leftNavigation = [
@@ -147,18 +148,16 @@ export function Header() {
 
               <div className="nav-separator mx-2" />
 
-              <button
-                type="button"
-                className="nav-button text-light-text-secondary hover:text-primary-dark-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue"
+              <LiquidButton
+                size="icon"
                 aria-label="Search"
               >
                 <Search className="h-5 w-5" />
-              </button>
+              </LiquidButton>
 
-              <button
-                type="button"
+              <LiquidButton
+                size="icon"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="nav-button text-light-text-secondary hover:text-primary-dark-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue"
                 aria-label="Toggle theme"
               >
                 {mounted && theme === 'dark' ? (
@@ -166,7 +165,7 @@ export function Header() {
                 ) : (
                   <Moon className="h-5 w-5" />
                 )}
-              </button>
+              </LiquidButton>
             </div>
           </div>
         </div>
@@ -174,9 +173,8 @@ export function Header() {
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
           <div className="relative flex h-16 items-center justify-between">
             <div className="flex w-full items-center justify-between lg:hidden">
-            <button
-              type="button"
-              className="nav-button -m-2.5 inline-flex items-center justify-center text-light-text-primary dark:text-dark-text-primary"
+            <LiquidButton
+              size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
@@ -185,7 +183,7 @@ export function Header() {
               ) : (
                 <Menu className="h-6 w-6" aria-hidden="true" />
               )}
-            </button>
+            </LiquidButton>
 
             <Link href="/" className="inline-flex items-center" aria-label="ExoBengal home">
               <Image 
@@ -196,10 +194,9 @@ export function Header() {
               />
             </Link>
 
-            <button
-              type="button"
+            <LiquidButton
+              size="icon"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="nav-button text-light-text-secondary hover:text-primary-dark-blue dark:text-dark-text-secondary dark:hover:text-primary-light-blue"
               aria-label="Toggle theme"
             >
               {mounted && theme === 'dark' ? (
@@ -207,7 +204,7 @@ export function Header() {
               ) : (
                 <Moon className="h-5 w-5" />
               )}
-            </button>
+            </LiquidButton>
             </div>
           </div>
         </nav>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Sparkles, Loader2, Copy, ThumbsUp, ThumbsDown } from 'lucide-react'
 import { generateResponse } from '@/lib/chatbot';
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
+import { LiquidButton } from '@/components/ui/liquid-glass-button'
 // import { useChat } from 'ai/react' // Disabled for static export
 
 interface Message {
@@ -125,17 +126,22 @@ export function ChatWidget() {
   return (
     <>
       {/* Chat Widget Button */}
-      <motion.button
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-r from-primary-reddish-orange to-semantic-warning text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ${
+      <motion.div
+        className={`fixed bottom-6 right-6 z-40 ${
           isOpen ? 'scale-0' : 'scale-100'
-        }`}
+        } transition-all duration-300`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         style={{ display: isOpen ? 'none' : 'flex' }}
       >
-        <Sparkles className="h-6 w-6" />
-      </motion.button>
+        <LiquidButton
+          onClick={() => setIsOpen(true)}
+          size="lg"
+          className="p-4 bg-gradient-to-r from-primary-reddish-orange to-semantic-warning text-white rounded-full shadow-lg hover:shadow-xl"
+        >
+          <Sparkles className="h-6 w-6" />
+        </LiquidButton>
+      </motion.div>
 
       {/* Chat Window */}
       <AnimatePresence>
@@ -156,12 +162,13 @@ export function ChatWidget() {
                     <p className="text-xs opacity-90">Your Exoplanet Assistant</p>
                   </div>
                 </div>
-                <button
+                <LiquidButton
                   onClick={() => setIsOpen(false)}
-                  className="p-1 hover:bg-white/20 rounded-md transition-colors"
+                  size="icon"
+                  className="p-1 hover:bg-white/20 rounded-md"
                 >
                   <X className="h-5 w-5" />
-                </button>
+                </LiquidButton>
               </div>
             </div>
 
@@ -183,13 +190,14 @@ export function ChatWidget() {
                       Try asking:
                     </p>
                     {suggestedQuestions.slice(0, 3).map((question, index) => (
-                      <button
+                      <LiquidButton
                         key={index}
                         onClick={() => handleSuggestedQuestion(question)}
-                        className="block w-full text-left text-xs p-2 bg-light-surface dark:bg-dark-surface hover:bg-light-hover dark:hover:bg-dark-hover rounded-md transition-colors"
+                        size="sm"
+                        className="block w-full text-left text-xs p-2 bg-light-surface dark:bg-dark-surface hover:bg-light-hover dark:hover:bg-dark-hover rounded-md"
                       >
                         {question}
-                      </button>
+                      </LiquidButton>
                     ))}
                   </div>
                 </div>
@@ -214,25 +222,28 @@ export function ChatWidget() {
                           dangerouslySetInnerHTML={formatMessage(message.content)}
                         />
                         <div className="flex items-center gap-2 mt-2">
-                          <button
+                          <LiquidButton
                             onClick={() => copyMessage(message.content)}
-                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary transition-colors"
+                            size="icon"
+                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary"
                             title="Copy message"
                           >
                             <Copy className="h-3 w-3" />
-                          </button>
-                          <button
-                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-green-500 transition-colors"
+                          </LiquidButton>
+                          <LiquidButton
+                            size="icon"
+                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-green-500"
                             title="Helpful"
                           >
                             <ThumbsUp className="h-3 w-3" />
-                          </button>
-                          <button
-                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-red-500 transition-colors"
+                          </LiquidButton>
+                          <LiquidButton
+                            size="icon"
+                            className="p-1 text-light-text-secondary dark:text-dark-text-secondary hover:text-red-500"
                             title="Not helpful"
                           >
                             <ThumbsDown className="h-3 w-3" />
-                          </button>
+                          </LiquidButton>
                         </div>
                       </div>
                     ) : (
@@ -287,13 +298,14 @@ export function ChatWidget() {
                   className="flex-1 text-sm"
                   disabled={isLoading}
                 />
-                <button
+                <LiquidButton
                   type="submit"
                   disabled={isLoading || !input.trim()}
-                  className="p-2 bg-primary-dark-blue text-white rounded-md hover:bg-primary-very-dark-blue disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  size="icon"
+                  className="p-2 bg-primary-dark-blue text-white rounded-md hover:bg-primary-very-dark-blue disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4" />
-                </button>
+                </LiquidButton>
               </div>
               <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-2">
                 Powered by AI • May occasionally provide incorrect information

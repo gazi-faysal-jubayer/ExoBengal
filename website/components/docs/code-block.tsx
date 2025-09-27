@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Copy, Check } from 'lucide-react'
+import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
 // PrismJS is loaded dynamically to keep the initial bundle smaller
 let Prism: any
@@ -73,15 +74,16 @@ export function CodeBlock({ code, language = 'python', title }: CodeBlockProps) 
       <pre className={`line-numbers rounded-lg ${title ? 'rounded-t-none' : ''}`}>
         <code ref={codeRef} className={`language-${language}`}>{code}</code>
       </pre>
-      <button
+      <LiquidButton
         type="button"
         aria-label="Copy code"
         onClick={handleCopy}
+        size="sm"
         className="absolute top-2 right-2 inline-flex items-center gap-1 rounded-md bg-black/40 text-white px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
         <span className="text-xs">{copied ? 'Copied' : 'Copy'}</span>
-      </button>
+      </LiquidButton>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 interface TerminalCardProps {
   command?: string;
@@ -19,14 +20,20 @@ const TerminalCard: React.FC<TerminalCardProps> = ({ command = "pip install exob
                 </svg>
                 Terminal
               </p>
-              <button className="copy_toggle" tabIndex={-1} type="button" onClick={() => {
-                navigator.clipboard.writeText(command);
-              }}>
+              <LiquidButton 
+                className="copy_toggle" 
+                tabIndex={-1} 
+                type="button" 
+                size="icon"
+                onClick={() => {
+                  navigator.clipboard.writeText(command);
+                }}
+              >
                 <svg width="16px" height="16px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth={2} stroke="currentColor" fill="none">
                   <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
                   <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                 </svg>
-              </button>
+              </LiquidButton>
             </hgroup>
             <div className="body">
               <pre className="pre">

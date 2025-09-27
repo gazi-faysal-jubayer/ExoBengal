@@ -73,7 +73,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <NewsBar className="sticky top-16 z-40 -mt-16" />
+            <NewsBar className="sticky top-16 z-50" />
             <main className="flex-1">
               {children}
             </main>

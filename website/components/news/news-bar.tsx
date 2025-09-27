@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, Clock, Globe, Rss, ChevronLeft, ChevronRight, Pause, Play, Rocket, Satellite, Telescope, Star, Atom, Beaker, Microscope, BookOpen, BarChart3, Search } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import Link from 'next/link'
+import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
 interface NewsBarProps {
   className?: string
@@ -223,7 +224,7 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
+                  className={`w-3 h-3 rounded-full transition-colors ${
                     index === currentIndex
                       ? 'bg-primary-dark-blue dark:bg-primary-light-blue'
                       : 'bg-light-border dark:bg-dark-border hover:bg-light-text-secondary'
@@ -235,31 +236,34 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
 
             {/* Navigation controls */}
             <div className="flex items-center gap-1">
-              <button
+              <LiquidButton
                 onClick={goToPrevious}
-                className="p-1 rounded hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
+                size="icon"
+                className="p-2 rounded hover:bg-light-hover dark:hover:bg-dark-hover"
                 aria-label="Previous news"
                 disabled={news.length <= 1}
               >
                 <ChevronLeft className="h-4 w-4" />
-              </button>
+              </LiquidButton>
               
-              <button
+              <LiquidButton
                 onClick={togglePlayPause}
-                className="p-1 rounded hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
+                size="icon"
+                className="p-2 rounded hover:bg-light-hover dark:hover:bg-dark-hover"
                 aria-label={isPlaying ? 'Pause auto-advance' : 'Resume auto-advance'}
               >
                 {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </button>
+              </LiquidButton>
               
-              <button
+              <LiquidButton
                 onClick={goToNext}
-                className="p-1 rounded hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
+                size="icon"
+                className="p-2 rounded hover:bg-light-hover dark:hover:bg-dark-hover"
                 aria-label="Next news"
                 disabled={news.length <= 1}
               >
                 <ChevronRight className="h-4 w-4" />
-              </button>
+              </LiquidButton>
             </div>
 
             {/* Count indicator */}

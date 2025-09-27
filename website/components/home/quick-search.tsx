@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Search, Filter, TrendingUp, Star, Orbit, Zap } from 'lucide-react'
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
+import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
 const quickFilters = [
   { label: 'Earth-like Planets', icon: Orbit, query: 'radius:0.8-1.2' },
@@ -65,42 +66,50 @@ export function QuickSearch() {
                 dir="/universe"
                 className="w-full"
               />
-              <button
+              <LiquidButton
                 type="submit"
+                size="default"
                 className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary rounded-full px-6 py-2 z-10"
               >
                 Search
-              </button>
+              </LiquidButton>
             </div>
           </form>
 
           {/* Quick Filters */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickFilters.map((filter) => (
-              <motion.button
+              <motion.div
                 key={filter.label}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => handleQuickFilter(filter.query)}
-                className="card p-6 text-center card-hover group"
               >
-                <filter.icon className="h-8 w-8 mx-auto mb-3 text-primary-light-blue group-hover:text-primary-dark-blue transition-colors" />
-                <p className="font-medium text-light-text-primary dark:text-dark-text-primary">
-                  {filter.label}
-                </p>
-              </motion.button>
+                <LiquidButton
+                  onClick={() => handleQuickFilter(filter.query)}
+                  size="lg"
+                  className="card p-6 text-center card-hover group w-full h-full"
+                >
+                  <div className="flex flex-col items-center">
+                    <filter.icon className="h-8 w-8 mx-auto mb-3 text-primary-light-blue group-hover:text-primary-dark-blue transition-colors" />
+                    <p className="font-medium text-light-text-primary dark:text-dark-text-primary">
+                      {filter.label}
+                    </p>
+                  </div>
+                </LiquidButton>
+              </motion.div>
             ))}
           </div>
 
           {/* Advanced Search Link */}
           <div className="text-center mt-8">
-            <button
+            <LiquidButton
               onClick={() => router.push('/explorer')}
-              className="inline-flex items-center gap-2 text-primary-dark-blue hover:text-primary-light-blue transition-colors"
+              variant="ghost"
+              className="inline-flex items-center gap-2 text-primary-dark-blue hover:text-primary-light-blue"
             >
               <Filter className="h-4 w-4" />
               Advanced Search & Filters
-            </button>
+            </LiquidButton>
           </div>
         </motion.div>
       </div>

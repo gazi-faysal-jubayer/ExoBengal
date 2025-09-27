@@ -5,6 +5,7 @@ import { Search, X, Clock, Mic, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useExplorerStore } from '@/lib/explorer-store'
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
+import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
 const searchSuggestions = [
   'Kepler-452b',
@@ -104,20 +105,22 @@ export function SearchInterface() {
           
           {/* Voice Search & AI Assistant */}
           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-            <button
+            <LiquidButton
               type="button"
-              className="p-2 rounded-md text-slate-400 hover:text-primary-light-blue transition-colors"
+              size="icon"
+              className="p-2 rounded-md text-slate-400 hover:text-primary-light-blue"
               aria-label="Voice search"
             >
               <Mic className="h-4 w-4" />
-            </button>
-            <button
+            </LiquidButton>
+            <LiquidButton
               type="button"
-              className="p-2 rounded-md text-slate-400 hover:text-primary-reddish-orange transition-colors"
+              size="icon"
+              className="p-2 rounded-md text-slate-400 hover:text-primary-reddish-orange"
               aria-label="AI assistant"
             >
               <Sparkles className="h-4 w-4" />
-            </button>
+            </LiquidButton>
           </div>
         </div>
 
@@ -140,16 +143,18 @@ export function SearchInterface() {
                     </h4>
                     <div className="space-y-1">
                       {filteredSuggestions.slice(0, 5).map((suggestion) => (
-                        <button
+                        <LiquidButton
                           key={suggestion}
                           onClick={() => {
                             setQuery(suggestion)
                             handleSearch(suggestion)
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover transition-colors text-sm rounded-md"
+                          variant="ghost"
+                          size="sm"
+                          className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-sm rounded-md justify-start"
                         >
                           {suggestion}
-                        </button>
+                        </LiquidButton>
                       ))}
                     </div>
                   </div>
@@ -163,16 +168,18 @@ export function SearchInterface() {
                   </h4>
                   <div className="space-y-1">
                     {recentSearches.map((search) => (
-                      <button
+                      <LiquidButton
                         key={search}
                         onClick={() => {
                           setQuery(search)
                           handleSearch(search)
                         }}
-                        className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover transition-colors text-sm text-light-text-secondary dark:text-dark-text-secondary rounded-md"
+                        variant="ghost"
+                        size="sm"
+                        className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-sm text-light-text-secondary dark:text-dark-text-secondary rounded-md justify-start"
                       >
                         {search}
-                      </button>
+                      </LiquidButton>
                     ))}
                   </div>
                 </div>
@@ -196,14 +203,16 @@ export function SearchInterface() {
           Quick filters:
         </span>
         {quickFilters.map((filter) => (
-          <button
+          <LiquidButton
             key={filter.value}
             onClick={() => addFilter(filter.value)}
             disabled={selectedFilters.includes(filter.value)}
-            className="px-3 py-1 text-xs border border-light-border dark:border-dark-border hover:bg-light-hover dark:hover:bg-dark-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-full"
+            variant="outline"
+            size="sm"
+            className="px-3 py-1 text-xs border border-light-border dark:border-dark-border hover:bg-light-hover dark:hover:bg-dark-hover disabled:opacity-50 disabled:cursor-not-allowed rounded-full"
           >
             {filter.label}
-          </button>
+          </LiquidButton>
         ))}
       </div>
 
@@ -219,24 +228,27 @@ export function SearchInterface() {
               className="flex items-center gap-1 px-3 py-1 bg-primary-dark-blue text-white text-xs rounded-full"
             >
               <span>{filter.split(':')[0]}</span>
-              <button
+              <LiquidButton
                 onClick={() => removeFilter(filter)}
-                className="hover:bg-primary-very-dark-blue rounded-full p-0.5 transition-colors"
+                size="icon"
+                className="hover:bg-primary-very-dark-blue rounded-full p-0.5"
                 aria-label={`Remove ${filter} filter`}
               >
                 <X className="h-3 w-3" />
-              </button>
+              </LiquidButton>
             </div>
           ))}
-          <button
+          <LiquidButton
             onClick={() => {
               setSelectedFilters([])
               setFilters({ ...filters, disposition: [], yearRange: [1992, new Date().getFullYear()], radiusRange: [0, 100] })
             }}
-            className="text-xs text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary transition-colors"
+            variant="ghost"
+            size="sm"
+            className="text-xs text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text-primary dark:hover:text-dark-text-primary"
           >
             Clear all
-          </button>
+          </LiquidButton>
         </div>
       )}
     </div>
