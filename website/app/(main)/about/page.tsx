@@ -171,7 +171,10 @@ const page = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-16"
         >
-          <div className="card p-8 text-center">
+          <div className="card p-8 text-center" style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1'
+                }}>
             <Telescope className="h-16 w-16 mx-auto mb-6 text-primary-dark-blue" />
             <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-6">
               Our Mission
@@ -284,14 +287,14 @@ const page = () => {
           </div>
         </motion.section>
 
-      <div className="container relative z-2">
+      <div className="">
         {/* <Heading
           classname="md:max-w-md lg:max-w-2xl"
           title="Chat Smarter, Not Harder with Brainwave"
         /> */}
 
         <h4 className='text-4xl font-bold text-center mb-10'>Team ExoBengal</h4>
-        <div className="flex flex-wrap gap-4 mb-10">
+        <div className="flex flex-wrap gap-10 mb-10">
           
           {teamMembers.map((item) => (
             <div
@@ -340,7 +343,7 @@ const page = () => {
                 </div>
               </div>
 
-              {item.light && <GradientLight />}
+              {/* {item.light && <GradientLight />} */}
 
               <div
                 className="absolute inset-0.5 bg-n-8"
@@ -376,7 +379,7 @@ const page = () => {
             Data Sources
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" >
             {dataSources.map((source, index) => (
               <motion.div
                 key={source.name}
@@ -384,6 +387,10 @@ const page = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                 className="card p-6"
+                style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1'
+                }}
               >
                 <div className="text-4xl mb-4">{source.logo}</div>
                 <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
@@ -412,8 +419,12 @@ const page = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
           className="mb-16"
+          
         >
-          <div className="card p-8 text-center">
+          <div className="card p-8 text-center" style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1'
+                }}>
             <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-6">
               Acknowledgments
             </h2>
@@ -445,7 +456,11 @@ const page = () => {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="text-center"
         >
-          <div className="card p-8 max-w-2xl mx-auto">
+          <div className="card p-8 max-w-2xl mx-auto" 
+          style={{ 
+                  border: '2px solid',
+                  borderImage: 'linear-gradient(to right, #62c2f9, #bbcffd) 1'
+                }}>
             <Github className="h-16 w-16 mx-auto mb-6 text-primary-dark-blue" />
             <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-4">
               Open Source & Contributing
