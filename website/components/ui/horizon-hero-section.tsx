@@ -625,8 +625,8 @@ export const Component = () => {
        {[...Array(2)].map((_, i) => {
           const titles: { [key: number]: string } = {
             0: 'HORIZON',
-            1: 'COSMOS',
-            2: 'INFINITY'
+            1: 'ExoBengal',
+            2: 'COSMO'
           };
           
           const subtitles: { [key: number]: { line1: string; line2: string } } = {
@@ -635,12 +635,12 @@ export const Component = () => {
               line2: 'we shape the future of tomorrow'
             },
             1: {
-              line1: 'Beyond the boundaries of imagination,',
-              line2: 'lies the universe of possibilities'
+              line1: 'Bringing AI closer to the sky,',
+              line2: 'bringing the sky closer to us.'
             },
             2: {
-              line1: 'In the space between thought and creation,',
-              line2: 'we find the essence of true innovation'
+              line1: 'AI listens to starlight,',
+              line2: 'and whispers the secrets of planets.'
             }
           };
           
