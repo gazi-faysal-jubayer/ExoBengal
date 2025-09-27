@@ -1,20 +1,12 @@
 "use client"
-
 import React from "react";
 import Section from "./Section";
-// import { curve, heroBackground, robot } from "./hero";
-import curve from "./hero/curve.png";
-import heroBackground from "./hero/heroBackground.jpg";
-import robot from "./hero/robot.png";
-
-import Button from "./Button";
 import { BackgroundCircles, BottomLine, Gradient } from "./design/Hero";
-// import { heroIcons } from "../constants";
 import { ScrollParallax } from "react-just-parallax";
 import { useRef } from "react";
 import Generating from "./Generating";
 import Notification from "./Notification";
-import CompanyLogos from "./CompanyLogos";
+
 
 const Hero = () => {
   const parallaxRef = useRef(null);
