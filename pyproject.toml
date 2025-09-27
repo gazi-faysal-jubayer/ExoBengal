@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "exobengal"
-version = "1.1.0"
+version = "1.1.1"
 description = "A python package to train Machine Learning models on Kepler Datasets with customizable hyperparameters to detect exoplanet"
 readme = "README.md"
 
