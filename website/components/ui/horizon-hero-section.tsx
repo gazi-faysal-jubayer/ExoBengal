@@ -4,9 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -297,7 +297,9 @@ export const Component = () => {
         mountain.position.z = layer.distance;
         mountain.position.y = layer.distance;
         mountain.userData = { baseZ: layer.distance, index };
-        refs.scene.add(mountain);
+        if (refs.scene) {
+          refs.scene.add(mountain);
+        }
         refs.mountains.push(mountain);
       });
     };
@@ -462,7 +464,7 @@ export const Component = () => {
     if (!isReady) return;
     
     // Set initial states to prevent flash
-    gsap.set([menuRef.current, titleRef.current, subtitleRef.current, scrollProgressRef.current], {
+    gsap.set([menuRef.current, titleRef.current, scrollProgressRef.current], {
       visibility: 'visible'
     });
 
@@ -478,29 +480,18 @@ export const Component = () => {
       });
     }
 
-    // Animate title with split text
-    if (titleRef.current) {
-      const titleChars = titleRef.current.querySelectorAll('.title-char');
-      tl.from(titleChars, {
-        y: 200,
-        opacity: 0,
-        duration: 1.5,
-        stagger: 0.05,
-        ease: "power4.out"
-      }, "-=0.5");
-    }
-
-    // Animate subtitle lines
-    if (subtitleRef.current) {
-      const subtitleLines = subtitleRef.current.querySelectorAll('.subtitle-line');
-      tl.from(subtitleLines, {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power3.out"
-      }, "-=0.8");
-    }
+     // Animate logo
+     if (titleRef.current) {
+       const logo = titleRef.current.querySelector('.hero-logo');
+       if (logo) {
+         tl.from(logo, {
+           scale: 0.3,
+           opacity: 0,
+           duration: 1.5,
+           ease: "power4.out"
+         }, "-=0.5");
+       }
+     }
 
     // Animate scroll indicator
     if (scrollProgressRef.current) {
@@ -604,21 +595,16 @@ export const Component = () => {
         <div className="vertical-text">SPACE</div>
       </div>
 
-      {/* Main content */}
-      <div className="hero-content cosmos-content">
-        <h1 ref={titleRef} className="hero-title">
-          {splitTitle("HORIZON")}
-        </h1>
-        
-        <div ref={subtitleRef} className="hero-subtitle cosmos-subtitle">
-          <p className="subtitle-line">
-            Where vision meets reality, 
-          </p>
-          <p className="subtitle-line">
-            we shape the future of tomorrow
-          </p>
-        </div>
-      </div>
+       {/* Main content */}
+       <div className="hero-content cosmos-content">
+         <div ref={titleRef} className="hero-logo-container" style={{ visibility: 'hidden' }}>
+           <img 
+             src="/exobengal.png" 
+             alt="ExoBengal" 
+             className="hero-logo"
+           />
+         </div>
+       </div>
 
       {/* Scroll progress indicator */}
       <div ref={scrollProgressRef} className="scroll-progress" style={{ visibility: 'hidden' }}>
@@ -658,22 +644,22 @@ export const Component = () => {
             }
           };
           
-          return (
-            <section key={i} className="content-section">
-              <h1 className="hero-title">
-                {splitTitle(titles[i+1] || 'DEFAULT')}
-              </h1>
-          
-              <div className="hero-subtitle cosmos-subtitle">
-                <p className="subtitle-line">
-                  {subtitles[i+1].line1}
-                </p>
-                <p className="subtitle-line">
-                  {subtitles[i+1].line2}
-                </p>
-              </div>
-            </section>
-          );
+           return (
+             <section key={i} className="content-section">
+               <h1 className="hero-title">
+                 {splitTitle(titles[i+1] || 'DEFAULT')}
+               </h1>
+           
+               <div className="hero-subtitle cosmos-subtitle">
+                 <p className="subtitle-line">
+                   {subtitles[i+1].line1}
+                 </p>
+                 <p className="subtitle-line">
+                 {subtitles[i+1].line2}
+                 </p>
+               </div>
+             </section>
+           );
         })}
       </div>
     </div>
