@@ -157,7 +157,104 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
       }}
     >
       <div className="container mx-auto px-4">
-        <div className={`flex items-center justify-between ${compact ? 'py-2' : 'py-3'}`}>
+        {/* Mobile Layout - Stacked */}
+        <div className="block md:hidden">
+          <div className={`${compact ? 'py-2' : 'py-3'}`}>
+            {/* Top row - Live indicator and controls */}
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2 text-primary-dark-blue dark:text-primary-light-blue flex-shrink-0">
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-primary-reddish-orange rounded-full animate-pulse" />
+                  <Rss className="h-3 w-3" />
+                </div>
+                <span className="text-xs font-medium">Live</span>
+              </div>
+              
+              {/* Mobile controls */}
+              <div className="flex items-center gap-1">
+                <LiquidButton
+                  onClick={goToPrevious}
+                  size="icon"
+                  className="p-1.5 rounded hover:bg-light-hover dark:hover:bg-dark-hover"
+                  aria-label="Previous news"
+                  disabled={news.length <= 1}
+                >
+                  <ChevronLeft className="h-3 w-3" />
+                </LiquidButton>
+                
+                <LiquidButton
+                  onClick={togglePlayPause}
+                  size="icon"
+                  className="p-1.5 rounded hover:bg-light-hover dark:hover:bg-dark-hover"
+                  aria-label={isPlaying ? 'Pause auto-advance' : 'Resume auto-advance'}
+                >
+                  {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+                </LiquidButton>
+                
+                <LiquidButton
+                  onClick={goToNext}
+                  size="icon"
+                  className="p-1.5 rounded hover:bg-light-hover dark:hover:bg-dark-hover"
+                  aria-label="Next news"
+                  disabled={news.length <= 1}
+                >
+                  <ChevronRight className="h-3 w-3" />
+                </LiquidButton>
+                
+                <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary ml-2">
+                  {currentIndex + 1}/{news.length}
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom row - News content */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="w-full"
+              >
+                {/* Source and category */}
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="text-primary-light-blue">{getSourceIcon(currentNews.source)}</div>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(currentNews.category)}`}>
+                    {currentNews.category}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <Link
+                  href={currentNews.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block hover:text-primary-light-blue transition-colors"
+                >
+                  <h3 className="text-sm font-medium line-clamp-2 group-hover:text-primary-light-blue">
+                    {currentNews.title}
+                  </h3>
+                </Link>
+                
+                {/* Meta info */}
+                <div className="flex items-center gap-3 text-xs text-light-text-secondary dark:text-dark-text-secondary mt-1">
+                  <span className="flex items-center gap-1">
+                    <Globe className="h-3 w-3" />
+                    {currentNews.source}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    {formatTimeAgo(currentNews.publishedAt)}
+                  </span>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Desktop Layout - Horizontal */}
+        <div className={`hidden md:flex items-center justify-between ${compact ? 'py-2' : 'py-3'}`}>
           {/* News Content */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
             {/* Live indicator */}
@@ -166,7 +263,7 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
                 <div className="w-2 h-2 bg-primary-reddish-orange rounded-full animate-pulse" />
                 <Rss className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium hidden sm:block">Live News</span>
+              <span className="text-sm font-medium">Live News</span>
             </div>
 
             {/* News item */}
@@ -216,10 +313,10 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
             </AnimatePresence>
           </div>
 
-          {/* Controls */}
+          {/* Desktop Controls */}
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Progress indicator */}
-            <div className="hidden sm:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-1">
               {news.slice(0, Math.min(5, news.length)).map((_, index) => (
                 <button
                   key={index}
@@ -267,7 +364,7 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
             </div>
 
             {/* Count indicator */}
-            <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary hidden md:block">
+            <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary hidden xl:block">
               {currentIndex + 1} of {news.length}
             </div>
           </div>

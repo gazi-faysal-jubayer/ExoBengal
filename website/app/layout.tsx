@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/header'
 import { Component as Footer } from '@/components/ui/footer-taped-design'
 import { ChatWidget } from '@/components/ai-chat/chat-widget'
 import { NewsBar } from '@/components/news/news-bar'
+import { BackgroundAudioPlayer } from '@/components/audio/background-audio-player'
 import { Toaster } from 'react-hot-toast'
 import TargetCursor from '@/components/ui/target-cursor'
 
@@ -81,6 +82,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <ChatWidget />
+          <BackgroundAudioPlayer />
           <TargetCursor 
             targetSelector=".cursor-target"
             spinDuration={2}

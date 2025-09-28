@@ -748,6 +748,62 @@
 }
 
 /* Responsive adjustments */
+/* Audio Player Styles */
+.audio-player-glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border: 1px solid rgba(53, 83, 129, 0.2);
+  box-shadow: 
+    0 8px 30px rgba(53, 83, 129, 0.1),
+    0 1px 3px rgba(53, 83, 129, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark .audio-player-glass {
+  background: linear-gradient(
+    135deg,
+    rgba(31, 41, 55, 0.95) 0%,
+    rgba(31, 41, 55, 0.8) 50%,
+    rgba(31, 41, 55, 0.95) 100%
+  );
+  border: 1px solid rgba(130, 178, 215, 0.3);
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Audio slider animations */
+.audio-slider {
+  transition: all 0.2s ease;
+}
+
+.audio-slider:hover {
+  transform: scaleY(1.2);
+}
+
+.audio-player-tab {
+  background: linear-gradient(
+    90deg,
+    rgba(53, 83, 129, 0.1) 0%,
+    rgba(130, 178, 215, 0.05) 50%,
+    rgba(53, 83, 129, 0.1) 100%
+  );
+}
+
+.dark .audio-player-tab {
+  background: linear-gradient(
+    90deg,
+    rgba(130, 178, 215, 0.15) 0%,
+    rgba(182, 226, 244, 0.08) 50%,
+    rgba(130, 178, 215, 0.15) 100%
+  );
+}
+
 @media (max-width: 768px) {
   .side-menu {
     left: 20px;
@@ -779,6 +835,100 @@
   
   .content-section .hero-title {
     font-size: clamp(2rem, 6vw, 4rem);
+  }
+
+  /* Mobile audio player adjustments */
+  .audio-player-glass {
+    min-width: 200px !important;
+  }
+  
+  .audio-slider {
+    height: 3px !important;
+  }
+  
+  .audio-slider::-webkit-slider-thumb {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  .audio-slider::-moz-range-thumb {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* Mobile bottom bar player */
+  .mobile-bottom-bar {
+    backdrop-filter: blur(20px);
+    box-shadow: 
+      0 -4px 20px rgba(53, 83, 129, 0.1),
+      0 -1px 3px rgba(53, 83, 129, 0.05);
+  }
+
+  .dark .mobile-bottom-bar {
+    box-shadow: 
+      0 -4px 20px rgba(0, 0, 0, 0.3),
+      0 -1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Touch targets for mobile */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Mobile bottom padding to account for audio bar */
+  @supports (padding: max(0px)) {
+    .mobile-audio-active {
+      padding-bottom: max(env(safe-area-inset-bottom), 72px) !important;
+    }
+  }
+
+  /* Mobile menu improvements */
+  .mobile-menu {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .mobile-menu-item {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mobile-menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .mobile-menu-item:hover::before {
+    left: 100%;
   }
 }
 

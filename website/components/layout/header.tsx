@@ -23,7 +23,6 @@ const rightNavigation = [
   { name: 'Documentation', href: '/docs' },
   { name: 'Learn', href: '/learn' },
   { name: 'API', href: '/api-access' },
-  { name: 'Demo', href: '/demo' },
   { name: 'About', href: '/about' },
 ]
 
@@ -48,6 +47,34 @@ export function Header() {
       return () => window.removeEventListener('resize', handleResize)
     }
   }, [])
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuOpen && !(event.target as Element).closest('nav')) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    if (mobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [mobileMenuOpen])
+
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    if (mobileMenuOpen) {
+      document.addEventListener('keydown', handleEscape)
+      return () => document.removeEventListener('keydown', handleEscape)
+    }
+  }, [mobileMenuOpen])
 
   // Determine logo version and size based on window width
   const getLogoConfig = () => {
@@ -85,7 +112,7 @@ export function Header() {
   const logoConfig = getLogoConfig()
 
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="sticky top-0 z-[55] w-full">
       <div className="relative">
         {/* Desktop three-column layout */}
         <div className="hidden lg:flex h-16 w-full">
@@ -166,29 +193,33 @@ export function Header() {
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
           <div className="relative flex h-16 items-center justify-between">
             <div className="flex w-full items-center justify-between lg:hidden">
-            <LiquidButton
-              size="icon"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="cursor-target"
-            >
-              <span className="sr-only">Open main menu</span>
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              )}
-            </LiquidButton>
+              {/* Hamburger Menu Button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-light-text-primary dark:text-dark-text-primary hover:text-primary-dark-blue dark:hover:text-primary-light-blue hover:bg-light-hover dark:hover:bg-dark-hover focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-light-blue transition-colors duration-200"
+                aria-expanded={mobileMenuOpen}
+                aria-label="Toggle main menu"
+              >
+                <span className="sr-only">Open main menu</span>
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" aria-hidden="true" />
+                ) : (
+                  <Menu className="h-6 w-6" aria-hidden="true" />
+                )}
+              </button>
 
-            <Link href="/" className="inline-flex items-center cursor-target" aria-label="ExoBengal home">
-              <Image 
-                src={logoConfig.src}
-                alt="ExoBengal logo" 
-                width={logoConfig.width}
-                height={logoConfig.height}
-              />
-            </Link>
+              {/* Logo */}
+              <Link href="/" className="inline-flex items-center cursor-target" aria-label="ExoBengal home">
+                <Image 
+                  src={logoConfig.src}
+                  alt="ExoBengal logo" 
+                  width={logoConfig.width}
+                  height={logoConfig.height}
+                />
+              </Link>
 
-            <StarWarsToggle />
+              {/* Theme Toggle */}
+              <StarWarsToggle />
             </div>
           </div>
         </nav>
@@ -200,27 +231,56 @@ export function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden"
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            className="lg:hidden absolute top-full left-0 right-0 z-[60] bg-light-surface/95 dark:bg-dark-surface/95 mobile-menu border-t border-light-border dark:border-dark-border shadow-xl backdrop-blur-xl"
           >
-            <div className="space-y-1 px-4 pb-3 pt-2">
-              {[...leftNavigation, ...rightNavigation].map((item) => {
-                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      'block rounded-md px-3 py-2 text-base font-medium transition-all duration-200',
-                      isActive
-                        ? 'bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white shadow-lg'
-                        : 'text-light-text-primary hover:bg-primary-dark-blue/10 hover:text-primary-dark-blue dark:text-dark-text-primary dark:hover:bg-primary-light-blue/10 dark:hover:text-primary-light-blue'
-                    )}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
+            <div className="px-4 py-3 space-y-1">
+              {/* Left Navigation */}
+              <div className="space-y-1">
+                {leftNavigation.map((item) => {
+                  const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        'block rounded-md px-3 py-2 text-base font-medium transition-all duration-200 mobile-menu-item',
+                        isActive
+                          ? 'bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white shadow-lg'
+                          : 'text-light-text-primary hover:bg-primary-dark-blue/10 hover:text-primary-dark-blue dark:text-dark-text-primary dark:hover:bg-primary-light-blue/10 dark:hover:text-primary-light-blue'
+                      )}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-light-border dark:border-dark-border my-2"></div>
+
+              {/* Right Navigation */}
+              <div className="space-y-1">
+                {rightNavigation.map((item) => {
+                  const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        'block rounded-md px-3 py-2 text-base font-medium transition-all duration-200 mobile-menu-item',
+                        isActive
+                          ? 'bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white shadow-lg'
+                          : 'text-light-text-primary hover:bg-primary-dark-blue/10 hover:text-primary-dark-blue dark:text-dark-text-primary dark:hover:bg-primary-light-blue/10 dark:hover:text-primary-light-blue'
+                      )}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </motion.div>
         )}
