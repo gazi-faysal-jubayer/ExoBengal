@@ -24,8 +24,19 @@ export function BackgroundAudioPlayer() {
     const handleLoadedData = () => {
       setDuration(audio.duration)
       setIsLoaded(true)
-      
-      // Auto-play when audio is loaded (only attempt once)
+    }
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime)
+    }
+
+    const handleEnded = () => {
+      setIsPlaying(false)
+      setCurrentTime(0)
+    }
+
+    const handleCanPlay = () => {
+      // Try to auto-play as soon as audio can play
       if (!autoPlayAttempted) {
         setAutoPlayAttempted(true)
         audio.play()
@@ -40,18 +51,10 @@ export function BackgroundAudioPlayer() {
       }
     }
 
-    const handleTimeUpdate = () => {
-      setCurrentTime(audio.currentTime)
-    }
-
-    const handleEnded = () => {
-      setIsPlaying(false)
-      setCurrentTime(0)
-    }
-
     audio.addEventListener('loadeddata', handleLoadedData)
     audio.addEventListener('timeupdate', handleTimeUpdate)
     audio.addEventListener('ended', handleEnded)
+    audio.addEventListener('canplay', handleCanPlay)
 
     // Set initial volume
     audio.volume = volume
@@ -60,30 +63,31 @@ export function BackgroundAudioPlayer() {
       audio.removeEventListener('loadeddata', handleLoadedData)
       audio.removeEventListener('timeupdate', handleTimeUpdate)
       audio.removeEventListener('ended', handleEnded)
+      audio.removeEventListener('canplay', handleCanPlay)
     }
   }, [volume, autoPlayAttempted])
 
-  // Auto-play attempt only on initial load (removed global click listener)
+  // Additional auto-play attempt on component mount
   useEffect(() => {
-    const tryInitialAutoPlay = () => {
-      const audio = audioRef.current
-      if (!audio || autoPlayAttempted) return
-      
-      setAutoPlayAttempted(true)
-      audio.play()
-        .then(() => {
-          setIsPlaying(true)
-        })
-        .catch(() => {
-          // Auto-play blocked, user will need to manually start
-          console.log('Auto-play blocked by browser, user must manually start')
-        })
-    }
+    const audio = audioRef.current
+    if (!audio || autoPlayAttempted) return
 
-    if (isLoaded && !autoPlayAttempted) {
-      tryInitialAutoPlay()
-    }
-  }, [isLoaded, autoPlayAttempted])
+    // Try auto-play after a short delay to ensure audio is ready
+    const timer = setTimeout(() => {
+      if (!autoPlayAttempted) {
+        setAutoPlayAttempted(true)
+        audio.play()
+          .then(() => {
+            setIsPlaying(true)
+          })
+          .catch(() => {
+            console.log('Auto-play blocked by browser, user will need to manually start')
+          })
+      }
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [autoPlayAttempted])
 
   const togglePlay = async () => {
     const audio = audioRef.current
@@ -152,7 +156,8 @@ export function BackgroundAudioPlayer() {
         loop
         preload="auto"
         autoPlay
-        muted={true}
+        muted={false}
+        playsInline
       />
 
       {/* Mobile Slide-out player - Enhanced Design */}
