@@ -958,6 +958,28 @@
     cursor: auto !important;
   }
 
+  /* Fixed positioning on mobile for better performance */
+  @media (max-width: 768px) {
+    header {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
+    
+    /* NewsBar hidden on mobile - no styles needed */
+  }
+
+  /* Desktop sticky behavior */
+  @media (min-width: 768px) {
+    .news-bar {
+      position: fixed !important;
+      top: 64px !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
+  }
+
   .mobile-menu-item {
     position: relative;
     overflow: hidden;

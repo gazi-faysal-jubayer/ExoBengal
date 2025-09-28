@@ -75,8 +75,8 @@ export default function RootLayout({
         <Providers>
           <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
             <Header />
-            <NewsBar className="sticky top-16 z-50 -mt-16" />
-            <main className="flex-1 overflow-x-hidden max-w-full">
+            <NewsBar className="hidden md:block sticky md:fixed top-16 md:left-0 md:right-0 z-[60]" />
+            <main className="flex-1 overflow-x-hidden max-w-full pt-16 md:pt-32">
               {children}
             </main>
             <Footer />

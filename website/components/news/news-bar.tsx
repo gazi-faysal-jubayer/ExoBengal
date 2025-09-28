@@ -22,11 +22,13 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
   // Load news on component mount
   useEffect(() => {
     const loadNews = async () => {
+      console.log('NewsBar: Starting to load news...')
       setIsLoading(true)
       
       // Try to use cached news first
       if (isCacheFresh()) {
         const cached = getCachedNews()
+        console.log('NewsBar: Found cached news:', cached.length)
         if (cached.length > 0) {
           setNews(cached)
           setIsLoading(false)
@@ -36,19 +38,23 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
 
       // Fetch fresh news
       try {
+        console.log('NewsBar: Fetching fresh news...')
         const freshNews = await fetchAllExoplanetNews()
+        console.log('NewsBar: Fresh news received:', freshNews.length)
         if (freshNews.length > 0) {
           setNews(freshNews)
           setCachedNews(freshNews)
         } else {
           // Fallback to cached news even if stale
           const cached = getCachedNews()
+          console.log('NewsBar: Using stale cached news:', cached.length)
           setNews(cached)
         }
       } catch (error) {
-        console.error('Failed to load news:', error)
+        console.error('NewsBar: Failed to load news:', error)
         // Use cached news as fallback
         const cached = getCachedNews()
+        console.log('NewsBar: Using fallback cached news:', cached.length)
         setNews(cached)
       } finally {
         setIsLoading(false)
@@ -123,7 +129,10 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
     }
   }
 
+  console.log('NewsBar render:', { isLoading, newsLength: news.length, currentIndex })
+
   if (isLoading) {
+    console.log('NewsBar: Rendering loading state')
     return (
       <div 
         className={`relative border-b border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card backdrop-blur-sm ${className}`}
@@ -144,16 +153,37 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
   }
 
   if (news.length === 0) {
-    return null
+    console.log('NewsBar: Rendering empty state')
+    // Show placeholder when no news is available
+    return (
+      <div 
+        className={`news-bar relative border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-card via-light-surface to-light-card dark:from-dark-card dark:via-dark-surface dark:to-dark-card backdrop-blur-sm ${className}`}
+        style={{
+          clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 4px))',
+          minHeight: '64px'
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center py-3">
+            <div className="flex items-center gap-2 text-primary-dark-blue dark:text-primary-light-blue">
+              <Rss className="h-4 w-4" />
+              <span className="text-sm font-medium">Loading news...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const currentNews = news[currentIndex]
+  console.log('NewsBar: Rendering content state with news:', currentNews?.title)
 
   return (
     <div 
-      className={`relative border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-card via-light-surface to-light-card dark:from-dark-card dark:via-dark-surface dark:to-dark-card backdrop-blur-sm ${className}`}
+      className={`news-bar relative border-b border-light-border dark:border-dark-border bg-gradient-to-r from-light-card via-light-surface to-light-card dark:from-dark-card dark:via-dark-surface dark:to-dark-card backdrop-blur-sm ${className}`}
       style={{
-        clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 4px))'
+        clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 4px))',
+        minHeight: '64px' // Ensure minimum height
       }}
     >
       <div className="container mx-auto px-4">

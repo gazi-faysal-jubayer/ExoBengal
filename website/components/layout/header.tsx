@@ -112,7 +112,7 @@ export function Header() {
   const logoConfig = getLogoConfig()
 
   return (
-    <header className="sticky top-0 z-[55] w-full">
+    <header className="fixed top-0 left-0 right-0 z-[55] w-full bg-light-background/95 dark:bg-dark-background/95 backdrop-blur-xl border-b border-light-border dark:border-dark-border">
       <div className="relative">
         {/* Desktop three-column layout */}
         <div className="hidden lg:flex h-16 w-full">
