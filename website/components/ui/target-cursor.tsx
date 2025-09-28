@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useCallback, useMemo } from "react";
+import { useEffect, useRef, useCallback, useMemo, useState } from "react";
 import { gsap } from "gsap";
 
 const TargetCursor = ({
@@ -11,6 +11,7 @@ const TargetCursor = ({
   const cursorRef = useRef(null);
   const cornersRef = useRef(null);
   const spinTl = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const constants = useMemo(
     () => ({
@@ -22,17 +23,32 @@ const TargetCursor = ({
   );
 
   const moveCursor = useCallback((x, y) => {
-    if (!cursorRef.current) return;
+    if (!cursorRef.current || isMobile) return;
     gsap.to(cursorRef.current, {
       x,
       y,
       duration: 0.1,
       ease: "power3.out",
     });
+  }, [isMobile]);
+
+  // Detect mobile devices
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                            window.innerWidth <= 768 || 
+                            ('ontouchstart' in window);
+      setIsMobile(isMobileDevice);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
-    if (!cursorRef.current) return;
+    if (!cursorRef.current || isMobile) return;
 
     const originalCursor = document.body.style.cursor;
     if (hideDefaultCursor) {
@@ -282,7 +298,12 @@ const TargetCursor = ({
         .timeline({ repeat: -1 })
         .to(cursorRef.current, { rotation: "+=360", duration: spinDuration, ease: "none" });
     }
-  }, [spinDuration]);
+  }, [spinDuration, isMobile]);
+
+  // Don't render cursor on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div

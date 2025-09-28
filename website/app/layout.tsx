@@ -71,12 +71,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-body`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-body overflow-x-hidden`}>
         <Providers>
-          <div className="flex min-h-screen flex-col">
+          <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
             <Header />
             <NewsBar className="sticky top-16 z-50 -mt-16" />
-            <main className="flex-1">
+            <main className="flex-1 overflow-x-hidden max-w-full">
               {children}
             </main>
             <Footer />
