@@ -155,87 +155,189 @@ export function BackgroundAudioPlayer() {
         muted={false}
       />
 
-      {/* Mobile Compact Slider */}
-      <div className="fixed bottom-4 right-4 z-[100] md:hidden pointer-events-auto">
+      {/* Mobile Slide-out player - Enhanced Design */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[100] md:hidden pointer-events-auto">
         <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ 
-            scale: isPlaying ? 1 : 0,
-            opacity: isPlaying ? 1 : 0
-          }}
-          transition={{ type: 'spring', damping: 20, stiffness: 400 }}
-          className="relative"
+          initial={{ x: '100%' }}
+          animate={{ x: isExpanded ? '0%' : 'calc(100% - 40px)' }}
+          transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+          className="flex items-center"
         >
-          <div className={cn(
-            "bg-light-surface/95 dark:bg-dark-surface/95 backdrop-blur-xl",
-            "border border-light-border dark:border-dark-border",
-            "rounded-full px-3 py-2 flex items-center gap-2 shadow-lg",
-            "min-w-[140px]"
-          )}>
-            {/* Compact play/pause button */}
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                togglePlay()
-              }}
-              className={cn(
-                "flex items-center justify-center w-8 h-8 rounded-full",
-                "bg-primary-dark-blue dark:bg-primary-light-blue",
-                "text-white dark:text-dark-background",
-                "hover:bg-primary-very-dark-blue dark:hover:bg-primary-cyan",
-                "transition-colors duration-200",
-                "touch-manipulation shadow-md",
-                "relative z-10 cursor-pointer flex-shrink-0"
-              )}
-              disabled={false}
-              type="button"
+          {/* Slide tab - Liquid Glass */}
+          <motion.button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={cn(
+              "flex items-center justify-center w-10 h-16 rounded-l-2xl",
+              "bg-white/10 dark:bg-white/5",
+              "backdrop-blur-2xl backdrop-saturate-150",
+              "border border-white/30 dark:border-white/20",
+              "shadow-2xl shadow-black/10 dark:shadow-black/30",
+              "hover:bg-white/20 dark:hover:bg-white/10",
+              "hover:border-white/40 dark:hover:border-white/30",
+              "hover:shadow-3xl transition-all duration-500 ease-out",
+              "group touch-manipulation active:scale-95",
+              "before:absolute before:inset-0 before:rounded-l-2xl",
+              "before:bg-gradient-to-br before:from-white/20 before:to-transparent",
+              "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
+              "relative overflow-hidden"
+            )}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <motion.div
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="flex items-center justify-center z-10 relative"
             >
-              {isPlaying ? (
-                <Pause className="w-3 h-3" />
-              ) : (
-                <Play className="w-3 h-3 ml-0.5" />
-              )}
-            </button>
+              <ChevronRight className="w-4 h-4 text-white/80 group-hover:text-white transition-colors drop-shadow-lg" />
+            </motion.div>
+          </motion.button>
 
-            {/* Compact track info */}
-            <div className="flex-1 min-w-0">
-              <div className="text-xs font-medium text-light-text-primary dark:text-dark-text-primary truncate">
-                Interstellar
+          {/* Player content - Liquid Glass */}
+          <div className={cn(
+            "bg-white/10 dark:bg-white/5",
+            "backdrop-blur-2xl backdrop-saturate-150",
+            "border border-white/30 dark:border-white/20",
+            "rounded-r-2xl shadow-2xl shadow-black/10 dark:shadow-black/30",
+            "min-w-[200px] max-w-[280px]",
+            "overflow-hidden relative",
+            "before:absolute before:inset-0 before:rounded-r-2xl",
+            "before:bg-gradient-to-br before:from-white/20 before:via-white/5 before:to-transparent",
+            "before:pointer-events-none"
+          )}>
+            {/* Track info section */}
+            <div className="px-4 py-3 border-b border-white/20 dark:border-white/10 relative z-10">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold text-white/90 dark:text-white truncate drop-shadow-sm">
+                    Interstellar
+                  </div>
+                  <div className="text-xs text-white/70 dark:text-white/60 drop-shadow-sm">
+                    Background Music
+                  </div>
+                </div>
+                {/* Status indicator */}
+                <div className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  isPlaying 
+                    ? "bg-green-400 shadow-lg shadow-green-400/60 animate-pulse" 
+                    : "bg-white/40 dark:bg-white/30"
+                )} />
               </div>
             </div>
 
-            {/* Volume control */}
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                toggleMute()
-              }}
-              className="p-1 rounded-full text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue transition-colors touch-manipulation flex-shrink-0"
-            >
-              {isMuted || volume === 0 ? (
-                <VolumeX className="w-3 h-3" />
-              ) : (
-                <Volume2 className="w-3 h-3" />
-              )}
-            </button>
+            {/* Controls section */}
+            <div className="px-4 py-3 relative z-10">
+              <div className="flex items-center justify-between gap-3">
+                {/* Play/Pause button - Liquid Glass */}
+                <motion.button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    togglePlay()
+                  }}
+                  className={cn(
+                    "flex items-center justify-center w-12 h-12 rounded-full",
+                    "bg-white/20 dark:bg-white/10",
+                    "backdrop-blur-xl backdrop-saturate-150",
+                    "border border-white/40 dark:border-white/30",
+                    "text-white shadow-2xl shadow-black/20",
+                    "hover:bg-white/30 dark:hover:bg-white/20",
+                    "hover:border-white/50 dark:hover:border-white/40",
+                    "hover:shadow-3xl transition-all duration-300",
+                    "active:scale-95 touch-manipulation",
+                    "relative overflow-hidden",
+                    "before:absolute before:inset-0 before:rounded-full",
+                    "before:bg-gradient-to-br before:from-white/30 before:to-transparent",
+                    "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                  )}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={false}
+                  type="button"
+                >
+                  <div className="relative z-10">
+                    {isPlaying ? (
+                      <Pause className="w-5 h-5 drop-shadow-lg" />
+                    ) : (
+                      <Play className="w-5 h-5 ml-0.5 drop-shadow-lg" />
+                    )}
+                  </div>
+                </motion.button>
 
-            {/* Close button */}
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                const audio = audioRef.current
-                if (audio) {
-                  audio.pause()
-                  setIsPlaying(false)
-                }
-              }}
-              className="p-1 rounded-full text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-reddish-orange transition-colors touch-manipulation flex-shrink-0"
-            >
-              <X className="w-3 h-3" />
-            </button>
+                {/* Volume controls - Liquid Glass */}
+                <div className="flex-1 flex items-center gap-3">
+                  <motion.button
+                    onClick={toggleMute}
+                    className={cn(
+                      "p-2 rounded-full transition-all duration-300",
+                      "bg-white/10 dark:bg-white/5",
+                      "backdrop-blur-lg border border-white/20 dark:border-white/10",
+                      "text-white/80 hover:text-white",
+                      "hover:bg-white/20 dark:hover:bg-white/10",
+                      "hover:border-white/30 dark:hover:border-white/20",
+                      "shadow-lg hover:shadow-xl",
+                      "touch-manipulation active:scale-95"
+                    )}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    {isMuted || volume === 0 ? (
+                      <VolumeX className="w-4 h-4 drop-shadow-sm" />
+                    ) : (
+                      <Volume2 className="w-4 h-4 drop-shadow-sm" />
+                    )}
+                  </motion.button>
+                  
+                  <div className="flex-1 relative">
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={isMuted ? 0 : volume}
+                      onChange={handleVolumeChange}
+                      className="w-full h-2 bg-white/20 dark:bg-white/10 rounded-lg appearance-none cursor-pointer volume-slider audio-slider backdrop-blur-sm border border-white/20"
+                    />
+                    <div className="text-xs text-white/70 dark:text-white/60 text-center mt-1 font-mono drop-shadow-sm">
+                      {Math.round(volume * 100)}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Progress section - Liquid Glass */}
+            <AnimatePresence>
+              {isExpanded && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="px-4 py-3 border-t border-white/20 dark:border-white/10 bg-white/5 dark:bg-white/5 backdrop-blur-sm relative z-10"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-white/70 dark:text-white/60 font-mono min-w-[35px] drop-shadow-sm">
+                      {formatTime(currentTime)}
+                    </span>
+                    <div className="flex-1 relative">
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={progress}
+                        onChange={handleProgressChange}
+                        className="w-full h-2 bg-white/20 dark:bg-white/10 rounded-lg appearance-none cursor-pointer progress-slider audio-slider backdrop-blur-sm border border-white/20"
+                      />
+                    </div>
+                    <span className="text-xs text-white/70 dark:text-white/60 font-mono min-w-[35px] text-right drop-shadow-sm">
+                      {formatTime(duration)}
+                    </span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </motion.div>
       </div>
@@ -248,14 +350,23 @@ export function BackgroundAudioPlayer() {
           transition={{ type: 'spring', damping: 20, stiffness: 300 }}
           className="flex items-center"
         >
-          {/* Slide tab */}
+          {/* Slide tab - Liquid Glass */}
           <motion.button
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
-              "flex items-center justify-center w-10 h-16 md:w-12 md:h-20 rounded-l-lg",
-              "audio-player-tab audio-player-glass cursor-pointer transition-all duration-300",
-              "hover:shadow-lg group border-r-0 backdrop-blur-xl",
-              "touch-manipulation"
+              "flex items-center justify-center w-10 h-16 md:w-12 md:h-20 rounded-l-2xl",
+              "bg-white/10 dark:bg-white/5",
+              "backdrop-blur-2xl backdrop-saturate-150",
+              "border border-white/30 dark:border-white/20 border-r-0",
+              "shadow-2xl shadow-black/10 dark:shadow-black/30",
+              "hover:bg-white/20 dark:hover:bg-white/10",
+              "hover:border-white/40 dark:hover:border-white/30",
+              "hover:shadow-3xl transition-all duration-500 ease-out",
+              "group touch-manipulation active:scale-95",
+              "before:absolute before:inset-0 before:rounded-l-2xl",
+              "before:bg-gradient-to-br before:from-white/20 before:to-transparent",
+              "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
+              "relative overflow-hidden"
             )}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -263,107 +374,154 @@ export function BackgroundAudioPlayer() {
             <motion.div
               animate={{ rotate: isExpanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
+              className="relative z-10"
             >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-light-text-secondary dark:text-dark-text-secondary group-hover:text-primary-dark-blue dark:group-hover:text-primary-light-blue" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 group-hover:text-white transition-colors drop-shadow-lg" />
             </motion.div>
           </motion.button>
 
-          {/* Player content */}
+          {/* Player content - Liquid Glass */}
           <div className={cn(
-            "audio-player-glass h-16 md:h-20 flex items-center gap-2 md:gap-4 px-2 md:px-6 rounded-r-lg",
-            "border-l-0 min-w-[240px] md:min-w-[320px]",
-            "backdrop-blur-xl"
+            "bg-white/10 dark:bg-white/5",
+            "backdrop-blur-2xl backdrop-saturate-150",
+            "border border-white/30 dark:border-white/20 border-l-0",
+            "rounded-r-2xl shadow-2xl shadow-black/10 dark:shadow-black/30",
+            "min-w-[280px] md:min-w-[360px]",
+            "relative overflow-hidden",
+            "before:absolute before:inset-0 before:rounded-r-2xl",
+            "before:bg-gradient-to-br before:from-white/20 before:via-white/5 before:to-transparent",
+            "before:pointer-events-none"
           )}>
-            {/* Track info */}
-            <div className="flex-1 min-w-0">
-              <div className="text-xs md:text-sm font-semibold text-light-text-primary dark:text-dark-text-primary truncate">
-                Interstellar
-              </div>
-              <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary hidden md:block">
-                Background Music
+            {/* Track info section */}
+            <div className="px-4 py-3 border-b border-white/20 dark:border-white/10 relative z-10">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs md:text-sm font-bold text-white/90 dark:text-white truncate drop-shadow-sm">
+                    Interstellar
+                  </div>
+                  <div className="text-xs text-white/70 dark:text-white/60 drop-shadow-sm">
+                    Background Music
+                  </div>
+                </div>
+                {/* Status indicator */}
+                <div className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  isPlaying 
+                    ? "bg-green-400 shadow-lg shadow-green-400/60 animate-pulse" 
+                    : "bg-white/40 dark:bg-white/30"
+                )} />
               </div>
             </div>
 
-            {/* Controls */}
-            <div className="flex items-center gap-2 md:gap-3 pointer-events-auto">
-              {/* Play/Pause */}
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  togglePlay()
-                }}
-                className={cn(
-                  "flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full",
-                  "bg-primary-dark-blue dark:bg-primary-light-blue",
-                  "text-white dark:text-dark-background",
-                  "hover:bg-primary-very-dark-blue dark:hover:bg-primary-cyan",
-                  "transition-colors duration-200",
-                  "disabled:opacity-50 disabled:cursor-not-allowed",
-                  "touch-manipulation",
-                  "relative z-10",
-                  "cursor-pointer"
-                )}
-                disabled={false}
-                type="button"
-              >
-                {isPlaying ? (
-                  <Pause className="w-3 h-3 md:w-4 md:h-4" />
-                ) : (
-                  <Play className="w-3 h-3 md:w-4 md:h-4 ml-0.5" />
-                )}
-              </button>
-
-              {/* Volume */}
-              <div className="flex items-center gap-1 md:gap-2">
+            {/* Controls section */}
+            <div className="px-4 py-3 relative z-10">
+              <div className="flex items-center justify-between gap-3 md:gap-4">
+                {/* Play/Pause button - Liquid Glass */}
                 <motion.button
-                  onClick={toggleMute}
-                  className="text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-dark-blue dark:hover:text-primary-light-blue transition-colors touch-manipulation"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  {isMuted || volume === 0 ? (
-                    <VolumeX className="w-3 h-3 md:w-4 md:h-4" />
-                  ) : (
-                    <Volume2 className="w-3 h-3 md:w-4 md:h-4" />
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    togglePlay()
+                  }}
+                  className={cn(
+                    "flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full",
+                    "bg-white/20 dark:bg-white/10",
+                    "backdrop-blur-xl backdrop-saturate-150",
+                    "border border-white/40 dark:border-white/30",
+                    "text-white shadow-2xl shadow-black/20",
+                    "hover:bg-white/30 dark:hover:bg-white/20",
+                    "hover:border-white/50 dark:hover:border-white/40",
+                    "hover:shadow-3xl transition-all duration-300",
+                    "active:scale-95 touch-manipulation",
+                    "relative overflow-hidden",
+                    "before:absolute before:inset-0 before:rounded-full",
+                    "before:bg-gradient-to-br before:from-white/30 before:to-transparent",
+                    "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
                   )}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={false}
+                  type="button"
+                >
+                  <div className="relative z-10">
+                    {isPlaying ? (
+                      <Pause className="w-4 h-4 md:w-5 md:h-5 drop-shadow-lg" />
+                    ) : (
+                      <Play className="w-4 h-4 md:w-5 md:h-5 ml-0.5 drop-shadow-lg" />
+                    )}
+                  </div>
                 </motion.button>
-                
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={isMuted ? 0 : volume}
-                  onChange={handleVolumeChange}
-                  className="w-10 md:w-16 h-1 bg-light-border dark:bg-dark-border rounded-lg appearance-none cursor-pointer volume-slider audio-slider"
-                />
+
+                {/* Volume controls - Liquid Glass */}
+                <div className="flex-1 flex items-center gap-3 md:gap-4">
+                  <motion.button
+                    onClick={toggleMute}
+                    className={cn(
+                      "p-2 rounded-full transition-all duration-300",
+                      "bg-white/10 dark:bg-white/5",
+                      "backdrop-blur-lg border border-white/20 dark:border-white/10",
+                      "text-white/80 hover:text-white",
+                      "hover:bg-white/20 dark:hover:bg-white/10",
+                      "hover:border-white/30 dark:hover:border-white/20",
+                      "shadow-lg hover:shadow-xl",
+                      "touch-manipulation active:scale-95"
+                    )}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    {isMuted || volume === 0 ? (
+                      <VolumeX className="w-4 h-4 drop-shadow-sm" />
+                    ) : (
+                      <Volume2 className="w-4 h-4 drop-shadow-sm" />
+                    )}
+                  </motion.button>
+                  
+                  <div className="flex-1 relative max-w-[120px]">
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={isMuted ? 0 : volume}
+                      onChange={handleVolumeChange}
+                      className="w-full h-2 bg-white/20 dark:bg-white/10 rounded-lg appearance-none cursor-pointer volume-slider audio-slider backdrop-blur-sm border border-white/20"
+                    />
+                    <div className="text-xs text-white/70 dark:text-white/60 text-center mt-1 font-mono drop-shadow-sm">
+                      {Math.round(volume * 100)}%
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Progress bar (when expanded) */}
+            {/* Progress section - Liquid Glass */}
             <AnimatePresence>
               {isExpanded && (
                 <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
-                  className="flex items-center gap-2 ml-2"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="px-4 py-3 border-t border-white/20 dark:border-white/10 bg-white/5 dark:bg-white/5 backdrop-blur-sm relative z-10"
                 >
-                  <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary font-mono">
-                    {formatTime(currentTime)}
-                  </span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={progress}
-                    onChange={handleProgressChange}
-                    className="w-16 sm:w-20 h-1 bg-light-border dark:bg-dark-border rounded-lg appearance-none cursor-pointer progress-slider audio-slider"
-                  />
-                  <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary font-mono">
-                    {formatTime(duration)}
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-white/70 dark:text-white/60 font-mono min-w-[35px] drop-shadow-sm">
+                      {formatTime(currentTime)}
+                    </span>
+                    <div className="flex-1 relative">
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={progress}
+                        onChange={handleProgressChange}
+                        className="w-full h-2 bg-white/20 dark:bg-white/10 rounded-lg appearance-none cursor-pointer progress-slider audio-slider backdrop-blur-sm border border-white/20"
+                      />
+                    </div>
+                    <span className="text-xs text-white/70 dark:text-white/60 font-mono min-w-[35px] text-right drop-shadow-sm">
+                      {formatTime(duration)}
+                    </span>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

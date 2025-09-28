@@ -18,9 +18,9 @@ const config: Config = {
           'very-dark-blue': '#2b3952',
         },
         light: {
-          background: '#ffffff',
-          surface: '#f8fafc',
-          card: '#ffffff',
+          background: '#b6e2f4',
+          surface: '#D5E7F3FF',
+          card: '#CFD8B8FF',
           'text-primary': '#1e293b',
           'text-secondary': '#64748b',
           border: '#e2e8f0',
