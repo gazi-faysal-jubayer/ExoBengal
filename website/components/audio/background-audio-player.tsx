@@ -152,7 +152,7 @@ export function BackgroundAudioPlayer() {
         loop
         preload="auto"
         autoPlay
-        muted={false}
+        muted={true}
       />
 
       {/* Mobile Slide-out player - Enhanced Design */}
