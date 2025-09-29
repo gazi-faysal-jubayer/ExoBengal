@@ -3,6 +3,7 @@
 import { ExplorerPlanetRow } from '@/lib/csv-loader'
 import { motion } from 'framer-motion'
 import { Camera, Star, Sun, Telescope } from 'lucide-react'
+import { BackgroundBeams } from '@/components/ui/background-beams'
 
 interface PhotometryGridProps {
   planet: ExplorerPlanetRow
@@ -75,9 +76,10 @@ export function PhotometryGrid({ planet }: PhotometryGridProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
+      className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
     >
-      <div className="p-6">
+      <BackgroundBeams className="absolute inset-0 opacity-55 dark:opacity-65" />
+      <div className="relative z-10 p-6">
         <h2 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
           Photometry
         </h2>
@@ -189,4 +191,5 @@ export function PhotometryGrid({ planet }: PhotometryGridProps) {
     </motion.div>
   )
 }
+
 

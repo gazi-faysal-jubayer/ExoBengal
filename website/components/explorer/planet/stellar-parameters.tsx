@@ -4,6 +4,7 @@ import { ExplorerPlanetRow } from '@/lib/csv-loader'
 import { motion } from 'framer-motion'
 import { Activity, Flame, Gauge, Mountain, Orbit, Star, Sun, Zap } from 'lucide-react'
 import { formatNum } from './shared-utils'
+import { NeonGlowBackground } from '@/components/ui/neon-glow-background'
 
 interface StellarParametersProps {
   planet: ExplorerPlanetRow
@@ -114,9 +115,10 @@ export function StellarParameters({ planet }: StellarParametersProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
+      className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
     >
-      <div className="p-6">
+      <NeonGlowBackground className="absolute inset-0" />
+      <div className="relative z-10 p-6">
         <h2 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
           Stellar Parameters
         </h2>
@@ -221,4 +223,5 @@ export function StellarParameters({ planet }: StellarParametersProps) {
     </motion.div>
   )
 }
+
 

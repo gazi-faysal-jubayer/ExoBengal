@@ -4,6 +4,7 @@ import { Globe, Calendar, Telescope, Scale, Orbit, Timer, TrendingUp } from 'luc
 import type { ReactNode } from 'react'
 import type { ExplorerPlanetRow } from '@/lib/csv-loader'
 import { formatNum, getPlanetType, formatDiscoveryDate, getDiscoveryFacility } from './shared-utils'
+import { EnhancedBackgroundBeams } from '@/components/ui/enhanced-background-beams'
 
 interface KeyFactsGridProps {
   planet: ExplorerPlanetRow
@@ -19,25 +20,33 @@ interface FactCardProps {
 
 function FactCard({ icon, label, value, subtitle, highlight = false }: FactCardProps) {
   return (
-    <div className={`relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 clip-corner-cut backdrop-blur-sm transition-all duration-200 hover:border-primary-light-blue/30 ${
-      highlight ? 'ring-1 ring-primary-dark-blue/20 dark:ring-primary-light-blue/20' : ''
-    }`}>
-      <div className="flex items-start justify-between mb-4">
+    <div 
+      className={`relative bg-light-card dark:bg-dark-card border-2 border-purple-400 dark:border-purple-300 p-6 clip-corner-cut backdrop-blur-sm transition-all duration-200 hover:border-cyan-400 shadow-lg shadow-purple-500/40 ${
+        highlight ? 'ring-2 ring-cyan-400 shadow-xl shadow-cyan-500/50' : ''
+      }`}
+      style={{
+        boxShadow: highlight 
+          ? "0 0 25px rgba(34, 211, 238, 0.5), inset 0 0 15px rgba(147, 51, 234, 0.1)"
+          : "0 0 15px rgba(147, 51, 234, 0.3), inset 0 0 10px rgba(147, 51, 234, 0.05)"
+      }}
+    >
+      <EnhancedBackgroundBeams className="absolute inset-0 opacity-70 dark:opacity-80" />
+      <div className="relative z-10 flex items-start justify-between mb-4">
         <div className="p-2 rounded-lg bg-primary-dark-blue/10 dark:bg-primary-light-blue/10 text-primary-dark-blue dark:text-primary-light-blue">
           {icon}
         </div>
       </div>
       
-      <h3 className="text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary mb-2 uppercase tracking-wide">
+      <h3 className="relative z-10 text-sm font-medium text-light-text-secondary dark:text-dark-text-secondary mb-2 uppercase tracking-wide">
         {label}
       </h3>
       
-      <p className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary mb-1">
+      <p className="relative z-10 text-2xl font-bold text-light-text-primary dark:text-dark-text-primary mb-1">
         {value}
       </p>
       
       {subtitle && (
-        <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+        <p className="relative z-10 text-sm text-light-text-secondary dark:text-dark-text-secondary">
           {subtitle}
         </p>
       )}

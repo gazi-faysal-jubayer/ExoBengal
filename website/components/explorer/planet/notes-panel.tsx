@@ -17,6 +17,7 @@ import {
   Share2
 } from 'lucide-react'
 import { useExplorerStore } from '@/lib/explorer-store'
+import { BackgroundBeams } from '@/components/ui/background-beams'
 
 interface NotesPanelProps {
   planetName: string
@@ -107,9 +108,10 @@ export function NotesPanel({ planetName }: NotesPanelProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.7 }}
-      className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
+      className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
     >
-      <div className="p-6">
+      <BackgroundBeams className="absolute inset-0 opacity-55 dark:opacity-65" />
+      <div className="relative z-10 p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary">
             Research Notes
@@ -308,4 +310,5 @@ export function NotesPanel({ planetName }: NotesPanelProps) {
     </motion.div>
   )
 }
+
 

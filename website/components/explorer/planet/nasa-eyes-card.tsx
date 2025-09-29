@@ -4,6 +4,7 @@ import { ExplorerPlanetRow } from '@/lib/csv-loader'
 import { motion } from 'framer-motion'
 import { Eye, ExternalLink, Maximize2, Play } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { EnhancedBackgroundBeams } from '@/components/ui/enhanced-background-beams'
 
 interface NASAEyesCardProps {
   planet: ExplorerPlanetRow
@@ -27,10 +28,14 @@ export function NASAEyesCard({ planet }: NASAEyesCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm"
+      className="relative bg-light-card dark:bg-dark-card border-2 border-cyan-400 dark:border-cyan-300 overflow-hidden clip-corner-cut backdrop-blur-sm shadow-2xl shadow-cyan-500/50 dark:shadow-cyan-400/60 animate-pulse"
+      style={{
+        boxShadow: "0 0 30px rgba(34, 211, 238, 0.6), inset 0 0 20px rgba(34, 211, 238, 0.1)"
+      }}
     >
+      <EnhancedBackgroundBeams className="absolute inset-0 opacity-80 dark:opacity-90" />
       {/* Header with NASA Eyes branding */}
-      <div className="p-4 border-b border-light-border/50 dark:border-dark-border/50">
+      <div className="relative z-10 p-4 border-b border-light-border/50 dark:border-dark-border/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary-dark-blue/10 dark:bg-primary-light-blue/10 rounded-lg">
@@ -59,7 +64,7 @@ export function NASAEyesCard({ planet }: NASAEyesCardProps) {
       </div>
 
       {/* NASA Eyes Visualization Area */}
-      <div className="relative">
+      <div className="relative z-10">
         <div className="h-[600px] bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 rounded-lg overflow-hidden flex items-center justify-center">
           {showIframe ? (
             <>
@@ -158,7 +163,7 @@ export function NASAEyesCard({ planet }: NASAEyesCardProps) {
       </div>
 
       {/* Brief description and NASA attribution */}
-      <div className="p-4 bg-light-surface/30 dark:bg-dark-surface/30">
+      <div className="relative z-10 p-4 bg-light-surface/30 dark:bg-dark-surface/30">
         <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-3">
           Explore <span className="font-medium text-light-text-primary dark:text-dark-text-primary">{planet.pl_name}</span> in 
           stunning 3D. Navigate through space, compare sizes, and discover what makes this exoplanet unique.

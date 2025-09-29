@@ -3,6 +3,7 @@
 import { ExternalLink, Calendar, Telescope, MapPin, FileText, Award } from 'lucide-react'
 import type { ExplorerPlanetRow } from '@/lib/csv-loader'
 import { stripHtml, extractAtUrl, formatDiscoveryDate, getDiscoveryFacility } from './shared-utils'
+import { BackgroundBeams } from '@/components/ui/background-beams'
 
 interface DiscoverySectionProps {
   planet: ExplorerPlanetRow
@@ -80,11 +81,12 @@ export function DiscoverySection({ planet }: DiscoverySectionProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main narrative */}
         <div className="lg:col-span-2">
-          <div className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 clip-corner-cut backdrop-blur-sm">
-            <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
+          <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 clip-corner-cut backdrop-blur-sm">
+            <BackgroundBeams className="absolute inset-0 opacity-55 dark:opacity-65" />
+            <h3 className="relative z-10 text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
               The Discovery
             </h3>
-            <div className="prose prose-gray dark:prose-invert max-w-none">
+            <div className="relative z-10 prose prose-gray dark:prose-invert max-w-none">
               <p className="text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
                 {narrative}
               </p>
@@ -92,7 +94,7 @@ export function DiscoverySection({ planet }: DiscoverySectionProps) {
             
             {/* Scientific reference */}
             {cleanReference && (
-              <div className="mt-6 p-4 bg-light-surface/30 dark:bg-dark-surface/30 rounded-lg border border-light-border/50 dark:border-dark-border/50">
+              <div className="relative z-10 mt-6 p-4 bg-light-surface/30 dark:bg-dark-surface/30 rounded-lg border border-light-border/50 dark:border-dark-border/50">
                 <h4 className="text-sm font-semibold text-light-text-primary dark:text-dark-text-primary mb-2 flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   Scientific Reference
@@ -116,12 +118,13 @@ export function DiscoverySection({ planet }: DiscoverySectionProps) {
         {/* Discovery details sidebar */}
         <div className="space-y-6">
           {/* Key discovery facts */}
-          <div className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 clip-corner-cut backdrop-blur-sm">
-            <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
+          <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 clip-corner-cut backdrop-blur-sm">
+            <BackgroundBeams className="absolute inset-0 opacity-45 dark:opacity-55" />
+            <h3 className="relative z-10 text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
               Discovery Details
             </h3>
             
-            <div className="space-y-4">
+            <div className="relative z-10 space-y-4">
               <div className="flex items-start gap-3">
                 <Calendar className="h-5 w-5 text-primary-dark-blue dark:text-primary-light-blue mt-0.5 flex-shrink-0" />
                 <div>
