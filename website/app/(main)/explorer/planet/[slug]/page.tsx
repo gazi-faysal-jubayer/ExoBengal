@@ -17,6 +17,7 @@ import { ObservationCoverage } from '@/components/explorer/planet/observation-co
 import { ExternalLinks } from '@/components/explorer/planet/external-links'
 import { NeighborContext } from '@/components/explorer/planet/neighbor-context'
 import { NotesPanel } from '@/components/explorer/planet/notes-panel'
+import { NASAEyesCard } from '@/components/explorer/planet/nasa-eyes-card'
 import { motion } from 'framer-motion'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { 
@@ -195,17 +196,29 @@ export default function PlanetPage({ params }: PlanetPageProps) {
               {/* Target Identifiers */}
               <TargetIdentifiers planet={planet} />
               
-              {/* System Visualization */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
-                    Orbital System
-                  </h3>
-                  <div className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg overflow-hidden">
-                    <OrbitalSystemViewer hostName={planet.hostname} />
-                  </div>
+              {/* Interactive Visualizations */}
+              <div>
+                <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-6">
+                  Interactive Visualizations
+                </h3>
+                
+                {/* NASA Eyes - Full Width at Top */}
+                <div className="mb-8">
+                  <NASAEyesCard planet={planet} />
                 </div>
-                <ArtistConception planet={planet} />
+                
+                {/* Orbital System and Artist's Conception */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="text-md font-medium text-light-text-primary dark:text-dark-text-primary mb-4">
+                      Orbital System
+                    </h4>
+                    <div className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg overflow-hidden">
+                      <OrbitalSystemViewer hostName={planet.hostname} />
+                    </div>
+                  </div>
+                  <ArtistConception planet={planet} />
+                </div>
               </div>
               
               {/* Discovery Information */}

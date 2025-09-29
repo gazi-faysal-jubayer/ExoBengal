@@ -33,7 +33,7 @@ export function ExternalLinks({ planet }: ExternalLinksProps) {
   }
 
   const generateADSUrl = () => {
-    return `https://ui.adsabs.harvard.edu/search/q=object:"${encodeURIComponent(planet.pl_name)}" OR object:"${encodeURIComponent(planet.hostname)}"&sort=date desc`
+    return `https://ui.adsabs.harvard.edu/search/q=object:"${encodeURIComponent(planet.pl_name)}" OR object:"${encodeURIComponent(planet.hostname || '')}"&sort=date desc`
   }
 
   const generateGaiaUrl = () => {
@@ -54,6 +54,12 @@ export function ExternalLinks({ planet }: ExternalLinksProps) {
       return `https://exofop.ipac.caltech.edu/tess/target.php?id=${toiMatch[1]}`
     }
     return 'https://exofop.ipac.caltech.edu/tess/'
+  }
+
+  const generateNASAEyesUrl = () => {
+    // Convert planet name to NASA Eyes format (replace spaces with underscores)
+    const formattedName = planet.pl_name.replace(/\s+/g, '_')
+    return `https://eyes.nasa.gov/apps/exo/#/planet/${encodeURIComponent(formattedName)}`
   }
 
   // Organize links by category
@@ -105,6 +111,11 @@ export function ExternalLinks({ planet }: ExternalLinksProps) {
       icon: Calculator,
       links: [
         {
+          name: 'NASA Eyes on Exoplanets',
+          url: generateNASAEyesUrl(),
+          description: 'Interactive 3D visualization'
+        },
+        {
           name: 'Aladin Sky Atlas',
           url: `https://aladin.u-strasbg.fr/AladinLite/?target=${planet.ra || 0} ${planet.dec || 0}&fov=0.2&survey=CDS/P/DSS2/color`,
           description: 'Interactive sky viewer'
@@ -132,12 +143,12 @@ export function ExternalLinks({ planet }: ExternalLinksProps) {
         },
         {
           name: 'arXiv',
-          url: `https://arxiv.org/search/?query="${encodeURIComponent(planet.pl_name)}" OR "${encodeURIComponent(planet.hostname)}"&searchtype=all`,
+          url: `https://arxiv.org/search/?query="${encodeURIComponent(planet.pl_name)}" OR "${encodeURIComponent(planet.hostname || '')}"&searchtype=all`,
           description: 'Preprint archive'
         },
         {
           name: 'Google Scholar',
-          url: `https://scholar.google.com/scholar?q="${encodeURIComponent(planet.pl_name)}" OR "${encodeURIComponent(planet.hostname)}"`,
+          url: `https://scholar.google.com/scholar?q="${encodeURIComponent(planet.pl_name)}" OR "${encodeURIComponent(planet.hostname || '')}"`,
           description: 'Academic search'
         }
       ]
