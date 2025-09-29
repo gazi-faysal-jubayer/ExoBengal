@@ -83,8 +83,14 @@ export default function RootLayout({
           </div>
           <ChatWidget />
           <BackgroundAudioPlayer />
+          {/* 
+            TargetCursor automatically targets common interactive elements:
+            - button, a, input, select, textarea elements
+            - Elements with [data-target-cursor] attribute
+            - Elements with .cursor-target class
+            Additional elements can use cursor-target class or data-target-cursor attribute for custom targeting
+          */}
           <TargetCursor 
-            targetSelector=".cursor-target"
             spinDuration={2}
             hideDefaultCursor={true}
           />

@@ -94,6 +94,7 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
           className
         )}
         onClick={() => onValueChange(value)}
+        data-target-cursor="true"
         {...props}
       >
         {children}

@@ -106,6 +106,7 @@ export function DiscoverySection({ planet }: DiscoverySectionProps) {
                   <button
                     onClick={() => window.open(referenceUrl, '_blank', 'noopener,noreferrer')}
                     className="btn-secondary text-sm inline-flex items-center gap-2"
+                    data-target-cursor="true"
                   >
                     Read Full Paper <ExternalLink className="h-3 w-3" />
                   </button>

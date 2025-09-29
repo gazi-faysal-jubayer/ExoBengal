@@ -438,6 +438,7 @@ export default function OrbitalSystemViewer({ hostName }: { hostName?: string })
         <button
           onClick={() => setSpeed(s => (s === 0 ? 1 : 0))}
           className="ml-1 px-2 py-1 bg-black/40 rounded hover:bg-black/60"
+          data-target-cursor="true"
         >
           {speed === 0 ? 'Play' : 'Pause'}
         </button>

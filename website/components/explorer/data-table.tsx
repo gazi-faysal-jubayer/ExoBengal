@@ -5,18 +5,17 @@ import { motion } from 'framer-motion'
 import { 
   ChevronDown, 
   ChevronUp, 
-  Eye, 
   Download, 
   MoreHorizontal,
   ArrowUpDown,
   Filter,
-  Star,
   Loader2
 } from 'lucide-react'
 import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
 import { useExplorerStore, selectFilteredRows } from '@/lib/explorer-store'
 import { planetNameToSlug } from '@/lib/planet-utils'
 import { useRouter } from 'next/navigation'
+import { CheckBox } from '@/components/ui/checkbox'
 
 // Convert CSV data to table format
 const convertNASAData = (nasaData: ExplorerPlanetRow[]) => {
@@ -240,7 +239,7 @@ export function DataTable() {
   }
 
   return (
-    <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm">
+    <div className="card data-table-card">
       {/* Error Banner */}
       {error && (
         <div className="p-4 bg-semantic-warning/10 border-b border-semantic-warning/20">
@@ -248,22 +247,22 @@ export function DataTable() {
         </div>
       )}
 
-      {/* Table Header Controls */}
-      <div className="p-4 border-b border-light-border dark:border-dark-border">
+      {/* Header Controls with Glass Panel */}
+      <div className="glass-panel p-4 border-b border-light-border dark:border-dark-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary">
               Exoplanets ({data.length.toLocaleString()})
             </h3>
             {selectedRows.length > 0 && (
-              <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+              <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary selection-glow">
                 {selectedRows.length} selected
               </span>
             )}
           </div>
           
           <div className="flex items-center gap-2">
-            <button className="btn-secondary text-sm flex items-center gap-2">
+            <button className="btn-secondary text-sm flex items-center gap-2" data-target-cursor="true">
               <Download className="h-4 w-4" />
               Export
             </button>
@@ -275,118 +274,152 @@ export function DataTable() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-light-surface dark:bg-dark-surface">
-            <tr>
-              <th className="w-12 p-3 text-left">
-                <input
-                  type="checkbox"
-                  className="border-light-border dark:border-dark-border clip-angled-tag"
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedRows(sortedData.map(row => row.id))
-                    } else {
-                      setSelectedRows([])
-                    }
-                  }}
-                />
-              </th>
-              <th className="w-8 p-3"></th>
-              {columns.map((column) => (
-                <th
-                  key={column.key as string}
-                  className={`p-3 text-left ${column.width || 'w-auto'}`}
+      {/* Column Headers with Glass Effects */}
+      <div className="column-header-glass p-4 border-b border-light-border dark:border-dark-border">
+        <div className="grid grid-cols-10 gap-4 items-center">
+          <div className="col-span-1 flex items-center justify-center">
+            <CheckBox
+              checked={selectedRows.length === sortedData.length && sortedData.length > 0}
+              onClick={() => {
+                if (selectedRows.length === sortedData.length) {
+                  setSelectedRows([])
+                } else {
+                  setSelectedRows(sortedData.map(row => row.id))
+                }
+              }}
+              size={20}
+              color="#82b2d7"
+            />
+          </div>
+          {columns.map((column, index) => (
+            <div
+              key={column.key as string}
+              className={`${index < 2 ? 'col-span-2' : 'col-span-1'} flex items-center`}
+            >
+              {column.sortable ? (
+                <button
+                  onClick={() => handleSort(column.key as string)}
+                  className={`flex items-center gap-1 transition-all duration-300 group ${
+                    sortColumn === column.key 
+                      ? 'text-primary-light-blue sort-indicator-active' 
+                      : 'hover:text-primary-light-blue'
+                  }`}
                 >
-                  {column.sortable ? (
-                    <button
-                      onClick={() => handleSort(column.key as string)}
-                      className="flex items-center gap-1 hover:text-primary-light-blue transition-colors group"
-                    >
-                      <span className="font-medium text-sm">{column.label}</span>
-                      <div className="flex flex-col">
-                        {sortColumn === column.key ? (
-                          sortDirection === 'asc' ? (
-                            <ChevronUp className="h-3 w-3" />
-                          ) : (
-                            <ChevronDown className="h-3 w-3" />
-                          )
-                        ) : (
-                          <ArrowUpDown className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
-                        )}
-                      </div>
-                    </button>
-                  ) : (
-                    <span className="font-medium text-sm">{column.label}</span>
-                  )}
-                </th>
-              ))}
-              <th className="w-12 p-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedData.map((row, index) => (
-              <motion.tr
-                key={row.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="border-b border-light-border dark:border-dark-border hover:bg-light-hover dark:hover:bg-dark-hover transition-colors"
-              >
-                <td className="p-3">
-                  <input
-                    type="checkbox"
-                    checked={selectedRows.includes(row.id)}
-                    onChange={() => toggleRowSelection(row.id)}
-                    className="border-light-border dark:border-dark-border clip-angled-tag"
-                  />
-                </td>
-                <td className="p-3">
-                  <button
-                    onClick={() => toggleFavorite(row.id)}
-                    className={`transition-colors ${
-                      row.favorite 
-                        ? 'text-semantic-warning' 
-                        : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-semantic-warning'
-                    }`}
-                  >
-                    <Star className={`h-4 w-4 ${row.favorite ? 'fill-current' : ''}`} />
-                  </button>
-                </td>
-                {columns.map((column) => (
-                  <td key={column.key as string} className="p-3">
-                    {column.key === 'pl_name' ? (
-                      <button
-                        onClick={() => handlePlanetClick(row.pl_name)}
-                        className="text-primary-dark-blue dark:text-primary-light-blue hover:underline font-medium"
-                      >
-                        {row[column.key]}
-                      </button>
+                  <span className="font-medium text-sm">{column.label}</span>
+                  <div className="flex flex-col">
+                    {sortColumn === column.key ? (
+                      sortDirection === 'asc' ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      )
                     ) : (
-                      <span className="text-sm">
-                        {formatValue(row[column.key], column.unit)}
-                      </span>
+                      <ArrowUpDown className="h-4 w-4 opacity-0 group-hover:opacity-70 transition-opacity" />
                     )}
-                  </td>
-                ))}
-                <td className="p-3">
-                  <button
-                    onClick={() => handlePlanetClick(row.pl_name)}
-                    className="p-1 hover:bg-light-surface dark:hover:bg-dark-surface transition-colors clip-angled-tag"
-                    aria-label="View details"
-                  >
-                    <Eye className="h-4 w-4" />
-                  </button>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
+                  </div>
+                </button>
+              ) : (
+                <span className="font-medium text-sm">{column.label}</span>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Pagination */}
-      <div className="p-4 border-t border-light-border dark:border-dark-border">
+      {/* Card-Based Row Layout */}
+      <div className="p-4 space-y-3">
+        {sortedData.map((row, index) => (
+          <motion.div
+            key={row.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
+            className={`row-card card-hover data-table-hover ${
+              selectedRows.includes(row.id) ? 'selection-glow' : ''
+            }`}
+          >
+            <div className="p-4">
+              <div className="grid grid-cols-10 gap-4 items-center">
+                {/* Selection Checkbox */}
+                <div className="col-span-1 flex items-center justify-center">
+                  <CheckBox
+                    checked={selectedRows.includes(row.id)}
+                    onClick={() => toggleRowSelection(row.id)}
+                    size={18}
+                    color="#82b2d7"
+                  />
+                </div>
+
+                {/* Planet Name - Prominent */}
+                <div className="col-span-2">
+                  <button
+                    onClick={() => handlePlanetClick(row.pl_name)}
+                    className="text-left group"
+                  >
+                    <div className="font-semibold text-primary-dark-blue dark:text-primary-light-blue group-hover:underline transition-all duration-300">
+                      {row.pl_name}
+                    </div>
+                  </button>
+                </div>
+
+                {/* Host Star */}
+                <div className="col-span-2">
+                  <div className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">
+                    {row.hostname}
+                  </div>
+                </div>
+
+                {/* Discovery Method */}
+                <div className="col-span-1">
+                  <div className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">
+                    {row.discoverymethod}
+                  </div>
+                </div>
+
+                {/* Discovery Year */}
+                <div className="col-span-1">
+                  <div className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">
+                    {row.disc_year || '—'}
+                  </div>
+                </div>
+
+                {/* Orbital Period */}
+                <div className="col-span-1">
+                  <div className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">
+                    {formatValue(row.pl_orbper, 'days')}
+                  </div>
+                </div>
+
+                {/* Discovery Facility */}
+                <div className="col-span-1">
+                  <div className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">
+                    {row.pl_facility || '—'}
+                  </div>
+                </div>
+
+                {/* Solution Type */}
+                <div className="col-span-1">
+                  <div className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">
+                    {row.soltype || '—'}
+                  </div>
+                </div>
+
+                {/* Distance */}
+                <div className="col-span-1">
+                  <div className="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">
+                    {formatValue(row.distance, 'ly')}
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Enhanced Pagination */}
+      <div className="glass-panel p-4 border-t border-light-border dark:border-dark-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">

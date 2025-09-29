@@ -139,6 +139,7 @@ export function NASAEyesCard({ planet }: NASAEyesCardProps) {
                 <button
                   onClick={() => setShowIframe(true)}
                   className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-dark-blue to-primary-light-blue text-white font-semibold rounded-lg hover:from-primary-dark-blue/90 hover:to-primary-light-blue/90 transition-all duration-300 hover:shadow-lg hover:scale-105 text-lg"
+                  data-target-cursor="true"
                 >
                   <Play className="h-6 w-6" />
                   <span>Launch Visualization</span>

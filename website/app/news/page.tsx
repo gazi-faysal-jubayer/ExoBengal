@@ -277,6 +277,7 @@ export default function NewsPage() {
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="btn-secondary flex items-center gap-2 lg:hidden"
+              data-target-cursor="true"
             >
               <Filter className="h-4 w-4" />
               Filters

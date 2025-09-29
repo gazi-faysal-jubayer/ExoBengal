@@ -188,6 +188,7 @@ export function BackgroundAudioPlayer() {
             )}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            data-target-cursor="true"
           >
             <motion.div
               animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -260,6 +261,7 @@ export function BackgroundAudioPlayer() {
                   whileTap={{ scale: 0.95 }}
                   disabled={false}
                   type="button"
+                  data-target-cursor="true"
                 >
                   <div className="relative z-10">
                     {isPlaying ? (
@@ -286,6 +288,7 @@ export function BackgroundAudioPlayer() {
                     )}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
+                    data-target-cursor="true"
                   >
                     {isMuted || volume === 0 ? (
                       <VolumeX className="w-4 h-4 drop-shadow-sm" />
@@ -375,6 +378,7 @@ export function BackgroundAudioPlayer() {
             )}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            data-target-cursor="true"
           >
             <motion.div
               animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -447,6 +451,7 @@ export function BackgroundAudioPlayer() {
                   whileTap={{ scale: 0.95 }}
                   disabled={false}
                   type="button"
+                  data-target-cursor="true"
                 >
                   <div className="relative z-10">
                     {isPlaying ? (

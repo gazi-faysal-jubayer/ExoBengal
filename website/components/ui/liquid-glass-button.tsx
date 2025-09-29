@@ -49,6 +49,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        data-target-cursor="true"
         {...props}
       />
     )
@@ -110,6 +111,7 @@ function LiquidButton({
           "relative",
           liquidbuttonVariants({ variant, size, className })
         )}
+        data-target-cursor="true"
         {...props}
       >
         <div className="absolute top-0 left-0 z-0 h-full w-full rounded-full 
@@ -360,6 +362,7 @@ export const MetalButton = React.forwardRef<
         ref={ref}
         className={cn(variants.button, className)}
         style={variants.buttonStyle}
+        data-target-cursor="true"
         {...props}
         onMouseDown={handleInternalMouseDown}
         onMouseUp={handleInternalMouseUp}

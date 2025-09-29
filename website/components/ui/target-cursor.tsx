@@ -3,11 +3,19 @@
 import { useEffect, useRef, useCallback, useMemo, useState } from "react";
 import { gsap } from "gsap";
 
+interface TargetCursorProps {
+  targetSelector?: string | string[];
+  spinDuration?: number;
+  hideDefaultCursor?: boolean;
+}
+
+const DEFAULT_TARGET_SELECTORS = ["button", "a", "input", "select", "textarea", "[data-target-cursor]", ".cursor-target"] as const;
+
 const TargetCursor = ({
-  targetSelector = ".cursor-target",
+  targetSelector = DEFAULT_TARGET_SELECTORS,
   spinDuration = 2,
   hideDefaultCursor = true,
-}) => {
+}: TargetCursorProps) => {
   const cursorRef = useRef(null);
   const cornersRef = useRef(null);
   const spinTl = useRef(null);
@@ -21,6 +29,18 @@ const TargetCursor = ({
     }),
     []
   );
+
+  // Helper function to check if element matches any of the provided selectors
+  const matchesAnySelector = useCallback((element: Element, selectors: string | string[]): boolean => {
+    const selectorArray = Array.isArray(selectors) ? selectors : [selectors];
+    return selectorArray.some(selector => {
+      try {
+        return element.matches(selector);
+      } catch (e) {
+        return false;
+      }
+    });
+  }, []);
 
   const moveCursor = useCallback((x, y) => {
     if (!cursorRef.current || isMobile) return;
@@ -102,7 +122,7 @@ const TargetCursor = ({
       const allTargets = [];
       let current = directTarget;
       while (current && current !== document.body) {
-        if (current.matches(targetSelector)) {
+        if (matchesAnySelector(current, targetSelector)) {
           allTargets.push(current);
         }
         current = current.parentElement;
@@ -287,7 +307,7 @@ const TargetCursor = ({
       spinTl.current?.kill();
       document.body.style.cursor = originalCursor;
     };
-  }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor]);
+  }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor, matchesAnySelector]);
 
   useEffect(() => {
     if (!cursorRef.current || !spinTl.current) return;

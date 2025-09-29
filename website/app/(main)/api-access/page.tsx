@@ -212,7 +212,7 @@ export default function APIAccessPage() {
                   <h3 className="font-semibold text-light-text-primary dark:text-dark-text-primary capitalize">
                     {language}
                   </h3>
-                  <button className="p-2 hover:bg-light-hover dark:hover:bg-dark-hover rounded transition-colors">
+                  <button className="p-2 hover:bg-light-hover dark:hover:bg-dark-hover rounded transition-colors" data-target-cursor="true">
                     <Copy className="h-4 w-4" />
                   </button>
                 </div>

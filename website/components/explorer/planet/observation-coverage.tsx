@@ -174,6 +174,7 @@ export function ObservationCoverage({ planet }: ObservationCoverageProps) {
               <button
                 key={index}
                 className="flex items-center gap-2 px-3 py-2 bg-light-surface dark:bg-dark-surface rounded-md hover:bg-light-hover dark:hover:bg-dark-hover transition-colors text-sm"
+                data-target-cursor="true"
               >
                 <link.icon className="h-3 w-3" />
                 {link.name}

@@ -109,6 +109,7 @@ export function NewsCategories({
                 ? 'ring-2 ring-primary-light-blue shadow-lg scale-105'
                 : 'hover:scale-105 hover:shadow-md'
             }`}
+            data-target-cursor="true"
           >
             {/* Background gradient */}
             <div className={`absolute inset-0 bg-gradient-to-br ${category.color} clip-corner-cut transition-opacity ${

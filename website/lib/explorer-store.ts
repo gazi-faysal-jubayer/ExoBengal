@@ -12,6 +12,7 @@ export interface ExplorerFilters {
   radiusRange: [number, number]
   massRange: [number, number]
   disposition: Disposition[]
+  habitable: boolean | null
 }
 
 export interface ExplorerState {
@@ -55,6 +56,7 @@ const defaultFilters: ExplorerFilters = {
   radiusRange: [0, 100],
   massRange: [0, 10000],
   disposition: [],
+  habitable: null,
 }
 
 export const useExplorerStore = create<ExplorerState>((set, get) => ({
@@ -209,6 +211,22 @@ export function selectFilteredRows(state: ExplorerState): ExplorerPlanetRow[] {
       const mm = r.pl_masse
       if (typeof mm === 'number') {
         if (mm < filters.massRange[0] || mm > filters.massRange[1]) return false
+      }
+    }
+    if (filters.habitable !== null) {
+      const semiMajorAxis = r.pl_orbsmax
+      const starTeff = r.st_teff
+      
+      if (semiMajorAxis && starTeff) {
+        // Simple habitability calculation based on effective temperature
+        const habZoneInner = Math.sqrt(starTeff / 5778) * 0.95
+        const habZoneOuter = Math.sqrt(starTeff / 5778) * 1.37
+        const isHabitable = semiMajorAxis >= habZoneInner && semiMajorAxis <= habZoneOuter
+        
+        if (filters.habitable !== isHabitable) return false
+      } else {
+        // If we can't determine habitability and filter requires it, exclude
+        if (filters.habitable === true) return false
       }
     }
     return true

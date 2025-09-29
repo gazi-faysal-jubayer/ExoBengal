@@ -167,6 +167,7 @@ export function FeaturedDiscoveries() {
               onClick={prevSlide}
               className="p-2 rounded-full bg-white dark:bg-dark-card shadow-lg hover:shadow-xl transition-shadow"
               aria-label="Previous discovery"
+              data-target-cursor="true"
             >
               <ChevronLeft className="h-6 w-6 text-light-text-primary dark:text-dark-text-primary" />
             </button>
@@ -176,6 +177,7 @@ export function FeaturedDiscoveries() {
               onClick={nextSlide}
               className="p-2 rounded-full bg-white dark:bg-dark-card shadow-lg hover:shadow-xl transition-shadow"
               aria-label="Next discovery"
+              data-target-cursor="true"
             >
               <ChevronRight className="h-6 w-6 text-light-text-primary dark:text-dark-text-primary" />
             </button>

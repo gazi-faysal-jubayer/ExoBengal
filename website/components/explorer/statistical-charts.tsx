@@ -362,6 +362,7 @@ export default function StatisticalCharts() {
               ? 'bg-primary-dark-blue text-white'
               : 'bg-light-surface dark:bg-dark-surface text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover'
           }`}
+          data-target-cursor="true"
         >
           Discovery Timeline
         </button>

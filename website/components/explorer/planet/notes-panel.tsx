@@ -121,6 +121,7 @@ export function NotesPanel({ planetName }: NotesPanelProps) {
               onClick={shareNotes}
               className="p-2 hover:bg-light-surface dark:hover:bg-dark-surface rounded-md transition-colors"
               title="Share notes"
+              data-target-cursor="true"
             >
               <Share2 className="h-4 w-4" />
             </button>
