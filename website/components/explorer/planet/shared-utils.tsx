@@ -100,3 +100,4 @@ export function formatDiscoveryDate(planet: ExplorerPlanetRow): string {
 export function getDiscoveryFacility(planet: ExplorerPlanetRow): string {
   return planet.disc_telescope || planet.disc_facility || 'Unknown'
 }
+

@@ -189,3 +189,4 @@ export function PhotometryGrid({ planet }: PhotometryGridProps) {
     </motion.div>
   )
 }
+

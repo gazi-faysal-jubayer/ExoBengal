@@ -308,3 +308,4 @@ export function NotesPanel({ planetName }: NotesPanelProps) {
     </motion.div>
   )
 }
+

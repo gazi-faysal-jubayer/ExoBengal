@@ -221,3 +221,4 @@ export function ExternalLinks({ planet }: ExternalLinksProps) {
     </motion.div>
   )
 }
+

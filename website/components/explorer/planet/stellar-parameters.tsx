@@ -221,3 +221,4 @@ export function StellarParameters({ planet }: StellarParametersProps) {
     </motion.div>
   )
 }
+

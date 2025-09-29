@@ -192,3 +192,4 @@ export function SkyPosition({ planet }: SkyPositionProps) {
     </motion.div>
   )
 }
+

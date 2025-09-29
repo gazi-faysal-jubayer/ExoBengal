@@ -220,3 +220,4 @@ export function DiscoverySection({ planet }: DiscoverySectionProps) {
     </div>
   )
 }
+

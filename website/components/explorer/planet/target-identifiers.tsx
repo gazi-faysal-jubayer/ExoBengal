@@ -121,3 +121,4 @@ export function TargetIdentifiers({ planet }: TargetIdentifiersProps) {
     </motion.div>
   )
 }
+

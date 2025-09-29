@@ -25,7 +25,12 @@ export interface ExplorerState {
   selectedPlanetName: string | null
 
   // notes keyed by planet name
-  notesByPlanet?: Record<string, string[]>
+  notesByPlanet?: Record<string, Array<{
+    id: string
+    text: string
+    category: 'observation' | 'analysis' | 'question' | 'general'
+    timestamp: string
+  }>>
 
   // actions
   loadRows: (path?: string) => Promise<void>
@@ -34,8 +39,9 @@ export interface ExplorerState {
   setSelectedPlanetName: (name: string | null) => void
 
   // notes actions
-  addNote: (planetName: string, note: string) => void
-  deleteNote: (planetName: string, index: number) => void
+  addNote: (planetName: string, text: string, category?: 'observation' | 'analysis' | 'question' | 'general') => void
+  updateNote: (planetName: string, noteId: string, text: string, category?: 'observation' | 'analysis' | 'question' | 'general') => void
+  deleteNote: (planetName: string, noteId: string) => void
 
   // slug-based lookup methods
   getPlanetBySlug: (slug: string) => ExplorerPlanetRow | undefined
@@ -60,7 +66,7 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
   searchQuery: '',
   filters: defaultFilters,
   selectedPlanetName: null,
-  notesByPlanet: undefined,
+  notesByPlanet: {},
 
   loadRows: async (path = '/PS_2025.09.12_22.39.25.csv') => {
     if (get().isLoaded || get().isLoading) return
@@ -78,20 +84,47 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
   setFilters: (f) => set({ filters: f }),
   setSelectedPlanetName: (name) => set({ selectedPlanetName: name }),
 
-  addNote: (planetName, note) => {
+  addNote: (planetName, text, category = 'general') => {
     const key = 'exobengal.notes'
     const current = get().notesByPlanet || JSON.parse(typeof localStorage !== 'undefined' ? (localStorage.getItem(key) || '{}') : '{}')
     const updated = { ...current }
     const list = Array.isArray(updated[planetName]) ? updated[planetName] : []
-    updated[planetName] = [...list, note]
+    
+    const newNote = {
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      text,
+      category,
+      timestamp: new Date().toISOString()
+    }
+    
+    updated[planetName] = [...list, newNote]
     try { if (typeof localStorage !== 'undefined') localStorage.setItem(key, JSON.stringify(updated)) } catch {}
     set({ notesByPlanet: updated })
   },
-  deleteNote: (planetName, index) => {
+  updateNote: (planetName, noteId, text, category = 'general') => {
+    const key = 'exobengal.notes'
+    const current = get().notesByPlanet || JSON.parse(typeof localStorage !== 'undefined' ? (localStorage.getItem(key) || '{}') : '{}')
+    const updated = { ...current }
+    const list = Array.isArray(updated[planetName]) ? updated[planetName] : []
+    
+    const noteIndex = list.findIndex(note => note.id === noteId)
+    if (noteIndex >= 0) {
+      list[noteIndex] = {
+        ...list[noteIndex],
+        text,
+        category,
+        timestamp: new Date().toISOString()
+      }
+      updated[planetName] = [...list]
+      try { if (typeof localStorage !== 'undefined') localStorage.setItem(key, JSON.stringify(updated)) } catch {}
+      set({ notesByPlanet: updated })
+    }
+  },
+  deleteNote: (planetName, noteId) => {
     const key = 'exobengal.notes'
     const current = get().notesByPlanet || JSON.parse(typeof localStorage !== 'undefined' ? (localStorage.getItem(key) || '{}') : '{}')
     const list = Array.isArray(current[planetName]) ? current[planetName] : []
-    const updatedList = list.filter((_, i) => i !== index)
+    const updatedList = list.filter(note => note.id !== noteId)
     const updated = { ...current, [planetName]: updatedList }
     try { if (typeof localStorage !== 'undefined') localStorage.setItem(key, JSON.stringify(updated)) } catch {}
     set({ notesByPlanet: updated })
