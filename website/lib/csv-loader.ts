@@ -139,6 +139,56 @@ export interface ExplorerPlanetRow {
   ra?: number
   dec?: number
   sy_dist?: number
+  
+  // Target identifier fields
+  tic_id?: string | number
+  toi_id?: string | number
+  koi_id?: string | number
+  kic_id?: string | number
+  gaia_id?: string | number
+  '2mass_id'?: string
+  
+  // Astrometric fields
+  sy_plx?: number
+  sy_plxerr1?: number
+  st_pmra?: number
+  st_pmraerr?: number
+  st_pmdec?: number
+  st_pmdecerr?: number
+  st_radv?: number
+  st_radverr?: number
+  
+  // Photometric fields
+  st_vmag?: number
+  st_vmagerr?: number
+  st_bmag?: number
+  st_bmagerr?: number
+  st_jmag?: number
+  st_jmagerr?: number
+  st_hmag?: number
+  st_hmagerr?: number
+  st_kmag?: number
+  st_kmagerr?: number
+  
+  // Stellar parameter fields
+  st_logg?: number
+  st_loggerr1?: number
+  st_met?: number
+  st_meterr1?: number
+  st_lum?: number
+  st_lumerr1?: number
+  st_age?: number
+  st_ageerr1?: number
+  st_vsin?: number
+  st_vsinerr1?: number
+  st_rotp?: number
+  st_rotperr1?: number
+  st_tefferr1?: number
+  st_raderr1?: number
+  st_masserr1?: number
+  
+  // Allow for any additional fields that might be present in CSV data
+  [key: string]: string | number | null | undefined
 }
 
 export async function loadExoplanetsFromCSV(

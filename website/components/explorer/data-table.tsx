@@ -15,6 +15,8 @@ import {
 } from 'lucide-react'
 import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
 import { useExplorerStore, selectFilteredRows } from '@/lib/explorer-store'
+import { planetNameToSlug } from '@/lib/planet-utils'
+import { useRouter } from 'next/navigation'
 
 // Convert CSV data to table format
 const convertNASAData = (nasaData: ExplorerPlanetRow[]) => {
@@ -119,12 +121,9 @@ const columns: Column[] = [
   { key: 'distance', label: 'Distance', sortable: true, unit: 'ly', width: 'w-28' },
 ]
 
-interface DataTableProps {
-  onPlanetSelect: (planetId: string) => void
-}
-
-export function DataTable({ onPlanetSelect }: DataTableProps) {
+export function DataTable() {
   const store = useExplorerStore(s => s)
+  const router = useRouter()
   const [sortColumn, setSortColumn] = useState<string>('pl_name')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [selectedRows, setSelectedRows] = useState<string[]>([])
@@ -212,6 +211,12 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
     // In production, this would update the database
     console.log('Toggle favorite for planet:', id)
   }, [])
+
+  const handlePlanetClick = useCallback((planetName: string) => {
+    // Navigate to dedicated planet page
+    const slug = planetNameToSlug(planetName)
+    router.push(`/explorer/planet/${slug}`)
+  }, [router])
 
   const formatValue = (value: any, unit?: string) => {
     if (value === null || value === undefined) return '—'
@@ -353,7 +358,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
                   <td key={column.key as string} className="p-3">
                     {column.key === 'pl_name' ? (
                       <button
-                        onClick={() => onPlanetSelect(row.pl_name)}
+                        onClick={() => handlePlanetClick(row.pl_name)}
                         className="text-primary-dark-blue dark:text-primary-light-blue hover:underline font-medium"
                       >
                         {row[column.key]}
@@ -367,7 +372,7 @@ export function DataTable({ onPlanetSelect }: DataTableProps) {
                 ))}
                 <td className="p-3">
                   <button
-                    onClick={() => onPlanetSelect(row.id)}
+                    onClick={() => handlePlanetClick(row.pl_name)}
                     className="p-1 hover:bg-light-surface dark:hover:bg-dark-surface transition-colors clip-angled-tag"
                     aria-label="View details"
                   >

@@ -118,7 +118,7 @@ export default function LearnPage() {
                   color: "bg-red-500"
                 }
               ].map((type, index) => (
-                <motion.div
+              <motion.div
                   key={type.title}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -181,8 +181,8 @@ export default function LearnPage() {
 
         {/* Detection Methods Section */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-20"
         >
@@ -212,7 +212,7 @@ export default function LearnPage() {
                 </p>
               </div>
               <VideoEmbed videoId="vka0W8tn4EU" title="Transit Photometry Explained" />
-            </div>
+                      </div>
 
             {/* Radial Velocity */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -230,9 +230,9 @@ export default function LearnPage() {
                 <p className="text-light-text-secondary dark:text-dark-text-secondary">
                   This effect is called the Doppler shift. By studying these shifts, scientists can estimate 
                   the planet's mass and orbital characteristics. This method confirmed some of the very first exoplanets.
-                </p>
-              </div>
-            </div>
+                        </p>
+                      </div>
+                    </div>
 
             {/* Direct Imaging */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -240,7 +240,7 @@ export default function LearnPage() {
                 <h3 className="text-2xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
                   <Globe className="inline-block mr-2 text-green-500" />
                   Direct Imaging
-                </h3>
+                    </h3>
                 <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
                   Normally, stars are millions of times brighter than their planets, making planets invisible. 
                   But with advanced telescopes and special instruments that block starlight, astronomers can 
@@ -262,7 +262,7 @@ export default function LearnPage() {
                   <Lightbulb className="inline-block mr-2 text-purple-500" />
                   Gravitational Microlensing
                 </h3>
-                <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
+                    <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
                   When a planet and its host star pass in front of a distant background star, their gravity bends 
                   and magnifies the background star's light — like a natural cosmic magnifying glass.
                 </p>
@@ -319,8 +319,8 @@ export default function LearnPage() {
                   focusing on the brightest and nearest stars. It discovers planets that are close enough for detailed 
                   follow-up studies with larger telescopes. TESS has already identified thousands of candidates and continues to expand our catalog.
                 </p>
-              </div>
-            </div>
+                      </div>
+                    </div>
 
             {/* James Webb */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -364,7 +364,7 @@ export default function LearnPage() {
                   <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
                     ESA, 2029 → Dedicated to studying exoplanet atmospheres in detail.
                   </p>
-                </div>
+                    </div>
                 <div className="text-center">
                   <div className="p-4 bg-purple-500/10 rounded-lg mb-4">
                     <Globe className="h-8 w-8 text-purple-500 mx-auto" />
@@ -383,8 +383,8 @@ export default function LearnPage() {
 
         {/* Habitability Section */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mb-20"
         >
@@ -464,7 +464,7 @@ export default function LearnPage() {
               <h3 className="text-2xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-6 text-center">
                 <Earth className="inline-block mr-2 text-green-500" />
                 Earth Analog
-              </h3>
+                    </h3>
               <div className="max-w-4xl mx-auto">
                 <p className="text-light-text-secondary dark:text-dark-text-secondary text-center mb-6">
                   An Earth analog is an exoplanet that is strikingly similar to Earth in size, mass, temperature, 
@@ -478,8 +478,8 @@ export default function LearnPage() {
                 <p className="text-light-text-secondary dark:text-dark-text-secondary text-center">
                   Famous examples include Kepler-452b and Proxima Centauri b. While no perfect twin of Earth has been 
                   confirmed yet, the ongoing search continues to bring us closer to finding a true Earth-like world.
-                </p>
-              </div>
+                    </p>
+                  </div>
             </div>
           </div>
         </motion.section>

@@ -4,13 +4,11 @@ import { useState } from 'react'
 import { SearchInterface } from '@/components/explorer/search-interface'
 import { DataTable } from '@/components/explorer/data-table'
 import VisualizationPanels from '@/components/explorer/visualization-panels'
-import { DetailView } from '@/components/explorer/detail-view'
 import { FilterPanel } from '@/components/explorer/filter-panel'
 import { motion } from 'framer-motion'
 import { Filter, Grid, BarChart3 } from 'lucide-react'
 
 export default function ExplorerPage() {
-  const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'table' | 'visualizations'>('table')
   const [showFilters, setShowFilters] = useState(false)
 
@@ -111,20 +109,12 @@ export default function ExplorerPage() {
             className={showFilters ? 'lg:col-span-3' : 'lg:col-span-4'}
           >
             {viewMode === 'table' ? (
-              <DataTable onPlanetSelect={setSelectedPlanet} />
+              <DataTable />
             ) : (
               <VisualizationPanels />
             )}
           </motion.div>
         </div>
-
-        {/* Detail View Modal */}
-        {selectedPlanet && (
-          <DetailView
-            planetId={selectedPlanet}
-            onClose={() => setSelectedPlanet(null)}
-          />
-        )}
       </div>
     </div>
   )

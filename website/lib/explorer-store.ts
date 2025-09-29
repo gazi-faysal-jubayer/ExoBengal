@@ -2,6 +2,7 @@
 
 import { create } from 'zustand'
 import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
+import { planetNameToSlug, normalizeSlug } from '@/lib/planet-utils'
 
 export type Disposition = 'Confirmed' | 'Candidate' | 'False Positive' | 'Controversial'
 
@@ -35,6 +36,11 @@ export interface ExplorerState {
   // notes actions
   addNote: (planetName: string, note: string) => void
   deleteNote: (planetName: string, index: number) => void
+
+  // slug-based lookup methods
+  getPlanetBySlug: (slug: string) => ExplorerPlanetRow | undefined
+  getPlanetBySlugUnfiltered: (slug: string) => ExplorerPlanetRow | undefined
+  getPlanetSlug: (planetName: string) => string
 }
 
 const defaultFilters: ExplorerFilters = {
@@ -89,6 +95,52 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
     const updated = { ...current, [planetName]: updatedList }
     try { if (typeof localStorage !== 'undefined') localStorage.setItem(key, JSON.stringify(updated)) } catch {}
     set({ notesByPlanet: updated })
+  },
+
+  getPlanetBySlug: (slug) => {
+    const filteredRows = selectFilteredRows(get())
+    
+    // Normalize the incoming slug to handle mixed-case or slightly malformed slugs
+    const normalizedSlug = normalizeSlug(slug)
+    
+    // If normalization results in an empty string, the slug is truly invalid
+    if (!normalizedSlug) {
+      return undefined
+    }
+    
+    // Find planet by comparing normalized slug against planetNameToSlug for each row
+    const planet = filteredRows.find(r => {
+      if (!r.pl_name) return false
+      const planetSlug = planetNameToSlug(r.pl_name)
+      return planetSlug === normalizedSlug
+    })
+    
+    return planet
+  },
+
+  getPlanetBySlugUnfiltered: (slug) => {
+    const { rows } = get()
+    
+    // Normalize the incoming slug to handle mixed-case or slightly malformed slugs
+    const normalizedSlug = normalizeSlug(slug)
+    
+    // If normalization results in an empty string, the slug is truly invalid
+    if (!normalizedSlug) {
+      return undefined
+    }
+    
+    // Find planet by comparing normalized slug against planetNameToSlug for each row
+    const planet = rows.find(r => {
+      if (!r.pl_name) return false
+      const planetSlug = planetNameToSlug(r.pl_name)
+      return planetSlug === normalizedSlug
+    })
+    
+    return planet
+  },
+
+  getPlanetSlug: (planetName) => {
+    return planetNameToSlug(planetName)
   },
 }))
 

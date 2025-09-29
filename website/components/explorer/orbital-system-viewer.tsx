@@ -1,10 +1,27 @@
 'use client'
 
-import React, { useMemo, useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Stars, Text } from '@react-three/drei'
+import React, { useMemo, useRef, useState, useCallback } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { OrbitControls, Stars, Text, Html, GradientTexture, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import { useExplorerStore } from '@/lib/explorer-store'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  Play, 
+  Pause, 
+  Camera, 
+  Download, 
+  Maximize2, 
+  Minimize2,
+  RotateCw,
+  Info,
+  Settings,
+  ZoomIn,
+  ZoomOut,
+  Grid3X3,
+  Eye,
+  Timer
+} from 'lucide-react'
 
 interface Planet {
   name: string
@@ -79,25 +96,72 @@ const STAR_SCALE = AU_TO_UNITS * 0.00465047 // Rsun to AU -> to units
 
 function Star({ radius, color }: { radius: number; color: string }) {
   const meshRef = useRef<THREE.Mesh>(null)
+  const glowRef = useRef<THREE.Mesh>(null)
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01
+      meshRef.current.rotation.y += 0.002
+    }
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime) * 0.05)
     }
   })
 
+  const starRadius = Math.max(0.4, radius * STAR_SCALE)
+
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[Math.max(0.4, radius * STAR_SCALE), 32, 32]} />
-      <meshBasicMaterial color={color} />
-      <pointLight intensity={2} decay={0.1} />
-    </mesh>
+    <group>
+      {/* Star glow */}
+      <mesh ref={glowRef}>
+        <sphereGeometry args={[starRadius * 2.5, 32, 32]} />
+        <meshBasicMaterial color={color} transparent opacity={0.3} />
+      </mesh>
+      
+      {/* Star surface */}
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[starRadius, 64, 64]} />
+        <meshStandardMaterial 
+          color={color} 
+          emissive={color}
+          emissiveIntensity={0.5}
+          roughness={0.8}
+          metalness={0.2}
+        />
+      </mesh>
+      
+      {/* Star corona */}
+      <mesh>
+        <sphereGeometry args={[starRadius * 1.5, 32, 32]} />
+        <meshBasicMaterial color={color} transparent opacity={0.1} wireframe />
+      </mesh>
+      
+      <pointLight intensity={3} decay={0.1} color={color} />
+      <pointLight position={[0, 0, 0]} intensity={1} distance={50} color={color} />
+    </group>
   )
 }
 
-function Planet({ planet, time, speed }: { planet: Planet; time: number; speed: number }) {
+function Planet({ planet, time, speed, showLabels, showOrbits }: { 
+  planet: Planet; 
+  time: number; 
+  speed: number;
+  showLabels: boolean;
+  showOrbits: boolean;
+}) {
   const meshRef = useRef<THREE.Mesh>(null)
   const orbitRef = useRef<THREE.Group>(null)
+  const labelRef = useRef<THREE.Group>(null)
+  const [hovered, setHovered] = useState(false)
+  
+  // Determine planet color based on size/type
+  const getPlanetColor = () => {
+    if (planet.radius < 1.5) return '#8B7355' // Rocky/terrestrial
+    if (planet.radius < 4) return '#4A90E2' // Sub-Neptune
+    if (planet.radius < 11) return '#F39C12' // Neptune-like
+    return '#E67E22' // Jupiter-like
+  }
+  
+  const planetColor = getPlanetColor()
 
   // Precompute orbit curve (projected with inclination)
   const orbitGeometry = useMemo(() => {
@@ -127,6 +191,10 @@ function Planet({ planet, time, speed }: { planet: Planet; time: number; speed: 
     return geo
   }, [planet.a, planet.e, planet.inc])
 
+  // Calculate current position and velocity
+  const [position, setPosition] = useState<[number, number, number]>([0, 0, 0])
+  const [velocity, setVelocity] = useState(0)
+  
   useFrame(() => {
     if (!meshRef.current) return
     // Keplerian propagation
@@ -155,38 +223,113 @@ function Planet({ planet, time, speed }: { planet: Planet; time: number; speed: 
     const Y = xo * sinO + yo * cosO * cosI
     const Z = yo * sinI
     meshRef.current.position.set(X, Z, Y)
-    meshRef.current.rotation.y += 0.03
+    meshRef.current.rotation.y += 0.01
+    setPosition([X, Z, Y])
+    
+    // Calculate velocity (km/s)
+    const r = Math.sqrt(X*X + Y*Y + Z*Z) / AU_TO_UNITS // back to AU
+    const v = 29.78 * Math.sqrt((2/r) - (1/planet.a)) // vis-viva equation
+    setVelocity(v)
+    
+    // Keep label facing camera
+    if (labelRef.current) {
+      labelRef.current.lookAt(0, 0, 50)
+    }
   })
 
+  const planetRadius = Math.max(0.1, planet.radius * 0.08)
+  
   return (
     <group ref={orbitRef}>
       {/* Orbit ellipse (projected with inclination) */}
-      <line>
-        <primitive object={orbitGeometry} attach="geometry" />
-        <lineBasicMaterial color="#777" transparent opacity={0.35} />
-      </line>
+      {showOrbits && (
+        <line>
+          <primitive object={orbitGeometry} attach="geometry" />
+          <lineBasicMaterial 
+            color={hovered ? "#ffffff" : "#555555"} 
+            transparent 
+            opacity={hovered ? 0.8 : 0.3} 
+            linewidth={hovered ? 2 : 1}
+          />
+        </line>
+      )}
 
       {/* Planet */}
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[Math.max(0.12, planet.radius * 0.15), 16, 16]} />
-        <meshStandardMaterial color={planet.color} />
-      </mesh>
-
-      {/* Planet label */}
-      <Text
-        position={[0, Math.max(0.12, planet.radius * 0.15) + 0.4, 0]}
-        fontSize={0.3}
-        color="white"
-        anchorX="center"
-        anchorY="middle"
+      <mesh 
+        ref={meshRef}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
       >
-        {planet.name}
-      </Text>
+        <sphereGeometry args={[planetRadius, 32, 32]} />
+        <meshStandardMaterial 
+          color={planetColor}
+          emissive={planetColor}
+          emissiveIntensity={hovered ? 0.2 : 0.05}
+          roughness={0.7}
+          metalness={0.3}
+        />
+      </mesh>
+      
+      {/* Planet atmosphere (for larger planets) */}
+      {planet.radius > 2 && (
+        <mesh>
+          <sphereGeometry args={[planetRadius * 1.05, 32, 32]} />
+          <meshBasicMaterial 
+            color={planetColor} 
+            transparent 
+            opacity={0.1} 
+            side={THREE.BackSide}
+          />
+        </mesh>
+      )}
+
+      {/* Planet label and info */}
+      {(showLabels || hovered) && (
+        <group ref={labelRef} position={position}>
+          <Html
+            center
+            distanceFactor={8}
+            style={{
+              pointerEvents: 'none',
+              userSelect: 'none',
+            }}
+          >
+            <div className={`
+              bg-dark-card/90 backdrop-blur-sm rounded-lg px-3 py-2 
+              text-white text-xs whitespace-nowrap
+              transition-all duration-300 transform
+              ${hovered ? 'scale-110' : 'scale-100'}
+            `}>
+              <div className="font-semibold mb-1">{planet.name}</div>
+              {hovered && (
+                <div className="space-y-0.5 text-gray-300">
+                  <div>Period: {planet.period.toFixed(1)} days</div>
+                  <div>Radius: {planet.radius.toFixed(2)} R⊕</div>
+                  <div>Velocity: {velocity.toFixed(1)} km/s</div>
+                  <div>Distance: {(Math.sqrt(position[0]**2 + position[1]**2 + position[2]**2) / AU_TO_UNITS).toFixed(3)} AU</div>
+                </div>
+              )}
+            </div>
+          </Html>
+        </group>
+      )}
     </group>
   )
 }
 
-function OrbitalSystem({ system, speed }: { system: ReturnType<typeof buildSystemFromRows>; speed: number }) {
+function OrbitalSystem({ 
+  system, 
+  speed, 
+  showLabels, 
+  showOrbits,
+  showGrid 
+}: { 
+  system: ReturnType<typeof buildSystemFromRows>; 
+  speed: number;
+  showLabels: boolean;
+  showOrbits: boolean;
+  showGrid: boolean;
+}) {
   const [time, setTime] = React.useState(0)
 
   useFrame((state) => {
@@ -195,27 +338,44 @@ function OrbitalSystem({ system, speed }: { system: ReturnType<typeof buildSyste
 
   return (
     <>
-      <ambientLight intensity={0.3} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
+      <ambientLight intensity={0.2} />
+      <pointLight position={[10, 10, 10]} intensity={0.5} />
       
       {/* Background stars */}
-      <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade speed={1} />
+      <Stars radius={200} depth={100} count={5000} factor={4} saturation={0} fade speed={0.5} />
+      
+      {/* Grid helper */}
+      {showGrid && (
+        <gridHelper 
+          args={[50, 50, 0x444444, 0x222222]} 
+          rotation={[Math.PI / 2, 0, 0]} 
+        />
+      )}
       
       {/* Central star */}
       <Star radius={system.star.radius} color={system.star.color} />
       
       {/* Planets */}
       {system.planets.map((planet) => (
-        <Planet key={planet.name} planet={planet} time={time} speed={speed} />
+        <Planet 
+          key={planet.name} 
+          planet={planet} 
+          time={time} 
+          speed={speed} 
+          showLabels={showLabels}
+          showOrbits={showOrbits}
+        />
       ))}
       
       {/* System name */}
       <Text
-        position={[0, 8, 0]}
-        fontSize={1}
+        position={[0, 12, 0]}
+        fontSize={1.5}
         color="white"
         anchorX="center"
         anchorY="middle"
+        outlineWidth={0.05}
+        outlineColor="#000000"
       >
         {system.name} System
       </Text>
@@ -230,7 +390,13 @@ export default function OrbitalSystemViewer({ hostName }: { hostName?: string })
   return (
     <div className="relative h-96 bg-black rounded-lg overflow-hidden">
       <Canvas camera={{ position: [0, 15, 20], fov: 75 }}>
-        <OrbitalSystem system={system} speed={speed} />
+        <OrbitalSystem 
+          system={system} 
+          speed={speed} 
+          showLabels={true}
+          showOrbits={true}
+          showGrid={false}
+        />
         <OrbitControls enableZoom={true} enablePan={true} enableRotate={true} />
       </Canvas>
       

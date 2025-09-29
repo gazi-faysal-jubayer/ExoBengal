@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useCallback, createContext, useContext, useEffect } from 'react'
-import { Search, X, Clock, Mic, Sparkles } from 'lucide-react'
+import { Search, X, Clock, Mic, Sparkles, ExternalLink } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { useExplorerStore } from '@/lib/explorer-store'
+import { planetNameToSlug } from '@/lib/planet-utils'
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
 import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
@@ -34,6 +36,7 @@ export function SearchInterface() {
   const [query, setQuery] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
+  const router = useRouter()
   const setSearchQuery = useExplorerStore(s => s.setSearchQuery)
   const loadRows = useExplorerStore(s => s.loadRows)
   const setFilters = useExplorerStore(s => s.setFilters)
@@ -46,7 +49,14 @@ export function SearchInterface() {
   const handleSearch = useCallback((searchQuery: string) => {
     setSearchQuery(searchQuery)
     setShowSuggestions(false)
-  }, [])
+  }, [setSearchQuery])
+
+  const handlePlanetClick = useCallback((planetName: string) => {
+    // Navigate to dedicated planet page
+    const slug = planetNameToSlug(planetName)
+    router.push(`/explorer/planet/${slug}`)
+    setShowSuggestions(false)
+  }, [router])
 
   const addFilter = useCallback((filter: string) => {
     if (selectedFilters.includes(filter)) return
@@ -108,8 +118,7 @@ export function SearchInterface() {
             <LiquidButton
               type="button"
               size="icon"
-              className="cursor-target"
-              className="p-2 rounded-md text-slate-400 hover:text-primary-light-blue"
+              className="cursor-target p-2 rounded-md text-slate-400 hover:text-primary-light-blue"
               aria-label="Voice search"
             >
               <Mic className="h-4 w-4" />
@@ -117,8 +126,7 @@ export function SearchInterface() {
             <LiquidButton
               type="button"
               size="icon"
-              className="cursor-target"
-              className="p-2 rounded-md text-slate-400 hover:text-primary-reddish-orange"
+              className="cursor-target p-2 rounded-md text-slate-400 hover:text-primary-reddish-orange"
               aria-label="AI assistant"
             >
               <Sparkles className="h-4 w-4" />
@@ -147,10 +155,7 @@ export function SearchInterface() {
                       {filteredSuggestions.slice(0, 5).map((suggestion) => (
                         <LiquidButton
                           key={suggestion}
-                          onClick={() => {
-                            setQuery(suggestion)
-                            handleSearch(suggestion)
-                          }}
+                          onClick={() => handlePlanetClick(suggestion)}
                           variant="ghost"
                           size="sm"
                           className="w-full text-left px-3 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-sm rounded-md justify-start cursor-target"
@@ -233,8 +238,7 @@ export function SearchInterface() {
               <LiquidButton
                 onClick={() => removeFilter(filter)}
                 size="icon"
-              className="cursor-target"
-                className="hover:bg-primary-very-dark-blue rounded-full p-0.5"
+                className="cursor-target hover:bg-primary-very-dark-blue rounded-full p-0.5"
                 aria-label={`Remove ${filter} filter`}
               >
                 <X className="h-3 w-3" />
