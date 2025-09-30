@@ -11,6 +11,7 @@ import { NewsBar } from '@/components/news/news-bar'
 import { BackgroundAudioPlayer } from '@/components/audio/background-audio-player'
 import { Toaster } from 'react-hot-toast'
 import TargetCursor from '@/components/ui/target-cursor'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -101,6 +102,7 @@ export default function RootLayout({
               duration: 4000,
             }}
           />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>
