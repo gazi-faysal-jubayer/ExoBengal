@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { useExplorerStore } from '@/lib/explorer-store'
+import { SmartCombobox } from '@/components/ui/smart-combo-box'
 
 type NumericKey =
   | 'pl_rade'
@@ -130,21 +131,25 @@ export default function ParameterCorrelations() {
     <div className="space-y-6">
       {/* Controls */}
       <div className="flex flex-wrap gap-3 items-end">
-        <div>
-          <label className="block text-xs mb-1 text-light-text-secondary dark:text-dark-text-secondary">X Axis</label>
-          <select value={selectedX} onChange={e => setSelectedX(e.target.value as NumericKey)} className="select-base text-sm py-1">
-            {PARAMS.map(p => (
-              <option key={p.key} value={p.key}>{p.label}</option>
-            ))}
-          </select>
+        <div className="w-48">
+          <SmartCombobox
+            label="X Axis"
+            placeholder="Select X parameter"
+            value={selectedX}
+            onValueChange={(val) => setSelectedX(val as NumericKey)}
+            options={PARAMS.map(p => ({ id: p.key, label: p.label }))}
+            clearable={false}
+          />
         </div>
-        <div>
-          <label className="block text-xs mb-1 text-light-text-secondary dark:text-dark-text-secondary">Y Axis</label>
-          <select value={selectedY} onChange={e => setSelectedY(e.target.value as NumericKey)} className="select-base text-sm py-1">
-            {PARAMS.map(p => (
-              <option key={p.key} value={p.key}>{p.label}</option>
-            ))}
-          </select>
+        <div className="w-48">
+          <SmartCombobox
+            label="Y Axis"
+            placeholder="Select Y parameter"
+            value={selectedY}
+            onValueChange={(val) => setSelectedY(val as NumericKey)}
+            options={PARAMS.map(p => ({ id: p.key, label: p.label }))}
+            clearable={false}
+          />
         </div>
         <div className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
           Correlation r: <span className="font-medium text-light-text-primary dark:text-dark-text-primary">{rXY === null ? '—' : rXY.toFixed(3)}</span>

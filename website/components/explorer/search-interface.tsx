@@ -1,28 +1,28 @@
 'use client'
 
-import { useState, useCallback, createContext, useContext, useEffect } from 'react'
-import { Search, X, Clock, Mic, Sparkles, ExternalLink } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useCallback, useEffect } from 'react'
+import { X } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useExplorerStore } from '@/lib/explorer-store'
 import { planetNameToSlug } from '@/lib/planet-utils'
-import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
+import { SmartCombobox } from '@/components/ui/smart-combo-box'
 import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
 const searchSuggestions = [
-  'Kepler-452b',
-  'Proxima Centauri b',
-  'TRAPPIST-1e',
-  'TOI-715 b',
-  'HD 209458 b',
-  'Gliese 667Cc',
+  { id: 'kepler-452b', label: 'Kepler-452b', group: 'Popular Planets' },
+  { id: 'proxima-centauri-b', label: 'Proxima Centauri b', group: 'Popular Planets' },
+  { id: 'trappist-1e', label: 'TRAPPIST-1e', group: 'Popular Planets' },
+  { id: 'toi-715-b', label: 'TOI-715 b', group: 'Popular Planets' },
+  { id: 'hd-209458-b', label: 'HD 209458 b', group: 'Popular Planets' },
+  { id: 'gliese-667cc', label: 'Gliese 667Cc', group: 'Popular Planets' },
 ]
 
 const recentSearches = [
-  'Earth-like planets',
-  'Hot Jupiters',
-  'Transit method',
-  'Habitable zone',
+  { id: 'earth-like', label: 'Earth-like planets', group: 'Recent' },
+  { id: 'hot-jupiters', label: 'Hot Jupiters', group: 'Recent' },
+  { id: 'transit', label: 'Transit method', group: 'Recent' },
+  { id: 'habitable', label: 'Habitable zone', group: 'Recent' },
 ]
 
 const quickFilters = [
@@ -33,8 +33,7 @@ const quickFilters = [
 ]
 
 export function SearchInterface() {
-  const [query, setQuery] = useState('')
-  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null)
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
   const router = useRouter()
   const setSearchQuery = useExplorerStore(s => s.setSearchQuery)
@@ -46,17 +45,26 @@ export function SearchInterface() {
     loadRows()
   }, [loadRows])
 
-  const handleSearch = useCallback((searchQuery: string) => {
-    setSearchQuery(searchQuery)
-    setShowSuggestions(false)
-  }, [setSearchQuery])
+  const handlePlanetSelect = useCallback((value: string | string[] | null) => {
+    const planetId = typeof value === 'string' ? value : null
+    setSelectedPlanet(planetId)
+    
+    if (planetId) {
+      const planet = [...searchSuggestions, ...recentSearches].find(p => p.id === planetId)
+      if (planet) {
+        // Navigate to planet page
+        const slug = planetNameToSlug(planet.label)
+        router.push(`/explorer/planet/${slug}`)
+      }
+    } else {
+      // Clear search
+      setSearchQuery('')
+    }
+  }, [router, setSearchQuery])
 
-  const handlePlanetClick = useCallback((planetName: string) => {
-    // Navigate to dedicated planet page
-    const slug = planetNameToSlug(planetName)
-    router.push(`/explorer/planet/${slug}`)
-    setShowSuggestions(false)
-  }, [router])
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query)
+  }, [setSearchQuery])
 
   const addFilter = useCallback((filter: string) => {
     if (selectedFilters.includes(filter)) return
@@ -94,135 +102,24 @@ export function SearchInterface() {
     }
   }, [setFilters, filters])
 
-  const filteredSuggestions = searchSuggestions.filter(suggestion =>
-    suggestion.toLowerCase().includes(query.toLowerCase())
-  )
+  const allOptions = [...searchSuggestions, ...recentSearches]
 
   return (
-    <div className="search-interface-glass p-6 rounded-xl space-y-6 search-entrance">
-      {/* Main Search Bar */}
+    <div className="search-interface-glass p-6 rounded-xl space-y-6 search-entrance relative z-[10000]">
+      {/* Main Search Bar with SmartCombobox */}
       <div className="relative">
-        <div className="relative">
-          <TerminalSearchInput
-            value={query}
-            onChange={(val) => {
-              setQuery(val)
-              setSearchQuery(val)
-            }}
-            onFocus={() => setShowSuggestions(true)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSearch(query)
-            }}
-            placeholder="search exoplanets by name, type, or properties..."
-            user="explorer"
-            host="nasa"
-            dir="/data"
-            className="w-full"
-          />
-          
-          {/* Voice Search & AI Assistant */}
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
-            <LiquidButton
-              type="button"
-              size="icon"
-              className="cursor-target p-2.5 rounded-lg text-slate-400 hover:text-primary-light-blue transition-all duration-300 hover:scale-110 hover:shadow-lg animate-pulse"
-              aria-label="Voice search"
-            >
-              <Mic className="h-4 w-4" />
-            </LiquidButton>
-            <LiquidButton
-              type="button"
-              size="icon"
-              className="cursor-target p-2.5 rounded-lg text-slate-400 hover:text-primary-reddish-orange transition-all duration-300 hover:scale-110 hover:shadow-lg animate-pulse"
-              aria-label="AI assistant"
-            >
-              <Sparkles className="h-4 w-4" />
-            </LiquidButton>
-          </div>
-        </div>
-
-        {/* Search Suggestions Dropdown */}
-        <AnimatePresence>
-          {showSuggestions && (query.length > 0 || true) && (
-            <motion.div
-              initial={{ opacity: 0, y: -15, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -15, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className="suggestion-dropdown-glass absolute top-full left-0 right-0 mt-3 rounded-xl shadow-2xl z-50 suggestion-slide"
-            >
-              <div className="p-6 space-y-5">
-                {/* Quick Suggestions */}
-                {query.length > 0 && filteredSuggestions.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-semibold text-light-text-primary dark:text-dark-text-primary mb-3 search-focus">
-                      Suggestions
-                    </h4>
-                    <div className="space-y-2">
-                      {filteredSuggestions.slice(0, 5).map((suggestion, index) => (
-                        <motion.div
-                          key={suggestion}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                        >
-                          <LiquidButton
-                            onClick={() => handlePlanetClick(suggestion)}
-                            variant="ghost"
-                            size="sm"
-                            className="suggestion-item-glass w-full text-left px-4 py-3 text-sm rounded-lg justify-start cursor-target"
-                          >
-                            <ExternalLink className="h-3 w-3 mr-2 opacity-60" />
-                            {suggestion}
-                          </LiquidButton>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Recent Searches */}
-                <div>
-                  <h4 className="text-sm font-semibold text-light-text-primary dark:text-dark-text-primary mb-3 flex items-center gap-2 search-focus">
-                    <Clock className="h-4 w-4 text-primary-light-blue drop-shadow-sm" />
-                    Recent Searches
-                  </h4>
-                  <div className="space-y-2">
-                    {recentSearches.map((search, index) => (
-                      <motion.div
-                        key={search}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: (index + filteredSuggestions.length) * 0.1 }}
-                      >
-                        <LiquidButton
-                          onClick={() => {
-                            setQuery(search)
-                            handleSearch(search)
-                          }}
-                          variant="ghost"
-                          size="sm"
-                          className="suggestion-item-glass w-full text-left px-4 py-3 text-sm text-light-text-secondary dark:text-dark-text-secondary rounded-lg justify-start cursor-target"
-                        >
-                          <Search className="h-3 w-3 mr-2 opacity-50" />
-                          {search}
-                        </LiquidButton>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Click outside to close */}
-        {showSuggestions && (
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setShowSuggestions(false)}
-          />
-        )}
+        <SmartCombobox
+          placeholder="Search exoplanets by name, type, or properties..."
+          options={allOptions}
+          value={selectedPlanet}
+          onValueChange={handlePlanetSelect}
+          clearable
+          header={<span className="font-semibold text-light-text-primary dark:text-dark-text-primary">Search Exoplanets</span>}
+          footer={<span className="text-light-text-secondary dark:text-dark-text-secondary">Press Enter to select, Escape to close</span>}
+          emptyState={<span className="text-light-text-secondary dark:text-dark-text-secondary">No exoplanets found. Try a different search term.</span>}
+          maxHeight={350}
+          className="w-full"
+        />
       </div>
 
       {/* Quick Filters */}

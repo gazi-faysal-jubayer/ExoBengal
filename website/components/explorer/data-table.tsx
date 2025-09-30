@@ -16,6 +16,7 @@ import { useExplorerStore, selectFilteredRows } from '@/lib/explorer-store'
 import { planetNameToSlug } from '@/lib/planet-utils'
 import { useRouter } from 'next/navigation'
 import { CheckBox } from '@/components/ui/checkbox'
+import { SmartCombobox } from '@/components/ui/smart-combo-box'
 
 // Convert CSV data to table format
 const convertNASAData = (nasaData: ExplorerPlanetRow[]) => {
@@ -419,21 +420,25 @@ export function DataTable() {
       </div>
 
       {/* Enhanced Pagination */}
-      <div className="glass-panel p-4 border-t border-light-border dark:border-dark-border">
+      <div className="data-table-pagination glass-panel p-4 border-t border-light-border dark:border-dark-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
               Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, data.length)} of {data.length} results
             </span>
-            <select
-              value={pageSize}
-              onChange={(e) => setPageSize(Number(e.target.value))}
-              className="text-sm input-base py-1"
-            >
-              <option value={25}>25 per page</option>
-              <option value={50}>50 per page</option>
-              <option value={100}>100 per page</option>
-            </select>
+        <SmartCombobox
+          placeholder="Items per page"
+          value={pageSize.toString()}
+          onValueChange={(val) => setPageSize(Number(val))}
+          options={[
+            { id: '25', label: '25 per page' },
+            { id: '50', label: '50 per page' },
+            { id: '100', label: '100 per page' }
+          ]}
+          clearable={false}
+          direction="up"
+          className="w-40"
+        />
           </div>
           
           <div className="flex items-center gap-2">

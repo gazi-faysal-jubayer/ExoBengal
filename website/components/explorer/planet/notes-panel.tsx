@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { useExplorerStore } from '@/lib/explorer-store'
 import { BackgroundBeams } from '@/components/ui/background-beams'
+import { SmartCombobox } from '@/components/ui/smart-combo-box'
 
 interface NotesPanelProps {
   planetName: string
@@ -154,16 +155,17 @@ export function NotesPanel({ planetName }: NotesPanelProps) {
               className="w-full pl-10 pr-3 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-light-blue"
             />
           </div>
-          <select
+          <SmartCombobox
+            placeholder="Filter by category"
             value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-light-blue"
-          >
-            <option value="all">All Categories</option>
-            {categories.map(cat => (
-              <option key={cat.value} value={cat.value}>{cat.label}</option>
-            ))}
-          </select>
+            onValueChange={(val) => setFilterCategory(val || 'all')}
+            options={[
+              { id: 'all', label: 'All Categories' },
+              ...categories.map(cat => ({ id: cat.value, label: cat.label }))
+            ]}
+            clearable={false}
+            className="w-48"
+          />
         </div>
 
         {/* Add/Edit Note Form */}

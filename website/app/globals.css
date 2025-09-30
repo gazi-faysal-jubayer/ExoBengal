@@ -2401,3 +2401,131 @@
   }
 }
 
+/* SmartCombobox Dropdown Fixes */
+.smart-combobox-dropdown {
+  z-index: 10001 !important;
+  position: absolute !important;
+  overflow: visible !important;
+  max-height: 400px !important;
+}
+
+/* Specific fix for data table pagination dropdown */
+.data-table-pagination .smart-combobox-dropdown {
+  z-index: 10002 !important;
+}
+
+/* Ensure all SmartCombobox dropdowns appear above everything */
+.smart-combobox-dropdown,
+[data-smart-combobox-dropdown] {
+  z-index: 9999999 !important;
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+
+/* Fix for data table pagination area */
+.data-table-pagination {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure combobox container has proper stacking context */
+.smart-combobox-dropdown {
+  contain: layout style !important;
+}
+
+/* Make sure the parent container allows overflow */
+[data-smart-combobox-dropdown] {
+  overflow: visible !important;
+}
+
+.data-table-pagination .smart-combobox-dropdown {
+  z-index: 10003 !important;
+  position: absolute !important;
+}
+
+/* Ensure dropdowns appear above all other elements */
+.smart-combobox-dropdown {
+  z-index: 9999999 !important;
+  transform: translateZ(0);
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  min-width: 200px !important;
+}
+
+/* Fix absolute positioning for dropdowns - default down direction */
+.smart-combobox-dropdown[data-smart-combobox-dropdown] {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  /* Let inline styles handle top/bottom positioning */
+}
+
+/* Specific class for upward direction */
+.smart-combobox-dropdown[data-direction="up"] {
+  bottom: 100% !important;
+  margin-bottom: 4px !important;
+  top: auto !important;
+  margin-top: 0 !important;
+}
+
+/* Specific class for downward direction */
+.smart-combobox-dropdown[data-direction="down"] {
+  top: 100% !important;
+  margin-top: 4px !important;
+  bottom: auto !important;
+  margin-bottom: 0 !important;
+}
+
+/* Fix option height and visibility */
+.smart-combobox-option {
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  line-height: normal !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+
+/* Ensure dropdowns are not cropped */
+[data-radix-popper-content-wrapper] {
+  z-index: 10001 !important;
+}
+
+/* Fix text visibility in dropdowns */
+.smart-combobox-option {
+  color: rgb(15 23 42) !important; /* slate-900 for light mode */
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.dark .smart-combobox-option {
+  color: rgb(248 250 252) !important; /* slate-50 for dark mode */
+  background-color: rgba(30, 41, 59, 0.95) !important;
+}
+
+/* Ensure proper contrast for dropdown text - removed circular dependency */
+
+/* Fix text visibility in dropdown options */
+.smart-combobox-dropdown [role="option"] {
+  color: rgb(15 23 42) !important;
+}
+
+.dark .smart-combobox-dropdown [role="option"] {
+  color: rgb(248 250 252) !important;
+}
+
+/* Ensure header and footer text is visible */
+.smart-combobox-dropdown .border-b {
+  color: rgb(71 85 105) !important;
+}
+
+.dark .smart-combobox-dropdown .border-b {
+  color: rgb(148 163 184) !important;
+}
+

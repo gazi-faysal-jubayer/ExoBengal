@@ -46,7 +46,7 @@ export default function ExplorerPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-          className="mb-8"
+          className="mb-8 relative z-[10000]"
         >
           <SearchInterface />
         </motion.div>

@@ -28,6 +28,7 @@ import {
   BarChart3
 } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
+import { SmartCombobox } from '@/components/ui/smart-combo-box'
 import { NewsCategories } from '@/components/news/news-categories'
 import { NewsTrending } from '@/components/news/news-trending'
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
@@ -287,44 +288,54 @@ export default function NewsPage() {
             {/* Desktop Filters */}
             <div className={`flex flex-col lg:flex-row gap-4 ${showFilters ? 'block' : 'hidden lg:flex'}`}>
               {/* Category Filter */}
-              <select
-                value={filters.category}
-                onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                className="select-base"
-              >
-                <option value="all">All Categories</option>
-                {uniqueCategories.map(category => (
-                  <option key={category} value={category}>
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </option>
-                ))}
-              </select>
+              <div className="w-48">
+                <SmartCombobox
+                  placeholder="Select Category"
+                  value={filters.category}
+                  onValueChange={(val) => setFilters(prev => ({ ...prev, category: (val as string) || 'all' }))}
+                  options={[
+                    { id: 'all', label: 'All Categories' },
+                    ...uniqueCategories.map(category => ({
+                      id: category,
+                      label: category.charAt(0).toUpperCase() + category.slice(1)
+                    }))
+                  ]}
+                  clearable={false}
+                />
+              </div>
 
               {/* Source Filter */}
-              <select
-                value={filters.source}
-                onChange={(e) => setFilters(prev => ({ ...prev, source: e.target.value }))}
-                className="select-base"
-              >
-                <option value="all">All Sources</option>
-                {uniqueSources.map(source => (
-                  <option key={source} value={source.toLowerCase()}>
-                    {source}
-                  </option>
-                ))}
-              </select>
+              <div className="w-48">
+                <SmartCombobox
+                  placeholder="Select Source"
+                  value={filters.source}
+                  onValueChange={(val) => setFilters(prev => ({ ...prev, source: (val as string) || 'all' }))}
+                  options={[
+                    { id: 'all', label: 'All Sources' },
+                    ...uniqueSources.map(source => ({
+                      id: source.toLowerCase(),
+                      label: source
+                    }))
+                  ]}
+                  clearable={false}
+                />
+              </div>
 
               {/* Date Range Filter */}
-              <select
-                value={filters.dateRange}
-                onChange={(e) => setFilters(prev => ({ ...prev, dateRange: e.target.value }))}
-                className="select-base"
-              >
-                <option value="all">All Time</option>
-                <option value="today">Today</option>
-                <option value="week">Past Week</option>
-                <option value="month">Past Month</option>
-              </select>
+              <div className="w-48">
+                <SmartCombobox
+                  placeholder="Select Date Range"
+                  value={filters.dateRange}
+                  onValueChange={(val) => setFilters(prev => ({ ...prev, dateRange: (val as string) || 'all' }))}
+                  options={[
+                    { id: 'all', label: 'All Time' },
+                    { id: 'today', label: 'Today' },
+                    { id: 'week', label: 'Past Week' },
+                    { id: 'month', label: 'Past Month' }
+                  ]}
+                  clearable={false}
+                />
+              </div>
             </div>
 
             {/* View Controls */}
