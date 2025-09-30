@@ -112,7 +112,7 @@ export const Component = () => {
       const { current: refs } = threeRefs;
       if (!refs.scene) return;
       
-      const starCount = 5000;
+      const starCount = 1000;
       
       for (let i = 0; i < 3; i++) {
         const geometry = new THREE.BufferGeometry();
