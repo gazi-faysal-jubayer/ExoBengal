@@ -99,11 +99,11 @@ export function PlanetHero({ planet }: PlanetHeroProps) {
   }
   
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden pl-6 pr-6">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-dark-blue/20 via-primary-light-blue/10 to-transparent"></div>
       
-      <div className="relative z-10 py-12 md:py-16">
+      <div className="relative z-10 py-12 md:py-16 pl-4 ml-2">
         {/* Breadcrumb navigation */}
         <nav className="mb-6">
           <ol className="flex items-center space-x-2 text-sm text-light-text-secondary dark:text-dark-text-secondary">
