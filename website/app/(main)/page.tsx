@@ -7,6 +7,7 @@ import { NewsTicker } from '@/components/home/news-ticker'
 import { NewsPreview } from '@/components/home/news-preview'
 import { CTASection } from '@/components/home/cta-section'
 import { Component as HorizonHero } from '@/components/ui/horizon-hero-section'
+import { PipInstallSection } from '@/components/home/pip-install-section'
 
 export default function HomePage() {
   return (
@@ -14,8 +15,12 @@ export default function HomePage() {
       {/* New Horizon Hero Section */}
       <HorizonHero />
       
+      {/* Pip Install Section */}
+      
+      
       {/* Original sections moved after the hero */}
       <div className="relative z-10 bg-light-background dark:bg-dark-background">
+      <PipInstallSection />
         <StatsCounter />
         <FeaturedDiscoveries />
         <QuickSearch />
