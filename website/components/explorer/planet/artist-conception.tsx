@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import type { ExplorerPlanetRow } from '@/lib/csv-loader'
+import { NasaVisualization } from './nasa-visualization'
 
 interface ArtistConceptionProps {
   planet: ExplorerPlanetRow
@@ -9,6 +10,8 @@ interface ArtistConceptionProps {
 
 export function ArtistConception({ planet }: ArtistConceptionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [viewMode, setViewMode] = useState<'custom' | 'nasa'>('custom')
+  const [selectedPlanet, setSelectedPlanet] = useState(planet.pl_name)
   const [tooltip, setTooltip] = useState<{ 
     x: number
     y: number
@@ -119,16 +122,100 @@ export function ArtistConception({ planet }: ArtistConceptionProps) {
     o: 0.35 + (((i * 53) % 10) / 40),
   }))
 
+  // Check if this planet has a NASA visualization
+  const nasaPlanets = ['HIP 65426 b', 'Kepler-22 b', 'GJ 15 A b', '55 Cancri e', 'PSR B1257+12 b']
+  const hasNasaVisualization = nasaPlanets.includes(planetName)
+
   return (
     <div className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border clip-corner-cut">
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
-          Artist's Conception
-        </h3>
-        <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-6">
-          Interactive 2D visualization of the {planetName} system showing orbital mechanics in real-time. 
-          Hover over elements for detailed information.
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary">
+            Artist's Conception
+          </h3>
+          {hasNasaVisualization && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => setViewMode('custom')}
+                className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                  viewMode === 'custom'
+                    ? 'bg-primary-light-blue text-white'
+                    : 'bg-light-border dark:bg-dark-border text-light-text-primary dark:text-dark-text-primary hover:bg-light-border/80 dark:hover:bg-dark-border/80'
+                }`}
+              >
+                Custom View
+              </button>
+              <button
+                onClick={() => setViewMode('nasa')}
+                className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                  viewMode === 'nasa'
+                    ? 'bg-primary-light-blue text-white'
+                    : 'bg-light-border dark:bg-dark-border text-light-text-primary dark:text-dark-text-primary hover:bg-light-border/80 dark:hover:bg-dark-border/80'
+                }`}
+              >
+                NASA View
+              </button>
+            </div>
+          )}
+        </div>
+        
+        {viewMode === 'nasa' && hasNasaVisualization ? (
+          <div className="space-y-4">
+            <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+              Interactive NASA visualization of the {planetName} system. Explore the exoplanet in 3D space with real astronomical data.
+            </p>
+            
+            {/* Planet Selector */}
+            <div>
+              <label className="block text-sm font-medium text-light-text-primary dark:text-dark-text-primary mb-2">
+                Select Planet:
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {['HIP 65426 b', 'Kepler-22 b', 'GJ 15 A b', '55 Cancri e', 'PSR B1257+12 b'].map((planet) => (
+                  <button
+                    key={planet}
+                    onClick={() => setSelectedPlanet(planet)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                      selectedPlanet === planet
+                        ? 'bg-primary-light-blue text-white'
+                        : 'bg-light-border dark:bg-dark-border text-light-text-primary dark:text-dark-text-primary hover:bg-light-border/80 dark:hover:bg-dark-border/80'
+                    }`}
+                  >
+                    {planet}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* NASA Eyes Container */}
+            <div className="relative h-[500px] rounded-lg overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900">
+              <iframe
+                src={`https://eyes.nasa.gov/apps/exo/#/planet/${selectedPlanet.replace(/\s+/g, '_')}`}
+                title={`NASA Eyes on Exoplanets - ${selectedPlanet}`}
+                className="w-full h-full border-0"
+                loading="eager"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                allowFullScreen
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+
+            <div className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
+              <p className="mb-1">
+                <strong>Data Source:</strong> NASA Exoplanet Exploration Program
+              </p>
+              <p>
+                This interactive visualization is provided by NASA and shows real exoplanet data 
+                from various space missions and ground-based observations.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-6">
+              Interactive 2D visualization of the {planetName} system showing orbital mechanics in real-time. 
+              Hover over elements for detailed information.
+            </p>
         
         <div ref={containerRef} className="relative w-full aspect-square bg-black rounded-lg overflow-hidden" onMouseMove={moveTip}>
           <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -235,6 +322,8 @@ export function ArtistConception({ planet }: ArtistConceptionProps) {
             Sizes and distances are scaled for visibility. Actual exoplanet systems may vary significantly from this representation.
           </p>
         </div>
+          </>
+        )}
       </div>
     </div>
   )

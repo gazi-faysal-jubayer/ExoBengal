@@ -15,38 +15,64 @@ interface Discovery {
   distance: string
   imageUrl: string
   highlights: string[]
+  nasaUrl: string
 }
 
 const featuredDiscoveries: Discovery[] = [
   {
     id: '1',
-    name: 'TOI-5205 b',
-    description: 'A gas giant planet orbiting an M-dwarf star, challenging our understanding of planetary formation.',
-    discoveryDate: '2023',
-    method: 'Transit',
-    distance: '280 light-years',
+    name: 'HIP 65426 b',
+    description: 'A massive gas giant planet directly imaged around a young A-type star, providing insights into planetary formation.',
+    discoveryDate: '2017',
+    method: 'Direct Imaging',
+    distance: '385 light-years',
     imageUrl: '/images/exoplanet-1.jpg',
-    highlights: ['Unusually large for its host star', 'Nearly as big as Jupiter', 'Orbits every 1.6 days'],
+    highlights: ['Directly imaged exoplanet', 'Massive gas giant', 'Young planetary system'],
+    nasaUrl: 'https://eyes.nasa.gov/apps/exo/#/planet/HIP_65426_b',
   },
   {
     id: '2',
-    name: 'LP 890-9 c',
-    description: 'A potentially habitable super-Earth in the habitable zone of a nearby red dwarf star.',
-    discoveryDate: '2022',
+    name: 'Kepler-22 b',
+    description: 'The first confirmed exoplanet in the habitable zone of a Sun-like star, opening new possibilities for life.',
+    discoveryDate: '2011',
     method: 'Transit',
-    distance: '105 light-years',
+    distance: '600 light-years',
     imageUrl: '/images/exoplanet-2.jpg',
-    highlights: ['In the habitable zone', '40% larger than Earth', 'Potential for liquid water'],
+    highlights: ['First habitable zone planet', '2.4x Earth radius', '290-day orbital period'],
+    nasaUrl: 'https://eyes.nasa.gov/apps/exo/#/planet/Kepler-22_b',
   },
   {
     id: '3',
-    name: 'WASP-193b',
-    description: 'An extremely low-density planet, likened to cosmic cotton candy.',
-    discoveryDate: '2023',
-    method: 'Transit',
-    distance: '1,200 light-years',
+    name: 'GJ 15 A b',
+    description: 'A super-Earth orbiting one of the nearest stars to our solar system, making it an ideal target for study.',
+    discoveryDate: '2014',
+    method: 'Radial Velocity',
+    distance: '11.6 light-years',
     imageUrl: '/images/exoplanet-3.jpg',
-    highlights: ['50% larger than Jupiter', 'Only 14% of Jupiter\'s mass', 'Density similar to cotton candy'],
+    highlights: ['One of the closest exoplanets', 'Super-Earth mass', 'Short orbital period'],
+    nasaUrl: 'https://eyes.nasa.gov/apps/exo/#/planet/GJ_15_A_b',
+  },
+  {
+    id: '4',
+    name: '55 Cancri e',
+    description: 'A super-Earth with extreme conditions, featuring a surface that may be covered in lava oceans.',
+    discoveryDate: '2004',
+    method: 'Radial Velocity',
+    distance: '41 light-years',
+    imageUrl: '/images/exoplanet-4.jpg',
+    highlights: ['Lava world', 'Diamond planet candidate', 'Extremely hot surface'],
+    nasaUrl: 'https://eyes.nasa.gov/apps/exo/#/planet/55_Cnc_e',
+  },
+  {
+    id: '5',
+    name: 'PSR B1257+12 b',
+    description: 'The first confirmed exoplanet ever discovered, orbiting a pulsar and opening the door to exoplanet science.',
+    discoveryDate: '1992',
+    method: 'Pulsar Timing',
+    distance: '2,300 light-years',
+    imageUrl: '/images/exoplanet-5.jpg',
+    highlights: ['First exoplanet discovered', 'Pulsar system', 'Revolutionary discovery'],
+    nasaUrl: 'https://eyes.nasa.gov/apps/exo/#/planet/PSR_B1257+12_b',
   },
 ]
 
@@ -92,14 +118,18 @@ export function FeaturedDiscoveries() {
                 transition={{ duration: 0.5 }}
                 className="card p-0 lg:flex card-hover"
               >
-                {/* Image Section */}
-                <div className="lg:w-1/2 h-64 lg:h-auto relative bg-gradient-to-br from-primary-dark-blue to-primary-light-blue">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Orbit className="h-32 w-32 text-white/20 animate-spin-slow" />
-                  </div>
-                  {/* Placeholder for actual image */}
-                  <div className="relative h-full flex items-center justify-center">
-                    <p className="text-white text-xl font-semibold">Artist&apos;s Conception</p>
+                {/* NASA Visualization Section */}
+                <div className="lg:w-1/2 h-64 lg:h-auto relative bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900">
+                  <div className="relative h-full w-full">
+                    <iframe
+                      src={currentDiscovery.nasaUrl}
+                      title={`NASA Eyes on Exoplanets - ${currentDiscovery.name}`}
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                      allowFullScreen
+                      style={{ width: '100%', height: '100%' }}
+                    />
                   </div>
                 </div>
 
@@ -149,13 +179,24 @@ export function FeaturedDiscoveries() {
                     </ul>
                   </div>
 
-                  <Link
-                    href={`/explorer?planet=${currentDiscovery.name}`}
-                    className="btn-primary inline-flex items-center gap-2"
-                  >
-                    Learn More
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href={`/explorer?planet=${currentDiscovery.name}`}
+                      className="btn-primary inline-flex items-center gap-2"
+                    >
+                      Learn More
+                      <ChevronRight className="h-4 w-4" />
+                    </Link>
+                    <a
+                      href={currentDiscovery.nasaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-secondary inline-flex items-center gap-2"
+                    >
+                      <Telescope className="h-4 w-4" />
+                      NASA Visualization
+                    </a>
+                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>
