@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import 'prismjs/themes/prism-tomorrow.css'
@@ -12,6 +13,8 @@ import { BackgroundAudioPlayer } from '@/components/audio/background-audio-playe
 import { Toaster } from 'react-hot-toast'
 import TargetCursor from '@/components/ui/target-cursor'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Analytics } from "@vercel/analytics/next"
+import { generateOrganizationSchema, generateWebSiteSchema, jsonLdScriptProps } from '@/lib/structured-data'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -63,6 +66,21 @@ export const metadata: Metadata = {
     description: 'Explore the cosmos with our interactive exoplanet data visualization platform',
     images: ['/og-image.png'],
   },
+  alternates: {
+    canonical: 'https://exo-bengal.vercel.app/',
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#1e3a5f' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a1628' },
+  ],
+  verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '' },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 }
 
 export default function RootLayout({
@@ -70,9 +88,37 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Generate structured data schemas for SEO
+  const organizationSchema = generateOrganizationSchema()
+  const websiteSchema = generateWebSiteSchema()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-body overflow-x-hidden`}>
+        {/* JSON-LD structured data for SEO */}
+        <script {...jsonLdScriptProps(organizationSchema)} />
+        <script {...jsonLdScriptProps(websiteSchema)} />
+        
+        {/* Google Analytics 4 - tracks user behavior and site performance */}
+        {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
+        
         <Providers>
           <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
             <Header />
@@ -103,6 +149,8 @@ export default function RootLayout({
             }}
           />
           <SpeedInsights />
+          {/* Vercel Analytics - tracks page views and Web Vitals */}
+          <Analytics />
         </Providers>
       </body>
     </html>

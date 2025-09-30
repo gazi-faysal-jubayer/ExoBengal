@@ -1,0 +1,13 @@
+# robots.txt for ExoBengal - Search Engine Crawler Directives
+# This file provides instructions to web crawlers about which pages to crawl
+
+User-agent: *
+Allow: /
+
+# Disallow API routes and temporary pages
+Disallow: /api/
+Disallow: /news/
+
+# Reference the sitemap location
+Sitemap: https://exo-bengal.vercel.app/sitemap.xml
+

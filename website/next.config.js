@@ -11,7 +11,29 @@ const nextConfig = {
   basePath: repoBasePath,
   assetPrefix: repoBasePath ? `${repoBasePath}/` : '',
   images: {
-    unoptimized: true,
+    unoptimized: true, // Required for static export
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'exoplanetarchive.ipac.caltech.edu',
+      },
+      {
+        protocol: 'https',
+        hostname: 'eyes.nasa.gov',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.nasa.gov',
+      },
+      {
+        protocol: 'https',
+        hostname: 'youtube.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ytimg.com',
+      },
+    ],
   },
   eslint: {
     ignoreDuringBuilds: true,

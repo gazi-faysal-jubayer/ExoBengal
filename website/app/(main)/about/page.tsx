@@ -64,22 +64,24 @@ const page = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-16">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-6">
             Meet Team ExoBengal
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Passionate researchers, developers, and educators dedicated to making exoplanet science accessible to everyone through innovative technology and open-source collaboration.
           </p>
-        </div>
+        </header>
 
         {/* Animated Testimonials */}
-        <AnimatedTestimonials testimonials={testimonials} autoplay={true} />
+        <section aria-label="Team members">
+          <AnimatedTestimonials testimonials={testimonials} autoplay={true} />
+        </section>
 
         {/* Mission Statement */}
-        <div className="mt-20 text-center">
+        <section className="mt-20 text-center" aria-labelledby="mission-heading">
           <div className="max-w-4xl mx-auto p-8 rounded-2xl bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
-            <h2 className="text-3xl font-bold text-foreground mb-6">
+            <h2 id="mission-heading" className="text-3xl font-bold text-foreground mb-6">
               Our Mission
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
@@ -88,7 +90,7 @@ const page = () => {
               exciting journey of discovering worlds beyond our solar system.
             </p>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

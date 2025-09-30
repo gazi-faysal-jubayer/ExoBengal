@@ -1,5 +1,7 @@
 'use client'
 
+// Dynamic metadata is generated in layout.tsx using generateMetadata()
+
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useExplorerStore } from '@/lib/explorer-store'
@@ -71,20 +73,6 @@ export default function PlanetPage({ params }: PlanetPageProps) {
     initializePage()
   }, [slug, isLoaded, isLoading, loadRows, getPlanetBySlugUnfiltered])
 
-  // Set page title and meta
-  useEffect(() => {
-    if (planet) {
-      document.title = `${planet.pl_name} - ExoBengal Exoplanet Explorer`
-      
-      // Update meta description
-      const metaDescription = document.querySelector('meta[name="description"]')
-      if (metaDescription) {
-        metaDescription.setAttribute('content', 
-          `Explore ${planet.pl_name}, an exoplanet in the ${planet.hostname || 'unknown'} system. Discovered using ${planet.discoverymethod || 'unknown method'} ${planet.disc_year ? `in ${planet.disc_year}` : ''}.`
-        )
-      }
-    }
-  }, [planet])
 
   // Loading state
   if (isLoading || (!isLoaded && !error)) {

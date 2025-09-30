@@ -38,12 +38,13 @@ export default function LearnPage() {
     <div className="min-h-screen bg-light-background dark:bg-dark-background">
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <header>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
           <h1 className="text-4xl md:text-6xl font-bold text-light-text-primary dark:text-dark-text-primary mb-6">
             Learn About Exoplanets
           </h1>
@@ -51,7 +52,8 @@ export default function LearnPage() {
             Discover the fascinating world of planets beyond our solar system through comprehensive lessons 
             covering the fundamentals, detection methods, space missions, and habitability science.
           </p>
-        </motion.div>
+          </motion.div>
+        </header>
 
         {/* Exoplanet Basics Section */}
         <motion.section

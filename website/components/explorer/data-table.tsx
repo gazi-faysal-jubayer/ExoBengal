@@ -240,10 +240,10 @@ export function DataTable() {
   }
 
   return (
-    <div className="card data-table-card">
+    <div className="card data-table-card" role="table" aria-label="Exoplanet data table">
       {/* Error Banner */}
       {error && (
-        <div className="p-4 bg-semantic-warning/10 border-b border-semantic-warning/20">
+        <div className="p-4 bg-semantic-warning/10 border-b border-semantic-warning/20" role="alert">
           <p className="text-semantic-warning text-sm">{error}</p>
         </div>
       )}
@@ -252,7 +252,7 @@ export function DataTable() {
       <div className="glass-panel p-4 border-b border-light-border dark:border-dark-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary">
+            <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary" id="table-heading">
               Exoplanets ({data.length.toLocaleString()})
             </h3>
             {selectedRows.length > 0 && (
@@ -263,11 +263,11 @@ export function DataTable() {
           </div>
           
           <div className="flex items-center gap-2">
-            <button className="btn-secondary text-sm flex items-center gap-2" data-target-cursor="true">
+            <button className="btn-secondary text-sm flex items-center gap-2" data-target-cursor="true" aria-label="Export exoplanet data">
               <Download className="h-4 w-4" />
               Export
             </button>
-            <button className="btn-secondary text-sm flex items-center gap-2">
+            <button className="btn-secondary text-sm flex items-center gap-2" aria-label="Filter table columns">
               <Filter className="h-4 w-4" />
               Column Filter
             </button>

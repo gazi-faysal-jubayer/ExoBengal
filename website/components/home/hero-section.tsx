@@ -17,7 +17,7 @@ export function HeroSection() {
   }, [words.length])
 
   return (
-    <section className="relative min-h-[90vh] overflow-hidden bg-gradient-to-b from-light-background to-light-surface dark:from-dark-background dark:to-dark-surface">
+    <section className="relative min-h-[90vh] overflow-hidden bg-gradient-to-b from-light-background to-light-surface dark:from-dark-background dark:to-dark-surface" aria-label="Hero section">
       {/* Animated Background */}
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary-dark-blue/10 to-primary-light-blue/10">
         <div className="absolute inset-0 opacity-20">
@@ -85,6 +85,8 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4"
+            role="region"
+            aria-label="Key statistics"
           >
             <div className="card p-4 text-center">
               <p className="text-3xl font-bold text-primary-dark-blue">5,000+</p>

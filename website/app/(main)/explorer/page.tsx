@@ -16,12 +16,13 @@ export default function ExplorerPage() {
     <div className="explorer-page-glass">
       <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-          className="explorer-header-glass rounded-2xl p-8 mb-8 clip-corner-cut explorer-entrance"
-        >
+        <header>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+            className="explorer-header-glass rounded-2xl p-8 mb-8 clip-corner-cut explorer-entrance"
+          >
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 rounded-full bg-gradient-to-br from-primary-dark-blue/20 to-primary-light-blue/20 backdrop-blur-sm">
               <Telescope className="h-8 w-8 text-primary-dark-blue dark:text-primary-light-blue" />
@@ -39,17 +40,20 @@ export default function ExplorerPage() {
             </div>
           </div>
           <div className="h-px bg-gradient-to-r from-transparent via-primary-light-blue/30 to-transparent"></div>
-        </motion.div>
+          </motion.div>
+        </header>
 
         {/* Search Interface */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-          className="mb-8 relative z-[10000]"
-        >
+        <section aria-label="Search and filters">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            className="mb-8 relative z-[10000]"
+          >
           <SearchInterface />
-        </motion.div>
+          </motion.div>
+        </section>
 
         {/* Controls */}
         <motion.div
@@ -119,9 +123,10 @@ export default function ExplorerPage() {
         </motion.div>
 
         {/* Main Content */}
-        <div className={`explorer-grid-glass rounded-2xl p-4 transition-all duration-500 ${
-          showFilters ? 'grid grid-cols-1 lg:grid-cols-4 gap-8' : 'grid grid-cols-1 gap-8'
-        }`}>
+        <section aria-label="Exoplanet data">
+          <div className={`explorer-grid-glass rounded-2xl p-4 transition-all duration-500 ${
+            showFilters ? 'grid grid-cols-1 lg:grid-cols-4 gap-8' : 'grid grid-cols-1 gap-8'
+          }`}>
           {/* Filter Panel */}
           {showFilters && (
             <motion.div
@@ -158,7 +163,8 @@ export default function ExplorerPage() {
               )}
             </motion.div>
           </motion.div>
-        </div>
+          </div>
+        </section>
 
         {/* Floating Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20 dark:opacity-10">
