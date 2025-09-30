@@ -1,0 +1,6 @@
+exobengal
+fastapi
+uvicorn
+pydantic
+python-multipart
+requests
