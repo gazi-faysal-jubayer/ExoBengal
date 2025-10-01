@@ -8,13 +8,13 @@ import {
   Download, 
   MoreHorizontal,
   ArrowUpDown,
-  Filter,
-  Loader2
+  Filter
 } from 'lucide-react'
 import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
 import { useExplorerStore, selectFilteredRows } from '@/lib/explorer-store'
 import { planetNameToSlug } from '@/lib/planet-utils'
 import { useRouter } from 'next/navigation'
+import { useLoading } from '@/components/providers'
 import { CheckBox } from '@/components/ui/checkbox'
 import { SmartCombobox } from '@/components/ui/smart-combo-box'
 import { trackEvent, trackDownload } from '@/lib/analytics'
@@ -125,23 +125,25 @@ const columns: Column[] = [
 export function DataTable() {
   const store = useExplorerStore(s => s)
   const router = useRouter()
+  const { startLoading, finishLoading } = useLoading()
   const [sortColumn, setSortColumn] = useState<string>('pl_name')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(25)
   const [data, setData] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   // Fetch NASA data on component mount
   useEffect(() => {
     const loadData = async () => {
       try {
-        setLoading(true)
         setError(null)
         
-        await store.loadRows('/PS_2025.09.12_22.39.25.csv')
+        await store.loadRows('/PS_2025.09.12_22.39.25.csv', {
+          onStart: () => startLoading('data-table-csv'),
+          onFinish: () => finishLoading('data-table-csv')
+        })
         const exoplanets = selectFilteredRows(store)
         
         const convertedData = convertNASAData(exoplanets)
@@ -152,8 +154,6 @@ export function DataTable() {
         console.error('Failed to load NASA data:', err)
         setError('Failed to load data from NASA API. Using fallback data.')
         setData(fallbackData)
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -238,18 +238,6 @@ export function DataTable() {
     return value
   }
 
-  if (loading) {
-    return (
-      <div className="relative bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border overflow-hidden clip-corner-cut backdrop-blur-sm">
-        <div className="p-8 text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-light-blue" />
-          <p className="text-light-text-secondary dark:text-dark-text-secondary">
-            Loading exoplanet data from NASA Archive...
-          </p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="card data-table-card" role="table" aria-label="Exoplanet data table">

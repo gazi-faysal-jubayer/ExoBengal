@@ -1923,6 +1923,30 @@
   }
 }
 
+/* Terminal Loader Dot Animations */
+@keyframes ping-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.animate-ping-delayed-1 {
+  animation: ping-dot 1.5s ease-in-out 0.5s infinite;
+}
+
+.animate-ping-delayed-2 {
+  animation: ping-dot 1.5s ease-in-out 0.7s infinite;
+}
+
+.animate-ping-delayed-3 {
+  animation: ping-dot 1.5s ease-in-out 0.9s infinite;
+}
+
 /* Horizon Hero Section Styles */
 .hero-container {
   position: relative;

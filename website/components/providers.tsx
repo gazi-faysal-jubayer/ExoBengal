@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'next-themes'
 import { useState } from 'react'
+import { LoadingProvider, useLoading } from './providers/loading-provider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -25,9 +26,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <LoadingProvider>
+          {children}
+        </LoadingProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )
 }
+
+// Re-export useLoading hook for easy consumption
+export { useLoading }
 

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, Clock, Globe, Rss, ChevronLeft, ChevronRight, Pause, Play, Rocket, Satellite, Telescope, Star, Atom, Beaker, Microscope, BookOpen, BarChart3, Search } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
+import { useLoading } from '@/components/providers'
 import Link from 'next/link'
 import { LiquidButton } from '@/components/ui/liquid-glass-button'
 
@@ -18,12 +19,14 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
   const [isPlaying, setIsPlaying] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const intervalRef = useRef<NodeJS.Timeout>()
+  const { startLoading, finishLoading } = useLoading()
 
   // Load news on component mount
   useEffect(() => {
     const loadNews = async () => {
       console.log('NewsBar: Starting to load news...')
       setIsLoading(true)
+      startLoading('news-bar-load')
       
       // Try to use cached news first
       if (isCacheFresh()) {
@@ -32,6 +35,7 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
         if (cached.length > 0) {
           setNews(cached)
           setIsLoading(false)
+          finishLoading('news-bar-load')
           return
         }
       }
@@ -58,6 +62,7 @@ export function NewsBar({ className = '', compact = false }: NewsBarProps) {
         setNews(cached)
       } finally {
         setIsLoading(false)
+        finishLoading('news-bar-load')
       }
     }
 

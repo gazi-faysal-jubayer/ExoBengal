@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useExplorerStore } from '@/lib/explorer-store'
+import { useLoading } from '@/components/providers'
 import type { ExplorerPlanetRow } from '@/lib/csv-loader'
 import { trackPlanetView } from '@/lib/analytics'
 import { PlanetHero } from '@/components/explorer/planet/planet-hero'
@@ -44,6 +45,7 @@ interface PlanetPageProps {
 export default function PlanetPage({ params }: PlanetPageProps) {
   const { slug } = useParams() as { slug: string }
   const { loadRows, getPlanetBySlugUnfiltered, isLoaded, isLoading, error } = useExplorerStore()
+  const { startLoading, finishLoading } = useLoading()
   const [planet, setPlanet] = useState<ExplorerPlanetRow | undefined>(undefined)
   const [notFound, setNotFound] = useState(false)
 
@@ -51,7 +53,10 @@ export default function PlanetPage({ params }: PlanetPageProps) {
     const initializePage = async () => {
       // Ensure data is loaded
       if (!isLoaded && !isLoading) {
-        await loadRows()
+        await loadRows('/PS_2025.09.12_22.39.25.csv', { 
+          onStart: () => startLoading('planet-csv'), 
+          onFinish: () => finishLoading('planet-csv') 
+        })
       }
       
       // Once data is loaded, try to find the planet
@@ -82,20 +87,9 @@ export default function PlanetPage({ params }: PlanetPageProps) {
     }
   }, [planet, slug])
 
-  // Loading state
-  if (isLoading || (!isLoaded && !error)) {
-    return (
-      <div className="min-h-screen bg-light-background dark:bg-dark-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-dark-blue mx-auto mb-4"></div>
-              <p className="text-light-text-secondary dark:text-dark-text-secondary">Loading exoplanet data...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  // Loading state - simplified to let global loader handle it
+  if (!isLoaded && !error && !planet) {
+    return null
   }
 
   // Error state

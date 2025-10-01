@@ -4,6 +4,12 @@ import { create } from 'zustand'
 import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
 import { planetNameToSlug, normalizeSlug } from '@/lib/planet-utils'
 
+// Interface for loading callbacks to integrate with global LoadingContext
+export interface LoadingCallbacks {
+  onStart?: () => void
+  onFinish?: () => void
+}
+
 export type Disposition = 'Confirmed' | 'Candidate' | 'False Positive' | 'Controversial'
 
 export interface ExplorerFilters {
@@ -34,7 +40,7 @@ export interface ExplorerState {
   }>>
 
   // actions
-  loadRows: (path?: string) => Promise<void>
+  loadRows: (path?: string, callbacks?: LoadingCallbacks) => Promise<void>
   setSearchQuery: (q: string) => void
   setFilters: (f: ExplorerFilters) => void
   setSelectedPlanetName: (name: string | null) => void
@@ -59,6 +65,9 @@ const defaultFilters: ExplorerFilters = {
   habitable: null,
 }
 
+// Promise cache for request deduplication
+const loadingPromises: Map<string, Promise<ExplorerPlanetRow[]>> = new Map()
+
 export const useExplorerStore = create<ExplorerState>((set, get) => ({
   rows: [],
   isLoaded: false,
@@ -70,16 +79,49 @@ export const useExplorerStore = create<ExplorerState>((set, get) => ({
   selectedPlanetName: null,
   notesByPlanet: {},
 
-  loadRows: async (path = '/PS_2025.09.12_22.39.25.csv') => {
-    if (get().isLoaded || get().isLoading) return
+  loadRows: async (path = '/PS_2025.09.12_22.39.25.csv', callbacks) => {
+    // Extract callbacks with defaults
+    const { onStart, onFinish } = callbacks || {}
+    
+    // Check if already loaded - skip if data is already loaded
+    if (get().isLoaded) return
+    
+    // Check promise cache for deduplication - this must come before isLoading check
+    if (loadingPromises.has(path)) {
+      // An identical request is already in-flight
+      onStart?.()
+      try {
+        const rows = await loadingPromises.get(path)!
+        set({ rows, isLoaded: true })
+      } finally {
+        onFinish?.()
+      }
+      return
+    }
+    
+    // Check if already loading - skip if a different request is in progress
+    if (get().isLoading) return
+    
+    // Start new loading operation
     set({ isLoading: true, error: null })
+    onStart?.()
+    
+    // Create and cache the fetch promise
+    const fetchPromise = loadExoplanetsFromCSV(path)
+    loadingPromises.set(path, fetchPromise)
+    
     try {
-      const rows = await loadExoplanetsFromCSV(path)
+      // Await the promise with error handling
+      const rows = await fetchPromise
       set({ rows, isLoaded: true })
     } catch (e: any) {
       set({ error: e?.message || 'Failed to load CSV' })
+      console.error('Failed to load CSV:', e)
     } finally {
+      // Critical cleanup - always runs
       set({ isLoading: false })
+      onFinish?.()
+      loadingPromises.delete(path)
     }
   },
   setSearchQuery: (q) => set({ searchQuery: q }),

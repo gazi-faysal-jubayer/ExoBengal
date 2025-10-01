@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ScatterChart, Scatter, PieChart, Pie, Cell, BarChart, Bar } from 'recharts'
 import { loadExoplanetsFromCSV, type ExplorerPlanetRow } from '@/lib/csv-loader'
+import { useLoading } from '@/components/providers'
 
 const METHOD_COLORS: Record<string, string> = {
   Transit: '#355381',
@@ -37,20 +38,26 @@ type ChartType = 'timeline' | 'mass-radius' | 'methods' | 'radius-dist' | 'mass-
 export default function StatisticalCharts() {
   const [activeChart, setActiveChart] = useState<ChartType>('timeline')
   const [rows, setRows] = useState<ExplorerPlanetRow[]>([])
-  const [loading, setLoading] = useState(true)
+  const { startLoading, finishLoading } = useLoading()
 
   useEffect(() => {
     let cancelled = false
     const load = async () => {
+      startLoading('statistical-charts-csv')
       try {
         const data = await loadExoplanetsFromCSV('/PS_2025.09.12_13.49.08.csv')
         if (!cancelled) setRows(data)
+      } catch (error) {
+        console.error('Failed to load CSV for charts:', error)
       } finally {
-        if (!cancelled) setLoading(false)
+        finishLoading('statistical-charts-csv')
       }
     }
     load()
-    return () => { cancelled = true }
+    return () => { 
+      cancelled = true
+      finishLoading('statistical-charts-csv') // Cleanup on unmount
+    }
   }, [])
 
   const discoveryTimelineData = useMemo(() => {
@@ -198,9 +205,6 @@ export default function StatisticalCharts() {
   }, [rows])
 
   const renderChart = () => {
-    if (loading) {
-      return <div className="h-80 flex items-center justify-center text-light-text-secondary dark:text-dark-text-secondary">Loading charts…</div>
-    }
     switch (activeChart) {
       case 'timeline':
         return (

@@ -4,14 +4,17 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, ExternalLink, Clock, Globe, Rocket, Satellite, Telescope, Star, Atom, Beaker, Microscope, BookOpen, BarChart3, Search, Rss } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
+import { useLoading } from '@/components/providers'
 import Link from 'next/link'
 
 export function NewsPreview() {
   const [news, setNews] = useState<NewsItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const { startLoading, finishLoading } = useLoading()
 
   useEffect(() => {
     const loadNews = async () => {
+      startLoading('news-preview-load')
       try {
         // Try cached news first
         if (isCacheFresh()) {
@@ -19,6 +22,7 @@ export function NewsPreview() {
           if (cached.length > 0) {
             setNews(cached.slice(0, 6))
             setIsLoading(false)
+            finishLoading('news-preview-load')
             return
           }
         }
@@ -32,6 +36,7 @@ export function NewsPreview() {
         setNews(cached.slice(0, 6))
       } finally {
         setIsLoading(false)
+        finishLoading('news-preview-load')
       }
     }
 

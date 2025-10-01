@@ -29,6 +29,7 @@ import {
 } from 'lucide-react'
 import { fetchAllExoplanetNews, getCachedNews, setCachedNews, isCacheFresh, type NewsItem } from '@/lib/news-api'
 import { SmartCombobox } from '@/components/ui/smart-combo-box'
+import { useLoading } from '@/components/providers'
 import { NewsCategories } from '@/components/news/news-categories'
 import { NewsTrending } from '@/components/news/news-trending'
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
@@ -56,6 +57,7 @@ export function NewsPageClient() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [bookmarkedNews, setBookmarkedNews] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
+  const { startLoading, finishLoading } = useLoading()
 
   // Load bookmarks from localStorage
   useEffect(() => {
@@ -120,8 +122,12 @@ export function NewsPageClient() {
   }, [news, filters])
 
   const loadNews = async (force = false) => {
-    if (force) setIsRefreshing(true)
-    else setIsLoading(true)
+    if (force) {
+      setIsRefreshing(true)
+    } else {
+      setIsLoading(true)
+      startLoading('news-initial-load') // Global loader for initial load
+    }
 
     try {
       // Try cached news first unless forcing refresh
@@ -130,6 +136,7 @@ export function NewsPageClient() {
         if (cached.length > 0) {
           setNews(cached)
           setIsLoading(false)
+          finishLoading('news-initial-load')
           return
         }
       }
@@ -151,6 +158,9 @@ export function NewsPageClient() {
     } finally {
       setIsLoading(false)
       setIsRefreshing(false)
+      if (!force) {
+        finishLoading('news-initial-load')
+      }
     }
   }
 

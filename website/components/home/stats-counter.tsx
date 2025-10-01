@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { loadExoplanetsFromCSV } from '@/lib/csv-loader'
+import { useLoading } from '@/components/providers'
 
 interface Stat {
   label: string
@@ -54,10 +55,11 @@ function AnimatedCounter({ value, suffix = '', decimals = 0 }: { value: number; 
 
 export function StatsCounter() {
   const [stats, setStats] = useState(initialStats)
-  const [loading, setLoading] = useState(true)
+  const { startLoading, finishLoading } = useLoading()
 
   useEffect(() => {
     const loadStats = async () => {
+      startLoading('stats-counter-csv')
       try {
         const data = await loadExoplanetsFromCSV('/PS_2025.09.12_13.49.08.csv')
         const total = data.length
@@ -77,7 +79,7 @@ export function StatsCounter() {
       } catch (error) {
         console.error('Failed to load CSV stats:', error)
       } finally {
-        setLoading(false)
+        finishLoading('stats-counter-csv')
       }
     }
     loadStats()

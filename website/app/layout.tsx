@@ -16,6 +16,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from "@vercel/analytics/next"
 import { generateOrganizationSchema, generateWebSiteSchema, jsonLdScriptProps } from '@/lib/structured-data'
 import PageViewTracker from '@/components/analytics/page-view-tracker'
+import GlobalLoader from '@/components/loader/global-loader'
 import { Suspense } from 'react'
 
 const inter = Inter({ 
@@ -158,6 +159,7 @@ export default function RootLayout({
           <SpeedInsights />
           {/* Vercel Analytics - tracks page views and Web Vitals */}
           <Analytics />
+          <GlobalLoader />
         </Providers>
       </body>
     </html>
