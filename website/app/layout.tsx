@@ -16,6 +16,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from "@vercel/analytics/next"
 import { generateOrganizationSchema, generateWebSiteSchema, jsonLdScriptProps } from '@/lib/structured-data'
 import PageViewTracker from '@/components/analytics/page-view-tracker'
+import { Suspense } from 'react'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -28,6 +29,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://exo-bengal.vercel.app'),
   title: 'ExoBengal',
   description: 'Interactive web platform for exploring and visualizing NASA exoplanet data with documentation and AI assistance',
   keywords: ['exoplanets', 'NASA', 'astronomy', 'space', 'visualization', 'data science'],
@@ -70,10 +72,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://exo-bengal.vercel.app/',
   },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#1e3a5f' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a1628' },
-  ],
   verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '' },
 }
 
@@ -82,6 +80,10 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#1e3a5f' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a1628' },
+  ],
 }
 
 export default function RootLayout({
@@ -122,7 +124,9 @@ export default function RootLayout({
         
         <Providers>
           {/* Automatic page view tracking for Google Analytics */}
-          <PageViewTracker />
+          <Suspense fallback={null}>
+            <PageViewTracker />
+          </Suspense>
           <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
             <Header />
             <NewsBar className="hidden md:block sticky md:fixed top-16 md:left-0 md:right-0 z-[60]" />
