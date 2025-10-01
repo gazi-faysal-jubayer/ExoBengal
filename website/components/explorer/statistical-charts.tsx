@@ -161,6 +161,21 @@ export default function StatisticalCharts() {
     return bins.map(b => ({ bin: b.label, count: counts[b.label] || 0 }))
   }, [rows])
 
+  const getStellarTypeColor = (type: string) => {
+    const colors: Record<string, string> = {
+      'O-type': '#9bb5ff',
+      'B-type': '#aabfff',
+      'A-type': '#cad7ff',
+      'F-type': '#f8f7ff',
+      'G-type': '#fff4ea',
+      'K-type': '#ffd2a1',
+      'M-type': '#ff8c69',
+      'L/T-type': '#ff6b47',
+      'Unknown': '#6b7280'
+    }
+    return colors[type] || '#6b7280'
+  }
+
   const stellarTypesData = useMemo(() => {
     const counts: Record<string, number> = {}
     rows.forEach(r => {
@@ -181,21 +196,6 @@ export default function StatisticalCharts() {
       .sort((a, b) => b[1] - a[1])
       .map(([name, value]) => ({ name, value, color: getStellarTypeColor(name) }))
   }, [rows])
-
-  const getStellarTypeColor = (type: string) => {
-    const colors: Record<string, string> = {
-      'O-type': '#9bb5ff',
-      'B-type': '#aabfff',
-      'A-type': '#cad7ff',
-      'F-type': '#f8f7ff',
-      'G-type': '#fff4ea',
-      'K-type': '#ffd2a1',
-      'M-type': '#ff8c69',
-      'L/T-type': '#ff6b47',
-      'Unknown': '#6b7280'
-    }
-    return colors[type] || '#6b7280'
-  }
 
   const renderChart = () => {
     if (loading) {
