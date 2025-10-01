@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Sparkles, Loader2, Copy, ThumbsUp, ThumbsDown } from 'lucide-react'
 import Image from 'next/image'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { generateResponse } from '@/lib/chatbot';
 import { TerminalSearchInput } from '@/components/ui/terminal-search-input'
 import { LiquidButton } from '@/components/ui/liquid-glass-button'
@@ -63,16 +65,14 @@ export function ChatWidget() {
       }
 
       const data = await res.json();
-      const jsonMatch = data.response.match(/```json\s*\n([\s\S]*?)\n```/);
-      const jsonString = jsonMatch ? jsonMatch[1] : data.response;
+      console.log('Raw AI Response:', data);
     
-      const jsonResponse = JSON.parse(jsonString);
  
 
       const botResponse = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: jsonResponse.response,
+        content: data.response,
       };
       setMessages(prev => [...prev, botResponse]);
     } catch (err) {
@@ -111,17 +111,6 @@ export function ChatWidget() {
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content)
     // Could add a toast notification here
-  }
-
-  const formatMessage = (content: string) => {
-    // Simple markdown-like formatting
-    const formatted = content
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`(.*?)`/g, '<code class="bg-light-surface dark:bg-dark-surface px-1 py-0.5 rounded text-sm">$1</code>')
-      .replace(/```([\s\S]*?)```/g, '<pre class="bg-light-surface dark:bg-dark-surface p-3 rounded-md mt-2 mb-2 overflow-x-auto"><code>$1</code></pre>')
-    
-    return { __html: formatted }
   }
 
   return (
@@ -244,10 +233,66 @@ export function ChatWidget() {
                   >
                     {message.role === 'assistant' ? (
                       <div>
-                        <div 
-                          className="text-sm"
-                          dangerouslySetInnerHTML={formatMessage(message.content)}
-                        />
+                        <div className="text-sm prose prose-sm dark:prose-invert max-w-none
+                            prose-headings:text-light-text-primary dark:prose-headings:text-dark-text-primary
+                            prose-p:text-light-text-primary dark:prose-p:text-dark-text-primary
+                            prose-strong:text-light-text-primary dark:prose-strong:text-dark-text-primary
+                            prose-code:bg-light-surface dark:prose-code:bg-dark-surface prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+                            prose-pre:bg-light-surface dark:prose-pre:bg-dark-surface prose-pre:p-3 prose-pre:rounded-md prose-pre:overflow-x-auto
+                            prose-table:border prose-table:border-light-border dark:prose-table:border-dark-border prose-table:rounded-md prose-table:overflow-hidden
+                            prose-th:bg-light-hover dark:prose-th:bg-dark-hover prose-th:px-3 prose-th:py-2 prose-th:border-b prose-th:border-light-border dark:prose-th:border-dark-border prose-th:font-semibold prose-th:text-left
+                            prose-td:px-3 prose-td:py-2 prose-td:border-b prose-td:border-light-border dark:prose-td:border-dark-border
+                            prose-tr:hover:bg-light-hover dark:prose-tr:hover:bg-dark-hover/50">
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                              table: ({ children }) => (
+                                <div className="overflow-x-auto my-3">
+                                  <table className="w-full border border-light-border dark:border-dark-border rounded-md bg-light-surface dark:bg-dark-surface">
+                                    {children}
+                                  </table>
+                                </div>
+                              ),
+                              thead: ({ children }) => (
+                                <thead className="bg-light-hover dark:bg-dark-hover">
+                                  {children}
+                                </thead>
+                              ),
+                              th: ({ children }) => (
+                                <th className="px-3 py-2 border-b border-light-border dark:border-dark-border font-semibold text-left text-light-text-primary dark:text-dark-text-primary">
+                                  {children}
+                                </th>
+                              ),
+                              td: ({ children }) => (
+                                <td className="px-3 py-2 border-b border-light-border dark:border-dark-border text-light-text-primary dark:text-dark-text-primary">
+                                  {children}
+                                </td>
+                              ),
+                              tr: ({ children }) => (
+                                <tr className="hover:bg-light-hover dark:hover:bg-dark-hover/50">
+                                  {children}
+                                </tr>
+                              ),
+                              code: ({ children, className }) => {
+                                const isInline = !className;
+                                return isInline ? (
+                                  <code className="bg-light-surface dark:bg-dark-surface px-1 py-0.5 rounded text-sm">
+                                    {children}
+                                  </code>
+                                ) : (
+                                  <code className={className}>{children}</code>
+                                );
+                              },
+                              pre: ({ children }) => (
+                                <pre className="bg-light-surface dark:bg-dark-surface p-3 rounded-md mt-2 mb-2 overflow-x-auto">
+                                  {children}
+                                </pre>
+                              )
+                            }}
+                          >
+                            {message.content}
+                          </ReactMarkdown>
+                        </div>
                         <div className="flex items-center gap-2 mt-2">
                           <LiquidButton
                             onClick={() => copyMessage(message.content)}
