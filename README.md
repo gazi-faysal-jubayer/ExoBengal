@@ -4203,19 +4203,8 @@ While we acknowledge the contributions of many individuals and organizations, an
 ### Contact Information
 
 **Project Maintainers**
-- **Email**: maintainers@exobengal.ai
-- **GitHub**: [@exobengal](https://github.com/exobengal)
-- **Twitter**: [@ExoBengal](https://twitter.com/exobengal)
-
-**Community**
-- **Discord**: [Join our server](https://discord.gg/exobengal)
-- **Reddit**: [r/exobengal](https://reddit.com/r/exobengal)
-- **LinkedIn**: [ExoBengal Group](https://linkedin.com/groups/exobengal)
-
-**Business Inquiries**
-- **Partnerships**: partnerships@exobengal.ai
-- **Licensing**: legal@exobengal.ai
-- **Media**: press@exobengal.ai
+- **Email**: gazi.faysal.jubayer@gmail.com
+- **GitHub**: [@exobengal](https://github.com/gazi-faysal-jubayer/exobengal)
 
 ### Reporting Issues
 
