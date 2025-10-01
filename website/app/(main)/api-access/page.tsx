@@ -6,52 +6,101 @@ import { Code, Key, Database, Shield, ArrowRight, Copy, ExternalLink } from 'luc
 
 const endpoints = [
   {
-    path: '/api/exoplanets',
+    path: '/',
     method: 'GET',
-    description: 'Get exoplanet data with filtering and pagination',
-    params: ['search', 'method', 'year_min', 'year_max', 'radius_min', 'radius_max', 'limit', 'offset'],
+    description: 'Root endpoint with API information',
+    params: [],
   },
   {
-    path: '/api/exoplanets/{id}',
+    path: '/health',
     method: 'GET',
-    description: 'Get detailed information about a specific exoplanet',
-    params: ['id (required)'],
+    description: 'Health check endpoint to verify API status',
+    params: [],
   },
   {
-    path: '/api/stats',
+    path: '/models/info',
     method: 'GET',
-    description: 'Get statistical summaries and aggregated data',
-    params: ['category', 'format'],
+    description: 'Information about available models and input parameters',
+    params: [],
   },
   {
-    path: '/api/search',
+    path: '/predict',
     method: 'POST',
-    description: 'Advanced search with natural language queries',
-    params: ['natural_language_query', 'filters', 'sort_options'],
+    description: 'Single exoplanet prediction using ML models',
+    params: ['period', 'prad', 'teq', 'srad', 'slog_g', 'steff', 'impact', 'duration', 'depth', 'models'],
+  },
+  {
+    path: '/predict/batch',
+    method: 'POST',
+    description: 'Batch predictions for multiple exoplanet samples',
+    params: ['sample1', 'sample2', '...', 'models'],
+  },
+  {
+    path: '/docs',
+    method: 'GET',
+    description: 'Interactive API documentation (Swagger UI)',
+    params: [],
   },
 ]
 
 const codeExamples = {
-  javascript: `// Fetch Earth-like exoplanets
-const response = await fetch('/api/exoplanets?radius_min=0.8&radius_max=1.2&habitable_zone=true');
-const data = await response.json();
-console.log(\`Found \${data.total} Earth-like planets\`);`,
-  
   python: `import requests
 
-# Fetch recent discoveries
-url = "https://yoursite.com/api/exoplanets"
-params = {
-    "year_min": 2020,
-    "limit": 50
+# Single prediction
+url = "http://localhost:8000/predict"
+data = {
+    "period": 365.0,
+    "prad": 1.0,
+    "teq": 288.0,
+    "srad": 1.0,
+    "slog_g": 4.44,
+    "steff": 5778,
+    "impact": 0.1,
+    "duration": 5.0,
+    "depth": 100.0,
+    "models": ["random_forest", "cnn"]
 }
-response = requests.get(url, params=params)
-data = response.json()
-print(f"Found {data['total']} recent discoveries")`,
 
-  curl: `# Get exoplanet statistics
-curl -X GET "https://yoursite.com/api/stats?category=overview" \\
-     -H "Accept: application/json"`,
+response = requests.post(url, json=data)
+result = response.json()
+print(f"ESI: {result['esi']}")
+print(f"Random Forest Prediction: {result['random_forest']['prediction']}")`,
+
+  curl: `curl -X POST "http://localhost:8000/predict" \\
+     -H "Content-Type: application/json" \\
+     -d '{
+       "period": 365.0,
+       "prad": 1.0,
+       "teq": 288.0,
+       "srad": 1.0,
+       "slog_g": 4.44,
+       "steff": 5778,
+       "impact": 0.1,
+       "duration": 5.0,
+       "depth": 100.0
+     }'`,
+
+  javascript: `const response = await fetch('http://localhost:8000/predict', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    period: 365.0,
+    prad: 1.0,
+    teq: 288.0,
+    srad: 1.0,
+    slog_g: 4.44,
+    steff: 5778,
+    impact: 0.1,
+    duration: 5.0,
+    depth: 100.0,
+    models: ["random_forest"]
+  })
+});
+
+const data = await response.json();
+console.log('Prediction:', data);`,
 }
 
 export default function APIAccessPage() {
@@ -66,11 +115,11 @@ export default function APIAccessPage() {
           className="text-center mb-16"
         >
           <h1 className="text-4xl font-bold text-light-text-primary dark:text-dark-text-primary mb-6">
-            API Access
+            ExoBengal API Access
           </h1>
           <p className="text-xl text-light-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
-            Access NASA&apos;s exoplanet data programmatically through our RESTful API. 
-            Build applications, conduct research, or integrate exoplanet data into your projects.
+            Access ExoBengal&apos;s machine learning models for exoplanet detection and analysis. 
+            Use Random Forest, CNN, KNN, and Decision Tree models to predict exoplanet characteristics and calculate Earth Similarity Index.
           </p>
         </motion.div>
 
@@ -89,10 +138,10 @@ export default function APIAccessPage() {
             >
               <Key className="h-12 w-12 mx-auto mb-4 text-primary-dark-blue" />
               <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                1. Get API Key
+                1. No Authentication Required
               </h3>
               <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Sign up for a free API key to access enhanced rate limits and analytics
+                Free and open access to all API endpoints for research and development
               </p>
             </motion.div>
 
@@ -107,7 +156,7 @@ export default function APIAccessPage() {
                 2. Make Requests
               </h3>
               <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Use our RESTful endpoints to query exoplanet data in JSON format
+                Use RESTful endpoints to predict exoplanet characteristics using ML models
               </p>
             </motion.div>
 
@@ -128,13 +177,15 @@ export default function APIAccessPage() {
           </div>
 
           <div className="text-center">
-            <Link
-              href="/signup"
+            <a
+              href="http://localhost:8000/docs"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary px-8 py-3 text-lg font-semibold inline-flex items-center gap-2"
             >
-              Get Free API Key
+              View Interactive Docs
               <ArrowRight className="h-5 w-5" />
-            </Link>
+            </a>
           </div>
         </section>
 
@@ -143,6 +194,9 @@ export default function APIAccessPage() {
           <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-8">
             API Endpoints
           </h2>
+          <p className="text-lg text-light-text-secondary dark:text-dark-text-secondary mb-6">
+            Base URL: <code className="px-2 py-1 bg-light-surface dark:bg-dark-surface rounded font-mono">http://localhost:8000</code>
+          </p>
 
           <div className="space-y-4">
             {endpoints.map((endpoint, index) => (
@@ -224,7 +278,162 @@ export default function APIAccessPage() {
           </div>
         </section>
 
-        {/* Rate Limits & Guidelines */}
+        {/* Available Models */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-8">
+            Available Models
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="card p-6"
+            >
+              <Code className="h-8 w-8 mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                Random Forest
+              </h3>
+              <p className="text-light-text-secondary dark:text-dark-text-secondary">
+                Ensemble learning method using multiple decision trees
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="card p-6"
+            >
+              <Code className="h-8 w-8 mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                Decision Tree
+              </h3>
+              <p className="text-light-text-secondary dark:text-dark-text-secondary">
+                Tree-based learning algorithm for classification
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="card p-6"
+            >
+              <Code className="h-8 w-8 mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                K-Nearest Neighbors (KNN)
+              </h3>
+              <p className="text-light-text-secondary dark:text-dark-text-secondary">
+                Instance-based learning algorithm
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="card p-6"
+            >
+              <Code className="h-8 w-8 mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                Convolutional Neural Network (CNN)
+              </h3>
+              <p className="text-light-text-secondary dark:text-dark-text-secondary">
+                Deep learning model for pattern recognition
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Input Parameters */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-8">
+            Input Parameters
+          </h2>
+          
+          <div className="card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-light-surface dark:bg-dark-surface">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-light-text-primary dark:text-dark-text-primary uppercase tracking-wider">
+                      Parameter
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-light-text-primary dark:text-dark-text-primary uppercase tracking-wider">
+                      Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-light-text-primary dark:text-dark-text-primary uppercase tracking-wider">
+                      Description
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-light-text-primary dark:text-dark-text-primary uppercase tracking-wider">
+                      Example
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-light-border dark:divide-dark-border">
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">period</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Orbital period (days)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">365.25</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">prad</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Planet radius (Earth radii)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">1.0</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">teq</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Equilibrium temperature (Kelvin)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">288.0</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">srad</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Stellar radius (solar radii)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">1.0</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">slog_g</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Stellar surface gravity (log scale)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">4.44</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">steff</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Stellar effective temperature (Kelvin)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">5778</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">impact</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Impact parameter</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">0.0</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">duration</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Transit duration (hours)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">13.0</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-primary-dark-blue dark:text-primary-light-blue">depth</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">float</td>
+                    <td className="px-6 py-4 text-sm text-light-text-secondary dark:text-dark-text-secondary">Transit depth (parts per million)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-light-text-secondary dark:text-dark-text-secondary">84.0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* API Features & Resources */}
         <section className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <motion.div
@@ -235,13 +444,14 @@ export default function APIAccessPage() {
             >
               <Shield className="h-8 w-8 mb-4 text-primary-dark-blue" />
               <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
-                Rate Limits
+                API Features
               </h3>
               <ul className="space-y-2 text-light-text-secondary dark:text-dark-text-secondary">
-                <li>• Free tier: 1,000 requests/hour</li>
-                <li>• With API key: 10,000 requests/hour</li>
-                <li>• Premium: Unlimited requests</li>
-                <li>• Bulk downloads available</li>
+                <li>• Multiple ML Models (Random Forest, Decision Tree, KNN, CNN)</li>
+                <li>• Earth Similarity Index (ESI) calculation</li>
+                <li>• Batch processing support</li>
+                <li>• Model selection options</li>
+                <li>• Automatic OpenAPI documentation</li>
               </ul>
             </motion.div>
 
@@ -257,23 +467,28 @@ export default function APIAccessPage() {
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/docs/api" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                    Complete API Documentation
-                  </Link>
+                  <a 
+                    href="http://localhost:8000/docs" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary-dark-blue dark:text-primary-light-blue hover:underline"
+                  >
+                    Interactive API Docs (Swagger UI)
+                  </a>
                 </li>
                 <li>
-                  <Link href="/docs/examples" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                    More Code Examples
-                  </Link>
+                  <a 
+                    href="http://localhost:8000/redoc" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary-dark-blue dark:text-primary-light-blue hover:underline"
+                  >
+                    ReDoc Documentation
+                  </a>
                 </li>
                 <li>
-                  <Link href="/playground" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                    API Playground
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/support" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                    Developer Support
+                  <Link href="/docs/models" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                    Model Information
                   </Link>
                 </li>
               </ul>
