@@ -1,9 +1,12 @@
+'use client'
+
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
 import Link from 'next/link'
 
 import {Linkedin, Twitter, Github, Mail, Telescope} from 'lucide-react';
+import { trackExternalLink, trackDownload } from '@/lib/analytics'
 
 const tape = <svg xmlns="http://www.w3.org/2000/svg" width="95" height="80" viewBox="0 0 95 80" fill="none">
 <path d="M1 45L70.282 5L88.282 36.1769L19 76.1769L1 45Z" fill="#222222"/>
@@ -61,7 +64,15 @@ export const Component = () => {
           <div className='flex flex-col gap-1 md:gap-4'>
             <h4 className='uppercase whitespace-nowrap font-display text-md text-light-text-secondary dark:text-dark-text-secondary font-semibold'>Community</h4>
             <div className="flex flex-col gap-2 text-sm text-light-text-secondary dark:text-dark-text-secondary items-start">
-              <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="https://github.com/gazi-faysal-jubayer/ExoBengal" target="_blank" rel="noopener noreferrer">GitHub</Link>
+              <Link 
+                className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' 
+                href="https://github.com/gazi-faysal-jubayer/ExoBengal" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onClick={() => trackExternalLink('https://github.com/gazi-faysal-jubayer/ExoBengal', 'GitHub')}
+              >
+                GitHub
+              </Link>
               <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/docs/contributing">Contributing</Link>
               <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/api-access">API Access</Link>
               <Link className='text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-light-blue transition-colors whitespace-nowrap font-medium cursor-target' href="/support">Support</Link>
@@ -79,7 +90,13 @@ export const Component = () => {
           <div className="flex flex-row gap-4">
             <Link href="/privacy" className="hover:text-primary-light-blue transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-primary-light-blue transition-colors">Terms of Service</Link>
-            <Link href="https://github.com/gazi-faysal-jubayer/ExoBengal" className="hover:text-primary-light-blue transition-colors" target="_blank" rel="noopener noreferrer">
+            <Link 
+              href="https://github.com/gazi-faysal-jubayer/ExoBengal" 
+              className="hover:text-primary-light-blue transition-colors" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              onClick={() => trackExternalLink('https://github.com/gazi-faysal-jubayer/ExoBengal', 'Open Source')}
+            >
               Open Source
             </Link>
           </div>
@@ -92,6 +109,7 @@ export const Component = () => {
             rel="nofollow noopener"
             aria-label="ExoBengal GitHub Repository"
             className="hover:text-primary-light-blue transition-colors cursor-target"
+            onClick={() => trackExternalLink('https://github.com/gazi-faysal-jubayer/ExoBengal', 'GitHub Icon')}
           >
             <Github className="w-5 h-5 fill-current" />
           </a>
@@ -99,6 +117,7 @@ export const Component = () => {
             href="mailto:contact@exobengal.com"
             aria-label="Contact ExoBengal"
             className="hover:text-primary-light-blue transition-colors cursor-target"
+            onClick={() => trackExternalLink('mailto:contact@exobengal.com', 'Email Contact')}
           >
             <Mail className="w-5 h-5 fill-current" />
           </a>
@@ -108,6 +127,7 @@ export const Component = () => {
             rel="nofollow noopener"
             aria-label="Follow ExoBengal on Twitter"
             className="hover:text-primary-light-blue transition-colors cursor-target"
+            onClick={() => trackExternalLink('#', 'Twitter')}
           >
             <Twitter className="w-5 h-5 fill-current" />
           </a>

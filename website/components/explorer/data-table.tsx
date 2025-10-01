@@ -17,6 +17,7 @@ import { planetNameToSlug } from '@/lib/planet-utils'
 import { useRouter } from 'next/navigation'
 import { CheckBox } from '@/components/ui/checkbox'
 import { SmartCombobox } from '@/components/ui/smart-combo-box'
+import { trackEvent, trackDownload } from '@/lib/analytics'
 
 // Convert CSV data to table format
 const convertNASAData = (nasaData: ExplorerPlanetRow[]) => {
@@ -169,13 +170,24 @@ export function DataTable() {
   }, [store.searchQuery, store.filters, store.rows, store.isLoaded])
 
   const handleSort = useCallback((columnKey: string) => {
+    const newDirection = sortColumn === columnKey 
+      ? (sortDirection === 'asc' ? 'desc' : 'asc')
+      : 'asc'
+    
+    // Track sort interaction
+    trackEvent('sort_table', {
+      column: columnKey,
+      direction: newDirection,
+      row_count: data.length
+    })
+    
     if (sortColumn === columnKey) {
       setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
     } else {
       setSortColumn(columnKey)
       setSortDirection('asc')
     }
-  }, [sortColumn])
+  }, [sortColumn, sortDirection, data.length])
 
   const sortedData = useMemo(() => {
     const sorted = [...data].sort((a, b) => {
@@ -263,11 +275,66 @@ export function DataTable() {
           </div>
           
           <div className="flex items-center gap-2">
-            <button className="btn-secondary text-sm flex items-center gap-2" data-target-cursor="true" aria-label="Export exoplanet data">
+            <button 
+              className="btn-secondary text-sm flex items-center gap-2" 
+              data-target-cursor="true" 
+              aria-label="Export exoplanet data"
+              onClick={() => {
+                // Track the export event
+                trackDownload(
+                  `exoplanets-export-${new Date().toISOString().split('T')[0]}.csv`,
+                  'csv'
+                )
+                
+                // Also track as a generic event with more context
+                trackEvent('export_data', {
+                  format: 'csv',
+                  row_count: data.length,
+                  selected_rows: selectedRows.length,
+                  has_filters: (() => {
+                    const currentYear = new Date().getFullYear()
+                    const defaultYearRange: [number, number] = [1992, currentYear]
+                    const defaultRadiusRange: [number, number] = [0, 100]
+                    const defaultMassRange: [number, number] = [0, 10000]
+                    
+                    // Check if any filter differs from its default state
+                    return (
+                      store.filters.discoveryMethod.length > 0 ||
+                      store.filters.disposition.length > 0 ||
+                      store.filters.habitable !== null ||
+                      store.filters.yearRange[0] !== defaultYearRange[0] ||
+                      store.filters.yearRange[1] !== defaultYearRange[1] ||
+                      store.filters.radiusRange[0] !== defaultRadiusRange[0] ||
+                      store.filters.radiusRange[1] !== defaultRadiusRange[1] ||
+                      store.filters.massRange[0] !== defaultMassRange[0] ||
+                      store.filters.massRange[1] !== defaultMassRange[1]
+                    )
+                  })()
+                })
+                
+                // TODO: Implement actual CSV export functionality
+                console.log('Export CSV clicked - implement download logic')
+              }}
+            >
               <Download className="h-4 w-4" />
               Export
             </button>
-            <button className="btn-secondary text-sm flex items-center gap-2" aria-label="Filter table columns">
+            <button 
+              className="btn-secondary text-sm flex items-center gap-2" 
+              aria-label="Filter table columns"
+              onClick={() => {
+                // Track column filter interaction
+                trackEvent('open_column_filter', {
+                  total_columns: columns.length,
+                  row_count: data.length,
+                  current_sort: sortColumn,
+                  sort_direction: sortDirection
+                })
+                
+                // TODO: Implement column filter UI
+                console.log('Column Filter clicked - implement filter UI')
+              }}
+            >
               <Filter className="h-4 w-4" />
               Column Filter
             </button>

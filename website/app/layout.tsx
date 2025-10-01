@@ -15,6 +15,7 @@ import TargetCursor from '@/components/ui/target-cursor'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from "@vercel/analytics/next"
 import { generateOrganizationSchema, generateWebSiteSchema, jsonLdScriptProps } from '@/lib/structured-data'
+import PageViewTracker from '@/components/analytics/page-view-tracker'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -120,6 +121,8 @@ export default function RootLayout({
         )}
         
         <Providers>
+          {/* Automatic page view tracking for Google Analytics */}
+          <PageViewTracker />
           <div className="flex min-h-screen flex-col overflow-x-hidden max-w-full">
             <Header />
             <NewsBar className="hidden md:block sticky md:fixed top-16 md:left-0 md:right-0 z-[60]" />

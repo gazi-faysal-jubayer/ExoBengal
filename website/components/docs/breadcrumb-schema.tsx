@@ -58,3 +58,4 @@ export default function BreadcrumbSchema({ pathname }: BreadcrumbSchemaProps) {
 
   return <script {...jsonLdScriptProps(schema)} />
 }
+

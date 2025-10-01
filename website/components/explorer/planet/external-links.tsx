@@ -14,6 +14,7 @@ import {
   Calculator,
   FileText
 } from 'lucide-react'
+import { trackExternalLink, trackDownload } from '@/lib/analytics'
 
 interface ExternalLinksProps {
   planet: ExplorerPlanetRow
@@ -187,6 +188,7 @@ export function ExternalLinks({ planet }: ExternalLinksProps) {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => link.url && trackExternalLink(link.url, link.name)}
                         className="group bg-light-surface dark:bg-dark-surface p-3 rounded-lg hover:shadow-md transition-all hover:scale-[1.02]"
                       >
                         <div className="flex items-start justify-between mb-1">

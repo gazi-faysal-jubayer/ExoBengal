@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useExplorerStore } from '@/lib/explorer-store'
 import type { ExplorerPlanetRow } from '@/lib/csv-loader'
+import { trackPlanetView } from '@/lib/analytics'
 import { PlanetHero } from '@/components/explorer/planet/planet-hero'
 import { KeyFactsGrid } from '@/components/explorer/planet/key-facts-grid'
 import { ArtistConception } from '@/components/explorer/planet/artist-conception'
@@ -73,6 +74,17 @@ export default function PlanetPage({ params }: PlanetPageProps) {
     initializePage()
   }, [slug, isLoaded, isLoading, loadRows, getPlanetBySlugUnfiltered])
 
+  // Track planet view for analytics
+  useEffect(() => {
+    if (planet) {
+      trackPlanetView({
+        planetName: planet.pl_name,
+        slug: slug,
+        discoveryMethod: planet.discoverymethod,
+        discoveryYear: planet.disc_year
+      })
+    }
+  }, [planet, slug])
 
   // Loading state
   if (isLoading || (!isLoaded && !error)) {

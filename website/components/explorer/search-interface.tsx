@@ -8,6 +8,8 @@ import { useExplorerStore } from '@/lib/explorer-store'
 import { planetNameToSlug } from '@/lib/planet-utils'
 import { SmartCombobox } from '@/components/ui/smart-combo-box'
 import { LiquidButton } from '@/components/ui/liquid-glass-button'
+import { trackSearchQuery } from '@/lib/analytics'
+import { selectFilteredRows } from '@/lib/explorer-store'
 
 const searchSuggestions = [
   { id: 'kepler-452b', label: 'Kepler-452b', group: 'Popular Planets' },
@@ -52,6 +54,17 @@ export function SearchInterface() {
     if (planetId) {
       const planet = [...searchSuggestions, ...recentSearches].find(p => p.id === planetId)
       if (planet) {
+        // Get filtered results count for analytics
+        const state = useExplorerStore.getState()
+        const filteredRows = selectFilteredRows(state)
+        
+        // Track the search query
+        trackSearchQuery({
+          query: planet.label,
+          resultsCount: filteredRows.length,
+          filters: filters
+        })
+        
         // Navigate to planet page
         const slug = planetNameToSlug(planet.label)
         router.push(`/explorer/planet/${slug}`)
@@ -60,7 +73,7 @@ export function SearchInterface() {
       // Clear search
       setSearchQuery('')
     }
-  }, [router, setSearchQuery])
+  }, [router, setSearchQuery, filters])
 
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query)

@@ -5,6 +5,7 @@ import { ChevronRight, Terminal, CheckCircle, ExternalLink } from 'lucide-react'
 import { CodeBlock } from '@/components/docs/code-block'
 import { PrevNext } from '@/components/docs/prev-next'
 import TerminalCard from '@/components/docs/terminal-card'
+import { trackExternalLink, trackDownload } from '@/lib/analytics'
 
 const steps = [
   {
@@ -156,6 +157,7 @@ export default function GettingStartedPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary-dark-blue dark:text-primary-light-blue hover:underline text-sm flex items-center gap-1"
+                    onClick={() => trackExternalLink('https://github.com/gazi-faysal-jubayer/ExoBengal', 'GitHub Repository')}
                   >
                     GitHub Repository
                     <ExternalLink className="h-3 w-3" />
@@ -187,6 +189,7 @@ export default function GettingStartedPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary-dark-blue dark:text-primary-light-blue hover:underline flex items-center gap-1"
+                    onClick={() => trackExternalLink('https://github.com/gazi-faysal-jubayer/ExoBengal/issues', 'Report Issues')}
                   >
                     Report Issues
                     <ExternalLink className="h-3 w-3" />

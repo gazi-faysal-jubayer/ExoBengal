@@ -5,6 +5,7 @@ import { BookOpen, Download, Github, Rocket, Code, Star, Users, Zap } from 'luci
 import { motion } from 'framer-motion'
 import { CodeBlock } from '@/components/docs/code-block'
 import TerminalCard from '@/components/docs/terminal-card'
+import { trackExternalLink, trackDownload } from '@/lib/analytics'
 
 const quickLinks = [
   {
@@ -120,6 +121,7 @@ export default function DocsPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary px-8 py-3 text-lg font-semibold flex items-center gap-2"
+                onClick={() => trackExternalLink('https://github.com/gazi-faysal-jubayer/ExoBengal', 'View on GitHub')}
               >
                 <Github className="h-5 w-5" />
                 View on GitHub
