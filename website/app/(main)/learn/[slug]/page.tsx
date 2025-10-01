@@ -272,18 +272,13 @@ const ExoplanetBasicsContent = () => (
         What are Exoplanets?
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        Exoplanets, or extrasolar planets, are planets that orbit stars other than our Sun. 
-        These distant worlds have captured the imagination of scientists and the public alike, 
-        offering glimpses into the incredible diversity of planetary systems throughout our galaxy.
-      </p>
-      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        The discovery of the first confirmed exoplanet in 1995 marked a revolutionary moment in astronomy, 
-        proving that our Solar System is not unique and opening up endless possibilities for finding 
-        other worlds that might harbor life.
+        An exoplanet (extrasolar planet) is any planet that orbits a star outside our solar system. 
+        These worlds come in many forms — some may resemble Earth, while others are completely alien, 
+        with extreme temperatures, strange compositions, or unusual orbits.
       </p>
       {/* Source: https://science.nasa.gov/resource/video-what-is-an-exoplanet/ */}
       <VideoEmbed 
-        videoId="yJgXLtXwHGY" 
+        videoId="0ZOhJe_7GrE" 
         title="What is an Exoplanet? - NASA Science" 
       />
     </section>
@@ -292,14 +287,16 @@ const ExoplanetBasicsContent = () => (
       <h2 className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-6">
         Planet Types
       </h2>
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        Scientists classify exoplanets into different types based on their size, composition, and temperature:
+      </p>
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
             Gas Giants
           </h3>
           <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            Massive planets composed primarily of hydrogen and helium, similar to Jupiter and Saturn. 
-            These worlds often orbit close to their stars, creating "hot Jupiters."
+            Large planets like Jupiter and Saturn, mostly hydrogen and helium.
           </p>
         </div>
         <div>
@@ -307,8 +304,7 @@ const ExoplanetBasicsContent = () => (
             Neptunian Planets
           </h3>
           <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            Ice giants with thick atmospheres of hydrogen and helium, but with significant amounts 
-            of water, methane, and ammonia ices in their interiors.
+            Similar to Neptune or Uranus, with thick atmospheres and icy cores.
           </p>
         </div>
         <div>
@@ -316,8 +312,7 @@ const ExoplanetBasicsContent = () => (
             Super-Earths
           </h3>
           <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            Rocky planets larger than Earth but smaller than Neptune. These worlds may have 
-            thick atmospheres and could potentially be habitable.
+            Bigger than Earth but smaller than Neptune, possibly rocky and potentially habitable.
           </p>
         </div>
         <div>
@@ -325,113 +320,80 @@ const ExoplanetBasicsContent = () => (
             Terrestrial Planets
           </h3>
           <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            Rocky worlds similar to Earth, Mars, Venus, and Mercury. These are prime candidates 
-            for habitability studies.
+            Rocky worlds like Earth or Mars, sometimes found in the "habitable zone."
           </p>
         </div>
       </div>
-      {/* Source: https://science.nasa.gov/resource/video-exoplanet-types-worlds-beyond-our-solar-system/ */}
-      <VideoEmbed 
-        videoId="0rHoAhq7-Cc" 
-        title="Exoplanet Types: Worlds Beyond Our Solar System - NASA" 
-      />
     </section>
 
     <section className="card p-8 mb-8">
       <h2 className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-6">
         Size Comparisons
       </h2>
-      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        Understanding the relative sizes of exoplanets helps us categorize them and understand 
-        their potential characteristics. Size is one of the most fundamental properties that 
-        determines a planet's nature and habitability potential.
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        Exoplanets vary enormously in size:
       </p>
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Radius vs Mass
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            A planet's radius tells us about its physical size, while mass reveals its density 
-            and composition. Together, these measurements help classify planets into different types.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Earth Units
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            Scientists often express exoplanet sizes in Earth units - for example, a planet 
-            with 2 Earth radii or 5 Earth masses. This makes comparisons intuitive and meaningful.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Size Categories
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            From tiny Mercury-sized worlds to massive gas giants larger than Jupiter, 
-            exoplanets span an incredible range of sizes, each with unique characteristics 
-            and formation histories.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Habitability Implications
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            Size affects a planet's ability to retain an atmosphere, generate magnetic fields, 
-            and maintain geological activity - all factors crucial for potential habitability.
-          </p>
-        </div>
-      </div>
-      {/* Source: https://science.nasa.gov/resource/video-exoplanets-weird-wondrous-worlds/ */}
-      <VideoEmbed 
-        videoId="4IXYp9Fse44" 
-        title="Exoplanets: Weird, Wondrous Worlds - NASA" 
-      />
+      <ul className="space-y-3 mb-6 text-light-text-secondary dark:text-dark-text-secondary">
+        <li className="flex items-start gap-3">
+          <span className="text-primary-dark-blue dark:text-primary-light-blue mt-1">●</span>
+          <span>Some are smaller than Mercury, barely detectable.</span>
+        </li>
+        <li className="flex items-start gap-3">
+          <span className="text-primary-dark-blue dark:text-primary-light-blue mt-1">●</span>
+          <span>Others are "Hot Jupiters," so large and close to their stars that they dwarf Earth many times over.</span>
+        </li>
+        <li className="flex items-start gap-3">
+          <span className="text-primary-dark-blue dark:text-primary-light-blue mt-1">●</span>
+          <span>Scientists often use Earth-radius (R⊕) and Jupiter-radius (R♃) units to compare sizes and understand their nature.</span>
+        </li>
+      </ul>
     </section>
 
     <section className="card p-8 mb-8">
       <h2 className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-6">
         Orbital Mechanics
       </h2>
-      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        Understanding how exoplanets move around their stars is crucial for determining their 
-        potential habitability and characteristics. Orbital parameters tell us about a planet's 
-        temperature, seasons, and stability.
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        Every exoplanet follows an orbit around its star, defined by key parameters:
       </p>
-      <div className="grid md:grid-cols-3 gap-4 mb-6">
+      <div className="grid md:grid-cols-2 gap-4 mb-6">
         <div className="bg-light-surface dark:bg-dark-surface p-4 rounded-lg">
           <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-            Orbital Period
+            Orbital Period (P)
           </h4>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-            How long it takes for a planet to complete one orbit around its star.
+            How long it takes to complete one revolution.
           </p>
         </div>
         <div className="bg-light-surface dark:bg-dark-surface p-4 rounded-lg">
           <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-            Semi-Major Axis
+            Semi-Major Axis (a)
           </h4>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-            The average distance between the planet and its star.
+            Average distance from the star.
           </p>
         </div>
         <div className="bg-light-surface dark:bg-dark-surface p-4 rounded-lg">
           <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-            Eccentricity
+            Eccentricity (e)
           </h4>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-            How elliptical (non-circular) the planet's orbit is.
+            How circular or stretched the orbit is.
+          </p>
+        </div>
+        <div className="bg-light-surface dark:bg-dark-surface p-4 rounded-lg">
+          <h4 className="font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+            Inclination (i)
+          </h4>
+          <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+            Tilt of the orbit as seen from Earth.
           </p>
         </div>
       </div>
-      {/* Source: https://science.nasa.gov/exoplanets/ */}
-      <VideoEmbed 
-        videoId="rtrGRmyIGSo" 
-        title="Exoplanet Orbits and Kepler's Laws - NASA Education" 
-      />
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        These orbital properties are crucial for detecting exoplanets (via transit, radial velocity, etc.) 
+        and for predicting whether a planet could sustain life.
+      </p>
     </section>
   </>
 )
@@ -443,18 +405,18 @@ const DetectionMethodsContent = () => (
         Transit Photometry
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        The transit method detects exoplanets by measuring the slight dimming of a star when 
-        a planet passes in front of it. This technique has been incredibly successful, 
-        discovering thousands of exoplanets.
+        This is the most widely used method. When a planet passes in front of its host star 
+        (as seen from Earth), it blocks a tiny fraction of the star's light. This creates a small, 
+        regular dip in brightness called a transit.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        By analyzing the light curve - the graph of brightness over time - scientists can 
-        determine the planet's size, orbital period, and even some atmospheric properties.
+        By carefully measuring these dips, astronomers can determine the planet's size, orbital period, 
+        and even hints about its atmosphere. NASA's Kepler and TESS missions primarily use this method.
       </p>
       {/* Source: https://science.nasa.gov/resource/exoplanet-detection-transit-method/ */}
       <VideoEmbed 
-        videoId="hTC_3deYYLg" 
-        title="Exoplanet Detection: Transit Method - NASA" 
+        videoId="vka0W8tn4EU" 
+        title="Transit Photometry: How We Detect Exoplanets" 
       />
     </section>
 
@@ -463,18 +425,18 @@ const DetectionMethodsContent = () => (
         Radial Velocity (Doppler Spectroscopy)
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        This method detects the tiny wobble of a star caused by the gravitational pull of 
-        an orbiting planet. As the planet orbits, it causes the star to move slightly toward 
-        and away from us.
+        As a planet orbits its star, the star itself also wobbles slightly due to gravitational pull. 
+        This wobble causes the star's light spectrum to shift — towards blue when it moves toward us, 
+        and towards red when it moves away. This effect is called the Doppler shift.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        By measuring the Doppler shift in the star's light, astronomers can determine the 
-        planet's mass and orbital characteristics.
+        By studying these shifts, scientists can estimate the planet's mass and orbital characteristics. 
+        This method confirmed some of the very first exoplanets.
       </p>
       {/* Source: https://science.nasa.gov/resource/exoplanet-detection-radial-velocity-method/ */}
       <VideoEmbed 
-        videoId="jk_AXaEVJmE" 
-        title="Exoplanet Detection: Radial Velocity Method - NASA" 
+        videoId="rN7uuqLKv0I" 
+        title="Radial Velocity Method: Detecting Exoplanets Through Stellar Wobble" 
       />
     </section>
 
@@ -483,18 +445,18 @@ const DetectionMethodsContent = () => (
         Direct Imaging
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        The most challenging method involves directly photographing exoplanets. This requires 
-        blocking out the overwhelming light from the parent star using specialized instruments 
-        called coronagraphs.
+        Normally, stars are millions of times brighter than their planets, making planets invisible. 
+        But with advanced telescopes and special instruments that block starlight, astronomers can 
+        sometimes directly capture images of exoplanets.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        Direct imaging works best for young, massive planets that are far from their stars 
-        and still glowing from their formation heat.
+        This method works best for large planets far from their stars, and it allows scientists to 
+        study the atmospheres, colors, and even weather patterns of those worlds.
       </p>
       {/* Source: https://science.nasa.gov/resource/the-search-for-alien-earths-how-coronagraphs-find-hidden-planets/ */}
       <VideoEmbed 
-        videoId="aICaAEXDJQQ" 
-        title="How Coronagraphs Find Hidden Planets - NASA" 
+        videoId="dcuxxeEfuOA" 
+        title="Direct Imaging: Photographing Exoplanets" 
       />
     </section>
 
@@ -503,18 +465,18 @@ const DetectionMethodsContent = () => (
         Gravitational Microlensing
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        This method uses Einstein's theory of general relativity. When a star with a planet 
-        passes in front of a more distant star, the planet's gravity can cause additional 
-        magnification of the background star's light.
+        When a planet and its host star pass in front of a distant background star, their gravity 
+        bends and magnifies the background star's light — like a natural cosmic magnifying glass. 
+        If a planet is present, it creates a small but detectable extra signal in the magnification pattern.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        Microlensing is particularly good at finding planets at distances similar to Earth's 
-        distance from the Sun, and it can detect very low-mass planets.
+        This method can find planets that are too far away or too small for other techniques, 
+        even those thousands of light-years from Earth.
       </p>
       {/* Source: https://science.nasa.gov/resource/exoplanet-detection-microlensing-method/ */}
       <VideoEmbed 
-        videoId="hwq4CdTwjB8" 
-        title="Exoplanet Detection: Microlensing Method - NASA" 
+        videoId="_aZZt8dM-_0" 
+        title="Gravitational Microlensing: Finding Distant Exoplanets" 
       />
     </section>
   </>
@@ -527,19 +489,16 @@ const SpaceMissionsContent = () => (
         Kepler Mission (2009-2018)
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        NASA's Kepler Space Telescope revolutionized our understanding of exoplanets by 
-        conducting the first space-based survey of planets in our galaxy. It stared at 
-        a single patch of sky for four years, monitoring over 150,000 stars.
+        Kepler was NASA's first dedicated planet-hunting telescope. It monitored over 150,000 stars 
+        continuously and looked for tiny dips in brightness caused by transiting planets.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        Kepler discovered over 2,600 confirmed exoplanets and thousands more candidates, 
-        revealing that planets are common throughout the galaxy and that Earth-sized planets 
-        in the habitable zone are abundant.
+        Kepler alone confirmed more than 2,600 exoplanets and showed that planets are common in our galaxy.
       </p>
       {/* Source: https://science.nasa.gov/resource/kepler-end-of-flight-documentary/ */}
       <VideoEmbed 
-        videoId="_V7J05fK5e0" 
-        title="Legacy of NASA's Kepler Space Telescope - More Planets Than Stars" 
+        videoId="G_zcEgx1IgQ" 
+        title="Kepler Mission: Discovering Thousands of Exoplanets" 
       />
     </section>
 
@@ -548,18 +507,17 @@ const SpaceMissionsContent = () => (
         TESS - Transiting Exoplanet Survey Satellite (2018-Present)
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        TESS is conducting an all-sky survey to discover thousands of exoplanets around 
-        the nearest and brightest stars. Unlike Kepler, TESS observes the entire sky in 
-        sectors, spending about a month on each sector.
+        TESS is Kepler's successor. Instead of staring at one patch of sky, TESS surveys the entire sky, 
+        focusing on the brightest and nearest stars.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        This approach allows TESS to find planets around stars bright enough for detailed 
-        follow-up observations with ground-based telescopes and future space missions.
+        It discovers planets that are close enough for detailed follow-up studies with larger telescopes. 
+        TESS has already identified thousands of candidates and continues to expand our catalog.
       </p>
       {/* Source: https://svs.gsfc.nasa.gov/12850/ */}
       <VideoEmbed 
-        videoId="mpViVEO-ymc" 
-        title="NASA's New Planet Hunter: TESS - All-Sky Survey" 
+        videoId="L837XwH4nqE" 
+        title="TESS: NASA's All-Sky Exoplanet Survey" 
       />
     </section>
 
@@ -568,19 +526,17 @@ const SpaceMissionsContent = () => (
         James Webb Space Telescope (2021-Present)
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        The James Webb Space Telescope is transforming our ability to study exoplanet 
-        atmospheres. Its infrared capabilities allow it to detect the chemical composition 
-        of planetary atmospheres through transmission spectroscopy.
+        JWST is not just a discovery machine but a characterization powerhouse. It studies exoplanet 
+        atmospheres by analyzing starlight passing through them during transits.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        JWST has already made groundbreaking discoveries, detecting water, carbon dioxide, 
-        and other molecules in exoplanet atmospheres, bringing us closer to finding signs 
-        of life beyond Earth.
+        With its infrared vision, JWST can detect molecules like water vapor, carbon dioxide, methane, 
+        and search for signs of habitability on distant worlds.
       </p>
       {/* Source: https://science.nasa.gov/asset/webb/how-do-we-learn-about-a-planets-atmosphere/ */}
       <VideoEmbed 
-        videoId="XmGw9e9RPjQ" 
-        title="How Webb Studies Exoplanet Atmospheres - NASA" 
+        videoId="6VqG3Jazrfs" 
+        title="James Webb Space Telescope: Studying Exoplanet Atmospheres" 
       />
     </section>
 
@@ -588,49 +544,35 @@ const SpaceMissionsContent = () => (
       <h2 className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-6">
         Future Missions
       </h2>
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        Several upcoming missions aim to push exoplanet science further:
+      </p>
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Nancy Grace Roman Space Telescope
+            Nancy Grace Roman Space Telescope (NASA, 2027+)
           </h3>
           <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            Will use microlensing to discover thousands of exoplanets, including those 
-            in the habitable zones of their stars.
+            Will use microlensing to find planets, including free-floating ones.
           </p>
         </div>
         <div>
           <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            ARIEL Mission
+            ESA's ARIEL (2029)
           </h3>
           <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            The Atmospheric Remote-sensing Infrared Exoplanet Large-survey will study 
-            the atmospheres of 1,000 exoplanets.
+            Dedicated to studying exoplanet atmospheres in detail.
           </p>
         </div>
         <div>
           <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            PLATO Mission
+            PLATO (2026, ESA)
           </h3>
           <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            PLAnetary Transits and Oscillations will search for Earth-like planets 
-            around Sun-like stars.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Habitable Worlds Observatory
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-            A future NASA mission designed to directly image and characterize 
-            potentially habitable exoplanets.
+            Will focus on finding Earth-like planets in the habitable zone.
           </p>
         </div>
       </div>
-      {/* Source: https://science.nasa.gov/mission/roman-space-telescope/ */}
-      <VideoEmbed 
-        videoId="Blpy-t9qGD0" 
-        title="Nancy Grace Roman Space Telescope: The Next Generation - NASA" 
-      />
     </section>
   </>
 )
@@ -642,18 +584,21 @@ const HabitabilityContent = () => (
         The Habitable Zone
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        The habitable zone, often called the "Goldilocks zone," is the region around a star 
-        where liquid water could exist on a planet's surface. This zone depends on the star's 
-        temperature and luminosity.
+        The habitable zone, often called the "Goldilocks Zone," is the distance from a star where 
+        conditions may allow liquid water to exist on the surface of a planet. Water is essential 
+        for life as we know it, so planets in this zone are considered prime candidates for habitability.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        However, habitability is more complex than just being in the right distance. Factors 
-        like atmospheric composition, magnetic fields, and geological activity also play crucial roles.
+        If a planet is too close to its star, its water would boil away due to extreme heat; if it is 
+        too far, the water would freeze solid. The exact size of a star's habitable zone depends on the 
+        star's temperature and brightness — small, cool stars have much tighter zones, while larger, 
+        hotter stars have zones much farther out. Studying exoplanets inside this region helps astronomers 
+        focus their search for worlds that could potentially host life.
       </p>
       {/* Source: https://science.nasa.gov/resource/video-what-is-the-habitable-zone/ */}
       <VideoEmbed 
-        videoId="YHTyiVF1Y8k" 
-        title="What Is the Habitable Zone? - NASA" 
+        videoId="J04YN9azln8" 
+        title="The Habitable Zone: Where Life Could Exist" 
       />
     </section>
 
@@ -661,34 +606,23 @@ const HabitabilityContent = () => (
       <h2 className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-6">
         Atmospheric Composition
       </h2>
-      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        A planet's atmosphere is crucial for habitability. It regulates temperature, protects 
-        from harmful radiation, and provides the chemical environment necessary for life.
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        A planet's atmosphere is its protective blanket of gases, and it plays a critical role in 
+        determining whether life can survive there. Atmospheres regulate temperature by trapping heat 
+        (the greenhouse effect), shield surfaces from harmful radiation, and create conditions for 
+        weather and climate. For Earth, oxygen and nitrogen dominate, with smaller amounts of carbon 
+        dioxide and water vapor.
       </p>
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Greenhouse Effect
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary">
-            Atmospheric gases like carbon dioxide and water vapor trap heat, 
-            keeping planets warm enough for liquid water.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Atmospheric Escape
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary">
-            Planets can lose their atmospheres over time due to stellar winds 
-            and radiation, especially if they lack magnetic fields.
-          </p>
-        </div>
-      </div>
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        When we study exoplanets, scientists look for atmospheric compositions through techniques like 
+        transit spectroscopy — analyzing starlight that passes through a planet's atmosphere. Detecting 
+        gases such as oxygen, methane, or water vapor could be important clues to life-supporting conditions. 
+        Without an atmosphere, planets are often barren, airless, and exposed to harsh radiation.
+      </p>
       {/* Source: NASA video explaining greenhouse effect, atmospheric escape, and spectroscopy */}
       <VideoEmbed 
-        videoId="8Are9dDbW24" 
-        title="Exoplanet Atmospheres: The Key to Habitability - NASA" 
+        videoId="WSDxtH0o7zk" 
+        title="Exoplanet Atmospheres: Key to Finding Life" 
       />
     </section>
 
@@ -697,41 +631,21 @@ const HabitabilityContent = () => (
         Biosignatures
       </h2>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        Biosignatures are chemical or physical signs that could indicate the presence of life. 
-        These include gases like oxygen, methane, and nitrous oxide that are produced by 
-        biological processes on Earth.
+        Biosignatures are scientific clues that point toward the possibility of life. They can be chemical, 
+        such as unusual levels of oxygen, methane, or ozone in an atmosphere; physical, like patterns in 
+        surface reflectivity; or even indirect, such as seasonal changes in gas levels.
       </p>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        However, detecting biosignatures is challenging because many can also be produced 
-        by non-biological processes, leading to false positives.
+        What makes biosignatures powerful is that they cannot easily be explained by non-living processes. 
+        For example, oxygen on Earth is constantly replenished by plants through photosynthesis. If large 
+        amounts of oxygen were detected on an exoplanet, scientists would consider it a strong biosignature. 
+        However, care must be taken — some geological processes can mimic biosignatures, so astronomers look 
+        for multiple overlapping signs to strengthen the case.
       </p>
-      <div className="bg-light-surface dark:bg-dark-surface p-6 rounded-lg mb-6">
-        <h4 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-          Key Biosignatures to Look For:
-        </h4>
-        <ul className="space-y-2 text-light-text-secondary dark:text-dark-text-secondary">
-          <li className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-            Oxygen (O₂) - Produced by photosynthesis
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-            Methane (CH₄) - Can indicate biological activity
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-            Nitrous Oxide (N₂O) - Strong biosignature
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-            Dimethyl Sulfide (DMS) - Marine life indicator
-          </li>
-        </ul>
-      </div>
       {/* Source: https://science.nasa.gov/exoplanets/ */}
       <VideoEmbed 
-        videoId="gTUjSP76WmI" 
-        title="The Search for Biosignatures on Exoplanets - NASA" 
+        videoId="QlvzCGR90_Q" 
+        title="Biosignatures: Searching for Signs of Life on Exoplanets" 
       />
     </section>
 
@@ -739,40 +653,17 @@ const HabitabilityContent = () => (
       <h2 className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-6">
         Earth Analogs
       </h2>
-      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-4">
-        Scientists are particularly interested in finding Earth-like planets - worlds similar 
-        in size, composition, and orbital characteristics to our own planet.
-      </p>
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            Proxima Centauri b
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary">
-            The closest known exoplanet to Earth, located just 4.2 light-years away. 
-            It's in the habitable zone of a red dwarf star.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-3">
-            TRAPPIST-1 System
-          </h3>
-          <p className="text-light-text-secondary dark:text-dark-text-secondary">
-            Seven Earth-sized planets orbiting a cool red dwarf star, with three 
-            in the habitable zone.
-          </p>
-        </div>
-      </div>
       <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
-        Finding true Earth twins remains challenging because we need planets that are not 
-        only the right size and temperature, but also have the right atmospheric composition, 
-        magnetic field, and geological activity to support life as we know it.
+        An Earth analog is an exoplanet that is strikingly similar to Earth in size, mass, temperature, 
+        and orbital distance from its star. These are the planets most often highlighted in the media as 
+        "second Earths." To measure this, astronomers use tools like the Earth Similarity Index (ESI), 
+        which compares exoplanets to Earth on parameters such as radius, density, and surface temperature.
       </p>
-      {/* Source: https://science.nasa.gov/exoplanets/trappist-1/ */}
-      <VideoEmbed 
-        videoId="bnKFaAS30X8" 
-        title="TRAPPIST-1: Seven Earth-Sized Planets - NASA" 
-      />
+      <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+        Earth analogs are particularly exciting because they offer the best chance of hosting life as we 
+        know it. Famous examples include Kepler-452b and Proxima Centauri b. While no perfect twin of Earth 
+        has been confirmed yet, the ongoing search continues to bring us closer to finding a true Earth-like world.
+      </p>
     </section>
   </>
 )
