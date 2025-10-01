@@ -32,7 +32,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   )
 }
 
-type ChartType = 'timeline' | 'mass-radius' | 'methods' | 'radius-dist' | 'mass-dist' | 'period-axis' | 'habitable-zone'
+type ChartType = 'timeline' | 'mass-radius' | 'methods' | 'radius-dist' | 'mass-dist' | 'temperature-dist' | 'stellar-types'
 
 export default function StatisticalCharts() {
   const [activeChart, setActiveChart] = useState<ChartType>('timeline')
@@ -82,9 +82,11 @@ export default function StatisticalCharts() {
     const MAX_POINTS = 1000
     const out: { mass: number; radius: number; type: string; name: string }[] = []
     for (const r of rows) {
-      if (r.pl_masse && r.pl_rade) {
-        const type = r.pl_rade > 8 ? 'Gas Giant' : r.pl_rade > 2 ? 'Ice Giant' : 'Rocky'
-        out.push({ mass: r.pl_masse, radius: r.pl_rade, type, name: r.pl_name })
+      const mass = typeof r.pl_masse === 'string' ? parseFloat(r.pl_masse) : r.pl_masse
+      const radius = typeof r.pl_rade === 'string' ? parseFloat(r.pl_rade) : r.pl_rade
+      if (mass && radius) {
+        const type = radius > 8 ? 'Gas Giant' : radius > 2 ? 'Ice Giant' : 'Rocky'
+        out.push({ mass, radius, type, name: r.pl_name })
         if (out.length >= MAX_POINTS) break
       }
     }
@@ -111,7 +113,7 @@ export default function StatisticalCharts() {
     bins.push({ label: '20+', min: 20, max: Infinity })
     const counts: Record<string, number> = {}
     rows.forEach(r => {
-      const val = r.pl_rade
+      const val = typeof r.pl_rade === 'string' ? parseFloat(r.pl_rade) : r.pl_rade
       if (!val && val !== 0) return
       const bin = bins.find(b => val >= b.min && val < b.max)
       if (!bin) return
@@ -130,7 +132,7 @@ export default function StatisticalCharts() {
     ]
     const counts: Record<string, number> = {}
     rows.forEach(r => {
-      const val = r.pl_masse
+      const val = typeof r.pl_masse === 'string' ? parseFloat(r.pl_masse) : r.pl_masse
       if (!val && val !== 0) return
       const bin = bins.find(b => val >= b.min && val < b.max)
       if (!bin) return
@@ -139,16 +141,61 @@ export default function StatisticalCharts() {
     return bins.map(b => ({ bin: b.label, count: counts[b.label] || 0 }))
   }, [rows])
 
-  const periodAxisData = useMemo(() => {
-    const pts: { period: number; axis: number; name: string }[] = []
-    for (const r of rows) {
-      if (typeof r.pl_orbper === 'number' && typeof r.pl_orbsmax === 'number') {
-        pts.push({ period: r.pl_orbper, axis: r.pl_orbsmax, name: r.pl_name })
-      }
-      if (pts.length >= 1500) break
-    }
-    return pts
+  const temperatureDistData = useMemo(() => {
+    const bins = [
+      { label: '0-200K', min: 0, max: 200 },
+      { label: '200-400K', min: 200, max: 400 },
+      { label: '400-600K', min: 400, max: 600 },
+      { label: '600-800K', min: 600, max: 800 },
+      { label: '800-1000K', min: 800, max: 1000 },
+      { label: '1000K+', min: 1000, max: Infinity },
+    ]
+    const counts: Record<string, number> = {}
+    rows.forEach(r => {
+      const val = typeof r.pl_eqt === 'string' ? parseFloat(r.pl_eqt) : r.pl_eqt
+      if (!val && val !== 0) return
+      const bin = bins.find(b => val >= b.min && val < b.max)
+      if (!bin) return
+      counts[bin.label] = (counts[bin.label] || 0) + 1
+    })
+    return bins.map(b => ({ bin: b.label, count: counts[b.label] || 0 }))
   }, [rows])
+
+  const stellarTypesData = useMemo(() => {
+    const counts: Record<string, number> = {}
+    rows.forEach(r => {
+      const teff = typeof r.st_teff === 'string' ? parseFloat(r.st_teff) : r.st_teff
+      if (!teff) return
+      let type = 'Unknown'
+      if (teff >= 30000) type = 'O-type'
+      else if (teff >= 10000) type = 'B-type'
+      else if (teff >= 7500) type = 'A-type'
+      else if (teff >= 6000) type = 'F-type'
+      else if (teff >= 5200) type = 'G-type'
+      else if (teff >= 3700) type = 'K-type'
+      else if (teff >= 2400) type = 'M-type'
+      else type = 'L/T-type'
+      counts[type] = (counts[type] || 0) + 1
+    })
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, value]) => ({ name, value, color: getStellarTypeColor(name) }))
+  }, [rows])
+
+  const getStellarTypeColor = (type: string) => {
+    const colors: Record<string, string> = {
+      'O-type': '#9bb5ff',
+      'B-type': '#aabfff',
+      'A-type': '#cad7ff',
+      'F-type': '#f8f7ff',
+      'G-type': '#fff4ea',
+      'K-type': '#ffd2a1',
+      'M-type': '#ff8c69',
+      'L/T-type': '#ff6b47',
+      'Unknown': '#6b7280'
+    }
+    return colors[type] || '#6b7280'
+  }
 
   const renderChart = () => {
     if (loading) {
@@ -314,36 +361,49 @@ export default function StatisticalCharts() {
           </ResponsiveContainer>
         )
 
-      case 'period-axis':
+      case 'temperature-dist':
         return (
           <ResponsiveContainer width="100%" height={350}>
-            <ScatterChart data={periodAxisData}>
+            <BarChart data={temperatureDistData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis dataKey="period" type="number" scale="log" stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} label={{ value: 'Orbital Period (days)', position: 'insideBottom', offset: -5, fill: '#9CA3AF' }} />
-              <YAxis dataKey="axis" type="number" scale="log" stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} label={{ value: 'Semi-Major Axis (AU)', angle: -90, position: 'insideLeft', fill: '#9CA3AF' }} />
-              <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px', color: '#F9FAFB' }} formatter={(value, name) => [value, name]} labelFormatter={(label, payload) => payload?.[0]?.payload?.name || 'Planet'} />
-              <Scatter name="Planets" fill="#ef7454" />
-            </ScatterChart>
+              <XAxis dataKey="bin" stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} />
+              <YAxis stroke="#9CA3AF" tick={{ fill: '#9CA3AF' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '8px', color: '#F9FAFB' }} />
+              <Legend />
+              <Bar dataKey="count" name="Planets" fill="#ff6b47" />
+            </BarChart>
           </ResponsiveContainer>
         )
 
-      case 'habitable-zone':
+      case 'stellar-types':
         return (
-          <div className="h-350 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-64 h-64 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center">
-                <div className="w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold">Star</span>
-                </div>
-              </div>
-              <p className="text-light-text-secondary dark:text-dark-text-secondary">
-                Habitable Zone Visualization
-              </p>
-              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2">
-                Interactive habitable zone calculator coming soon
-              </p>
-            </div>
-          </div>
+          <ResponsiveContainer width="100%" height={350}>
+            <PieChart>
+              <Pie
+                data={stellarTypesData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={120}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {stellarTypesData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: '#1F2937',
+                  border: '1px solid #374151',
+                  borderRadius: '8px',
+                  color: '#F9FAFB'
+                }}
+              />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         )
 
       default:
@@ -407,24 +467,24 @@ export default function StatisticalCharts() {
           Mass Distribution
         </button>
         <button
-          onClick={() => setActiveChart('period-axis')}
+          onClick={() => setActiveChart('temperature-dist')}
           className={`px-4 py-2 text-sm rounded-md transition-colors ${
-            activeChart === 'period-axis'
+            activeChart === 'temperature-dist'
               ? 'bg-primary-dark-blue text-white'
               : 'bg-light-surface dark:bg-dark-surface text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover'
           }`}
         >
-          Period vs Axis
+          Temperature Distribution
         </button>
         <button
-          onClick={() => setActiveChart('habitable-zone')}
+          onClick={() => setActiveChart('stellar-types')}
           className={`px-4 py-2 text-sm rounded-md transition-colors ${
-            activeChart === 'habitable-zone'
+            activeChart === 'stellar-types'
               ? 'bg-primary-dark-blue text-white'
               : 'bg-light-surface dark:bg-dark-surface text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover'
           }`}
         >
-          Habitable Zone
+          Stellar Types
         </button>
       </div>
 
@@ -450,9 +510,14 @@ export default function StatisticalCharts() {
             Distribution of exoplanet discoveries by detection method. Transit photometry has been the most successful technique.
           </p>
         )}
-        {activeChart === 'habitable-zone' && (
+        {activeChart === 'temperature-dist' && (
           <p>
-            Conceptual visualization of the habitable zone around a star where liquid water could exist on a planet&apos;s surface.
+            Distribution of exoplanet equilibrium temperatures. Most planets cluster around 200-800K, with some extreme cases reaching over 1000K.
+          </p>
+        )}
+        {activeChart === 'stellar-types' && (
+          <p>
+            Distribution of host star types based on effective temperature. M-type (red dwarf) stars are most common, followed by G-type (Sun-like) stars.
           </p>
         )}
       </div>

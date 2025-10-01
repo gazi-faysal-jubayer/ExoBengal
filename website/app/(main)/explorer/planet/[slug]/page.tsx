@@ -9,7 +9,6 @@ import type { ExplorerPlanetRow } from '@/lib/csv-loader'
 import { trackPlanetView } from '@/lib/analytics'
 import { PlanetHero } from '@/components/explorer/planet/planet-hero'
 import { KeyFactsGrid } from '@/components/explorer/planet/key-facts-grid'
-import { ArtistConception } from '@/components/explorer/planet/artist-conception'
 import { DiscoverySection } from '@/components/explorer/planet/discovery-section'
 import { KeepExploring } from '@/components/explorer/planet/keep-exploring'
 import { TargetIdentifiers } from '@/components/explorer/planet/target-identifiers'
@@ -35,9 +34,6 @@ import {
   Telescope,
   Activity
 } from 'lucide-react'
-import dynamic from 'next/dynamic'
-
-const OrbitalSystemViewer = dynamic(() => import('@/components/explorer/orbital-system-viewer'), { ssr: false })
 
 interface PlanetPageProps {
   params: {
@@ -196,28 +192,15 @@ export default function PlanetPage({ params }: PlanetPageProps) {
               {/* Target Identifiers */}
               <TargetIdentifiers planet={planet} />
               
-              {/* Interactive Visualizations */}
+              {/* NASA Eyes Visualization */}
               <div>
                 <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-6">
-                  Interactive Visualizations
+                  Interactive Visualization
                 </h3>
                 
-                {/* NASA Eyes - Full Width at Top */}
+                {/* NASA Eyes - Full Width */}
                 <div className="mb-8">
                   <NASAEyesCard planet={planet} />
-                </div>
-                
-                {/* Orbital System and Artist's Conception */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="text-md font-medium text-light-text-primary dark:text-dark-text-primary mb-4">
-                      Orbital System
-                    </h4>
-                    <div className="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-lg overflow-hidden">
-                      <OrbitalSystemViewer hostName={planet.hostname} />
-                    </div>
-                  </div>
-                  <ArtistConception planet={planet} />
                 </div>
               </div>
               
@@ -266,10 +249,10 @@ export default function PlanetPage({ params }: PlanetPageProps) {
                     Interactive System Analysis
                   </h3>
                   <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-6">
-                    Explore the {planet.hostname || planet.pl_name} system with enhanced controls and real-time orbital data
+                    Advanced analysis tools and comparisons with other exoplanets coming soon.
                   </p>
-                  <div className="h-[600px]">
-                    <OrbitalSystemViewer hostName={planet.hostname} />
+                  <div className="h-[300px] flex items-center justify-center text-light-text-secondary dark:text-dark-text-secondary">
+                    <p>Analysis tools will be available in a future update.</p>
                   </div>
                 </div>
               </div>
