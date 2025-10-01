@@ -4113,7 +4113,7 @@ For licensing questions or commercial use inquiries:
 - Consider contributing the implementation
 
 **Security Issues**
-- Email security@exobengal.ai for sensitive issues
+- Email gazi.faysal.jubayer@gmail.com for sensitive issues
 - Use GitHub Security Advisories for public issues
 - Follow responsible disclosure practices
 
