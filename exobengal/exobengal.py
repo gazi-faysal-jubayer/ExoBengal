@@ -105,6 +105,16 @@ class DetectExoplanet:
             input_array = self.scaler.transform(input_array)
         return input_array
 
+    def _get_original_params(self, input_data):
+        """Extract original parameters for ESI calculation before scaling"""
+        if isinstance(input_data, ExoParams):
+            prad = input_data.prad if input_data.prad is not None else 0
+            teq = input_data.teq if input_data.teq is not None else 0
+        else:
+            prad = input_data[1] if input_data[1] is not None else 0
+            teq = input_data[2] if input_data[2] is not None else 0
+        return prad, teq
+
     # ============================================================
     # Random Forest
     # ============================================================
@@ -172,7 +182,9 @@ class DetectExoplanet:
 
         result = {"prediction": label, "probability": float(probability)}
         if label == "Planet":
-            result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
+            # Get original parameters before scaling for ESI calculation
+            prad, teq = self._get_original_params(input_data)
+            result["ESI"] = self.calculate_esi(prad, teq)
         return result
 
     # ============================================================
@@ -239,7 +251,9 @@ class DetectExoplanet:
         label = "Planet" if probability >= 0.6 else "Not a Planet"
         result = {"prediction": label, "probability": float(probability)}
         if label == "Planet":
-            result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
+            # Get original parameters before scaling for ESI calculation
+            prad, teq = self._get_original_params(input_data)
+            result["ESI"] = self.calculate_esi(prad, teq)
         return result
 
     # ============================================================
@@ -293,6 +307,7 @@ class DetectExoplanet:
         self.imputer = joblib.load(self.imputer_path)
 
     def knn(self, input_data):
+        
         if self.knn_model is None:
             self.load_knn()
         input_array = self._prepare_input(input_data)
@@ -300,7 +315,9 @@ class DetectExoplanet:
         label = "Planet" if probability >= 0.6 else "Not a Planet"
         result = {"prediction": label, "probability": float(probability)}
         if label == "Planet":
-            result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
+            # Get original parameters before scaling for ESI calculation
+            prad, teq = self._get_original_params(input_data)
+            result["ESI"] = self.calculate_esi(prad, teq)
         return result
 
     # ============================================================
@@ -382,5 +399,7 @@ class DetectExoplanet:
         label = "Planet" if probability > 0.6 else "Not a Planet"
         result = {"prediction": label, "probability": float(probability)}
         if label == "Planet":
-            result["ESI"] = self.calculate_esi(input_array[0][1], input_array[0][2])
+            # Get original parameters before scaling for ESI calculation
+            prad, teq = self._get_original_params(input_data)
+            result["ESI"] = self.calculate_esi(prad, teq)
         return result
