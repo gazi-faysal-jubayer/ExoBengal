@@ -1,12 +1,11 @@
-# ExoBengal API 🌌
+# ExoBengal API
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A FastAPI-based REST API for exoplanet detection and analysis using machine learning models. This API provides endpoints to predict exoplanet characteristics using various ML algorithms including Random Forest, Decision Tree, K-Nearest Neighbors, and Convolutional Neural Networks.
 
 ## Features
-
 - **Multiple ML Models**: Support for Random Forest, Decision Tree, KNN, and CNN models
 - **Earth Similarity Index (ESI)**: Calculate how similar an exoplanet is to Earth
 - **Batch Processing**: Analyze multiple exoplanets in a single request
