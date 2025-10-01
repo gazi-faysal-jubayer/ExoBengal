@@ -1,0 +1,569 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "seaborn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "seaborn",
+        "description": "seaborn",
+        "detail": "seaborn",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "SimpleImputer",
+        "importPath": "sklearn.impute",
+        "description": "sklearn.impute",
+        "isExtraImport": true,
+        "detail": "sklearn.impute",
+        "documentation": {}
+    },
+    {
+        "label": "StandardScaler",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "train_test_split",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "GridSearchCV",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "RandomForestClassifier",
+        "importPath": "sklearn.ensemble",
+        "description": "sklearn.ensemble",
+        "isExtraImport": true,
+        "detail": "sklearn.ensemble",
+        "documentation": {}
+    },
+    {
+        "label": "DecisionTreeClassifier",
+        "importPath": "sklearn.tree",
+        "description": "sklearn.tree",
+        "isExtraImport": true,
+        "detail": "sklearn.tree",
+        "documentation": {}
+    },
+    {
+        "label": "KNeighborsClassifier",
+        "importPath": "sklearn.neighbors",
+        "description": "sklearn.neighbors",
+        "isExtraImport": true,
+        "detail": "sklearn.neighbors",
+        "documentation": {}
+    },
+    {
+        "label": "classification_report",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "confusion_matrix",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "roc_auc_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "joblib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "joblib",
+        "description": "joblib",
+        "detail": "joblib",
+        "documentation": {}
+    },
+    {
+        "label": "tensorflow",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tensorflow",
+        "description": "tensorflow",
+        "detail": "tensorflow",
+        "documentation": {}
+    },
+    {
+        "label": "load_model",
+        "importPath": "tensorflow.keras.models",
+        "description": "tensorflow.keras.models",
+        "isExtraImport": true,
+        "detail": "tensorflow.keras.models",
+        "documentation": {}
+    },
+    {
+        "label": "Sequential",
+        "importPath": "tensorflow.keras.models",
+        "description": "tensorflow.keras.models",
+        "isExtraImport": true,
+        "detail": "tensorflow.keras.models",
+        "documentation": {}
+    },
+    {
+        "label": "Dense",
+        "importPath": "tensorflow.keras.layers",
+        "description": "tensorflow.keras.layers",
+        "isExtraImport": true,
+        "detail": "tensorflow.keras.layers",
+        "documentation": {}
+    },
+    {
+        "label": "Dropout",
+        "importPath": "tensorflow.keras.layers",
+        "description": "tensorflow.keras.layers",
+        "isExtraImport": true,
+        "detail": "tensorflow.keras.layers",
+        "documentation": {}
+    },
+    {
+        "label": "EarlyStopping",
+        "importPath": "tensorflow.keras.callbacks",
+        "description": "tensorflow.keras.callbacks",
+        "isExtraImport": true,
+        "detail": "tensorflow.keras.callbacks",
+        "documentation": {}
+    },
+    {
+        "label": "ModelCheckpoint",
+        "importPath": "tensorflow.keras.callbacks",
+        "description": "tensorflow.keras.callbacks",
+        "isExtraImport": true,
+        "detail": "tensorflow.keras.callbacks",
+        "documentation": {}
+    },
+    {
+        "label": "warnings",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "warnings",
+        "description": "warnings",
+        "detail": "warnings",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "uvicorn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uvicorn",
+        "description": "uvicorn",
+        "detail": "uvicorn",
+        "documentation": {}
+    },
+    {
+        "label": "DetectExoplanet",
+        "importPath": "exobengal",
+        "description": "exobengal",
+        "isExtraImport": true,
+        "detail": "exobengal",
+        "documentation": {}
+    },
+    {
+        "label": "InconsistentVersionWarning",
+        "importPath": "sklearn.exceptions",
+        "description": "sklearn.exceptions",
+        "isExtraImport": true,
+        "detail": "sklearn.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "ExoParams",
+        "kind": 6,
+        "importPath": "exobengal.exobengal",
+        "description": "exobengal.exobengal",
+        "peekOfCode": "class ExoParams:\n    def __init__(self, period=None, prad=None, teq=None, srad=None,\n                 slog_g=None, steff=None, impact=None, duration=None, depth=None):\n        self.period = period\n        self.prad = prad\n        self.teq = teq\n        self.srad = srad\n        self.slog_g = slog_g\n        self.steff = steff\n        self.impact = impact",
+        "detail": "exobengal.exobengal",
+        "documentation": {}
+    },
+    {
+        "label": "DetectExoplanet",
+        "kind": 6,
+        "importPath": "exobengal.exobengal",
+        "description": "exobengal.exobengal",
+        "peekOfCode": "class DetectExoplanet:\n    def __init__(self,\n                 rf_model_path=str(MODELS_DIR / \"random_forest_classifier.pkl\"),\n                 dt_model_path=str(MODELS_DIR / \"decision_tree_classifier.pkl\"),\n                 cnn_model_path=str(MODELS_DIR / \"cnn_model.h5\"),\n                 knn_model_path=str(MODELS_DIR / \"knn_model.pkl\"),\n                 scaler_path=str(MODELS_DIR / \"scaler.pkl\"),\n                 imputer_path=str(MODELS_DIR / \"imputer.pkl\")):\n        self.model_path = rf_model_path\n        self.dt_model_path = dt_model_path",
+        "detail": "exobengal.exobengal",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_DIR",
+        "kind": 5,
+        "importPath": "exobengal.exobengal",
+        "description": "exobengal.exobengal",
+        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parent\nMODELS_DIR = BASE_DIR.parent / \"models\"\nDATA_DIR = BASE_DIR.parent / \"data\"\nMODELS_DIR.mkdir(parents=True, exist_ok=True)\nclass ExoParams:\n    def __init__(self, period=None, prad=None, teq=None, srad=None,\n                 slog_g=None, steff=None, impact=None, duration=None, depth=None):\n        self.period = period\n        self.prad = prad\n        self.teq = teq",
+        "detail": "exobengal.exobengal",
+        "documentation": {}
+    },
+    {
+        "label": "MODELS_DIR",
+        "kind": 5,
+        "importPath": "exobengal.exobengal",
+        "description": "exobengal.exobengal",
+        "peekOfCode": "MODELS_DIR = BASE_DIR.parent / \"models\"\nDATA_DIR = BASE_DIR.parent / \"data\"\nMODELS_DIR.mkdir(parents=True, exist_ok=True)\nclass ExoParams:\n    def __init__(self, period=None, prad=None, teq=None, srad=None,\n                 slog_g=None, steff=None, impact=None, duration=None, depth=None):\n        self.period = period\n        self.prad = prad\n        self.teq = teq\n        self.srad = srad",
+        "detail": "exobengal.exobengal",
+        "documentation": {}
+    },
+    {
+        "label": "DATA_DIR",
+        "kind": 5,
+        "importPath": "exobengal.exobengal",
+        "description": "exobengal.exobengal",
+        "peekOfCode": "DATA_DIR = BASE_DIR.parent / \"data\"\nMODELS_DIR.mkdir(parents=True, exist_ok=True)\nclass ExoParams:\n    def __init__(self, period=None, prad=None, teq=None, srad=None,\n                 slog_g=None, steff=None, impact=None, duration=None, depth=None):\n        self.period = period\n        self.prad = prad\n        self.teq = teq\n        self.srad = srad\n        self.slog_g = slog_g",
+        "detail": "exobengal.exobengal",
+        "documentation": {}
+    },
+    {
+        "label": "ExoplanetInput",
+        "kind": 6,
+        "importPath": "exobengal-api.app",
+        "description": "exobengal-api.app",
+        "peekOfCode": "class ExoplanetInput(BaseModel):\n    period: float = Field(..., description=\"Orbital period (days)\", example=365.0)\n    prad: float = Field(..., description=\"Planet radius (Earth radii)\", example=1.0)\n    teq: float = Field(..., description=\"Equilibrium temperature (Kelvin)\", example=288.0)\n    srad: float = Field(..., description=\"Stellar radius (solar radii)\", example=1.0)\n    slog_g: float = Field(..., description=\"Stellar surface gravity (log scale)\", example=4.44)\n    steff: float = Field(..., description=\"Stellar effective temperature (Kelvin)\", example=5778)\n    impact: float = Field(..., description=\"Impact parameter (related to transit geometry)\", example=0.1)\n    duration: float = Field(..., description=\"Transit duration (hours)\", example=5.0)\n    depth: float = Field(..., description=\"Transit depth (parts per million)\", example=100.0)",
+        "detail": "exobengal-api.app",
+        "documentation": {}
+    },
+    {
+        "label": "PredictionResponse",
+        "kind": 6,
+        "importPath": "exobengal-api.app",
+        "description": "exobengal-api.app",
+        "peekOfCode": "class PredictionResponse(BaseModel):\n    random_forest: Optional[Dict[str, Any]] = None\n    decision_tree: Optional[Dict[str, Any]] = None\n    knn: Optional[Dict[str, Any]] = None\n    cnn: Optional[Dict[str, Any]] = None\n    esi: float\n    input_data: Dict[str, Any]\n    models_executed: List[str]\nclass HealthResponse(BaseModel):\n    status: str",
+        "detail": "exobengal-api.app",
+        "documentation": {}
+    },
+    {
+        "label": "HealthResponse",
+        "kind": 6,
+        "importPath": "exobengal-api.app",
+        "description": "exobengal-api.app",
+        "peekOfCode": "class HealthResponse(BaseModel):\n    status: str\n    message: str\n@app.get(\"/\", response_model=Dict[str, str])\nasync def root():\n    \"\"\"Root endpoint\"\"\"\n    return {\n        \"message\": \"Welcome to ExoBengal API\",\n        \"version\": \"1.0.0\",\n        \"docs\": \"/docs\"",
+        "detail": "exobengal-api.app",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "exobengal-api.app",
+        "description": "exobengal-api.app",
+        "peekOfCode": "app = FastAPI(\n    title=\"ExoBengal API\",\n    description=\"Exoplanet Detection API using Machine Learning Models\",\n    version=\"1.0.0\"\n)\n# Initialize the detector\ndetector = DetectExoplanet(\n    rf_model_path='../models/random_forest_classifier.pkl',\n    dt_model_path='../models/decision_tree_classifier.pkl',\n    cnn_model_path='../models/cnn_model.h5',",
+        "detail": "exobengal-api.app",
+        "documentation": {}
+    },
+    {
+        "label": "detector",
+        "kind": 5,
+        "importPath": "exobengal-api.app",
+        "description": "exobengal-api.app",
+        "peekOfCode": "detector = DetectExoplanet(\n    rf_model_path='../models/random_forest_classifier.pkl',\n    dt_model_path='../models/decision_tree_classifier.pkl',\n    cnn_model_path='../models/cnn_model.h5',\n    knn_model_path='../models/knn_model.pkl',\n    scaler_path='../models/scaler.pkl',\n    imputer_path='../models/imputer.pkl'\n)\n# Pydantic models for request/response\nclass ExoplanetInput(BaseModel):",
+        "detail": "exobengal-api.app",
+        "documentation": {}
+    },
+    {
+        "label": "test_single_prediction",
+        "kind": 2,
+        "importPath": "exobengal-api.test_api",
+        "description": "exobengal-api.test_api",
+        "peekOfCode": "def test_single_prediction():\n    \"\"\"Test single prediction endpoint\"\"\"\n    print(\"Testing single prediction...\")\n    # Earth-like sample\n    sample_data = {\n        \"period\": 365.25,\n        \"prad\": 1.0,\n        \"teq\": 288.0,\n        \"srad\": 1.0,\n        \"slog_g\": 4.44,",
+        "detail": "exobengal-api.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_batch_prediction",
+        "kind": 2,
+        "importPath": "exobengal-api.test_api",
+        "description": "exobengal-api.test_api",
+        "peekOfCode": "def test_batch_prediction():\n    \"\"\"Test batch prediction endpoint\"\"\"\n    print(\"\\nTesting batch prediction...\")\n    batch_data = {\n        \"earth_like\": {\n            \"period\": 365.25,\n            \"prad\": 1.0,\n            \"teq\": 288.0,\n            \"srad\": 1.0,\n            \"slog_g\": 4.44,",
+        "detail": "exobengal-api.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_health_check",
+        "kind": 2,
+        "importPath": "exobengal-api.test_api",
+        "description": "exobengal-api.test_api",
+        "peekOfCode": "def test_health_check():\n    \"\"\"Test health check endpoint\"\"\"\n    print(\"\\nTesting health check...\")\n    response = requests.get(f\"{BASE_URL}/health\")\n    if response.status_code == 200:\n        result = response.json()\n        print(f\"✅ Health check: {result['status']} - {result['message']}\")\n    else:\n        print(f\"❌ Health check failed: {response.status_code}\")\ndef test_models_info():",
+        "detail": "exobengal-api.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_models_info",
+        "kind": 2,
+        "importPath": "exobengal-api.test_api",
+        "description": "exobengal-api.test_api",
+        "peekOfCode": "def test_models_info():\n    \"\"\"Test models info endpoint\"\"\"\n    print(\"\\nTesting models info...\")\n    response = requests.get(f\"{BASE_URL}/models/info\")\n    if response.status_code == 200:\n        result = response.json()\n        print(\"✅ Models info retrieved successfully!\")\n        print(f\"Available models: {len(result['available_models'])}\")\n        for model in result['available_models']:\n            print(f\"  - {model['name']} ({model['type']})\")",
+        "detail": "exobengal-api.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_with_notebook_samples",
+        "kind": 2,
+        "importPath": "exobengal-api.test_api",
+        "description": "exobengal-api.test_api",
+        "peekOfCode": "def test_with_notebook_samples():\n    \"\"\"Test with the samples from your notebook\"\"\"\n    print(\"\\nTesting with notebook samples...\")\n    # Sample data from your notebook\n    samples = {\n        \"earth_like\": {\n            \"period\": 365.25,\n            \"prad\": 1.0,\n            \"teq\": 288.0,\n            \"srad\": 1.0,",
+        "detail": "exobengal-api.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_URL",
+        "kind": 5,
+        "importPath": "exobengal-api.test_api",
+        "description": "exobengal-api.test_api",
+        "peekOfCode": "BASE_URL = \"http://localhost:8000\"\ndef test_single_prediction():\n    \"\"\"Test single prediction endpoint\"\"\"\n    print(\"Testing single prediction...\")\n    # Earth-like sample\n    sample_data = {\n        \"period\": 365.25,\n        \"prad\": 1.0,\n        \"teq\": 288.0,\n        \"srad\": 1.0,",
+        "detail": "exobengal-api.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_specific_models",
+        "kind": 2,
+        "importPath": "exobengal-api.test_model_selection",
+        "description": "exobengal-api.test_model_selection",
+        "peekOfCode": "def test_specific_models():\n    \"\"\"Test prediction with specific models only\"\"\"\n    print(\"🔬 Testing specific model selection...\")\n    # Earth-like sample with only Random Forest and CNN\n    sample_data = {\n        \"period\": 365.25,\n        \"prad\": 1.0,\n        \"teq\": 288.0,\n        \"srad\": 1.0,\n        \"slog_g\": 4.44,",
+        "detail": "exobengal-api.test_model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "test_single_model",
+        "kind": 2,
+        "importPath": "exobengal-api.test_model_selection",
+        "description": "exobengal-api.test_model_selection",
+        "peekOfCode": "def test_single_model():\n    \"\"\"Test prediction with only one model\"\"\"\n    print(\"\\n🎯 Testing single model (CNN only)...\")\n    sample_data = {\n        \"period\": 3.5,\n        \"prad\": 1.2,\n        \"teq\": 1200.0,\n        \"srad\": 1.1,\n        \"slog_g\": 4.3,\n        \"steff\": 6000,",
+        "detail": "exobengal-api.test_model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "test_all_models",
+        "kind": 2,
+        "importPath": "exobengal-api.test_model_selection",
+        "description": "exobengal-api.test_model_selection",
+        "peekOfCode": "def test_all_models():\n    \"\"\"Test prediction with all models (default behavior)\"\"\"\n    print(\"\\n🌟 Testing all models (default)...\")\n    sample_data = {\n        \"period\": 50.0,\n        \"prad\": 1.8,\n        \"teq\": 350.0,\n        \"srad\": 0.9,\n        \"slog_g\": 4.5,\n        \"steff\": 5200,",
+        "detail": "exobengal-api.test_model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "test_invalid_model",
+        "kind": 2,
+        "importPath": "exobengal-api.test_model_selection",
+        "description": "exobengal-api.test_model_selection",
+        "peekOfCode": "def test_invalid_model():\n    \"\"\"Test prediction with invalid model name\"\"\"\n    print(\"\\n❌ Testing invalid model name...\")\n    sample_data = {\n        \"period\": 365.0,\n        \"prad\": 1.0,\n        \"teq\": 288.0,\n        \"srad\": 1.0,\n        \"slog_g\": 4.44,\n        \"steff\": 5778,",
+        "detail": "exobengal-api.test_model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "test_batch_with_models",
+        "kind": 2,
+        "importPath": "exobengal-api.test_model_selection",
+        "description": "exobengal-api.test_model_selection",
+        "peekOfCode": "def test_batch_with_models():\n    \"\"\"Test batch prediction with different models for each sample\"\"\"\n    print(\"\\n📦 Testing batch prediction with model selection...\")\n    batch_data = {\n        \"earth_like_rf_only\": {\n            \"period\": 365.25,\n            \"prad\": 1.0,\n            \"teq\": 288.0,\n            \"srad\": 1.0,\n            \"slog_g\": 4.44,",
+        "detail": "exobengal-api.test_model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_URL",
+        "kind": 5,
+        "importPath": "exobengal-api.test_model_selection",
+        "description": "exobengal-api.test_model_selection",
+        "peekOfCode": "BASE_URL = \"http://localhost:8000\"\ndef test_specific_models():\n    \"\"\"Test prediction with specific models only\"\"\"\n    print(\"🔬 Testing specific model selection...\")\n    # Earth-like sample with only Random Forest and CNN\n    sample_data = {\n        \"period\": 365.25,\n        \"prad\": 1.0,\n        \"teq\": 288.0,\n        \"srad\": 1.0,",
+        "detail": "exobengal-api.test_model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "_Known",
+        "kind": 6,
+        "importPath": "website.node_modules.flatted.python.flatted",
+        "description": "website.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _Known:\n    def __init__(self):\n        self.key = []\n        self.value = []\nclass _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0",
+        "detail": "website.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "_String",
+        "kind": 6,
+        "importPath": "website.node_modules.flatted.python.flatted",
+        "description": "website.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    keys = []\n    i = 0\n    for _ in value:\n        keys.append(i)\n        i += 1\n    return keys",
+        "detail": "website.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "kind": 2,
+        "importPath": "website.node_modules.flatted.python.flatted",
+        "description": "website.node_modules.flatted.python.flatted",
+        "peekOfCode": "def parse(value, *args, **kwargs):\n    json = _json.loads(value, *args, **kwargs)\n    wrapped = []\n    for value in json:\n        wrapped.append(_wrap(value))\n    input = []\n    for value in wrapped:\n        if isinstance(value, _String):\n            input.append(value.value)\n        else:",
+        "detail": "website.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "website.node_modules.flatted.python.flatted",
+        "description": "website.node_modules.flatted.python.flatted",
+        "peekOfCode": "def stringify(value, *args, **kwargs):\n    known = _Known()\n    input = []\n    output = []\n    i = int(_index(known, input, value))\n    while i < len(input):\n        output.append(_transform(known, input, input[i]))\n        i += 1\n    return _json.dumps(output, *args, **kwargs)",
+        "detail": "website.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "download",
+        "kind": 2,
+        "importPath": "website.node_modules.plotly.js..circleci.download_google_fonts",
+        "description": "website.node_modules.plotly.js..circleci.download_google_fonts",
+        "peekOfCode": "def download(repo, family, types) :\n    for t in types :\n        name = family + t + '.ttf'\n        url = repo + name + '?raw=true'\n        print(url)\n        req = requests.get(url, allow_redirects=True)\n        open(dirOut + name, 'wb').write(req.content)\ndownload(\n    'https://github.com/googlefonts/noto-fonts/blob/main/hinted/ttf/NotoSansMono/',\n    'NotoSansMono',",
+        "detail": "website.node_modules.plotly.js..circleci.download_google_fonts",
+        "documentation": {}
+    },
+    {
+        "label": "dirOut",
+        "kind": 5,
+        "importPath": "website.node_modules.plotly.js..circleci.download_google_fonts",
+        "description": "website.node_modules.plotly.js..circleci.download_google_fonts",
+        "peekOfCode": "dirOut = '.circleci/fonts/truetype/googleFonts/'\ndef download(repo, family, types) :\n    for t in types :\n        name = family + t + '.ttf'\n        url = repo + name + '?raw=true'\n        print(url)\n        req = requests.get(url, allow_redirects=True)\n        open(dirOut + name, 'wb').write(req.content)\ndownload(\n    'https://github.com/googlefonts/noto-fonts/blob/main/hinted/ttf/NotoSansMono/',",
+        "detail": "website.node_modules.plotly.js..circleci.download_google_fonts",
+        "documentation": {}
+    }
+]
