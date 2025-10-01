@@ -6,39 +6,27 @@ import { Code, Key, Database, Shield, ArrowRight, Copy, ExternalLink } from 'luc
 
 const endpoints = [
   {
-    path: '/',
-    method: 'GET',
-    description: 'Root endpoint with API information',
+    path: '/health_check',
+    method: 'POST',
+    description: 'Health check endpoint to verify API status and deployment health',
     params: [],
   },
   {
-    path: '/health',
-    method: 'GET',
-    description: 'Health check endpoint to verify API status',
-    params: [],
-  },
-  {
-    path: '/models/info',
-    method: 'GET',
-    description: 'Information about available models and input parameters',
+    path: '/get_model_info',
+    method: 'POST',
+    description: 'Information about available models, input parameters, and deployment configuration',
     params: [],
   },
   {
     path: '/predict',
     method: 'POST',
-    description: 'Single exoplanet prediction using ML models',
+    description: 'Single exoplanet prediction using ML models with Earth Similarity Index calculation',
     params: ['period', 'prad', 'teq', 'srad', 'slog_g', 'steff', 'impact', 'duration', 'depth', 'models'],
   },
   {
-    path: '/predict/batch',
+    path: '/init',
     method: 'POST',
-    description: 'Batch predictions for multiple exoplanet samples',
-    params: ['sample1', 'sample2', '...', 'models'],
-  },
-  {
-    path: '/docs',
-    method: 'GET',
-    description: 'Interactive API documentation (Swagger UI)',
+    description: 'Manual model initialization for faster subsequent requests',
     params: [],
   },
 ]
@@ -46,61 +34,74 @@ const endpoints = [
 const codeExamples = {
   python: `import requests
 
-# Single prediction
-url = "http://localhost:8000/predict"
+url = "https://api.aws.us-east-1.cerebrium.ai/v4/p-e08fc93f/exobengal-api/predict"
+headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+}
 data = {
-    "period": 365.0,
-    "prad": 1.0,
-    "teq": 288.0,
-    "srad": 1.0,
-    "slog_g": 4.44,
-    "steff": 5778,
-    "impact": 0.1,
-    "duration": 5.0,
-    "depth": 100.0,
-    "models": ["random_forest", "cnn"]
+    "item": {
+        "period": 365.0,
+        "prad": 1.0,
+        "teq": 288.0,
+        "srad": 1.0,
+        "slog_g": 4.44,
+        "steff": 5778.0,
+        "impact": 0.1,
+        "duration": 5.0,
+        "depth": 100.0,
+        "models": ["random_forest", "cnn"]
+    }
 }
 
-response = requests.post(url, json=data)
+response = requests.post(url, json=data, headers=headers)
 result = response.json()
-print(f"ESI: {result['esi']}")
-print(f"Random Forest Prediction: {result['random_forest']['prediction']}")`,
+print(f"Run ID: {result['run_id']}")
+print(f"ESI: {result['result']['esi']}")
+print(f"Predictions: {result['result']['predictions']}")`,
 
-  curl: `curl -X POST "http://localhost:8000/predict" \\
-     -H "Content-Type: application/json" \\
-     -d '{
-       "period": 365.0,
-       "prad": 1.0,
-       "teq": 288.0,
-       "srad": 1.0,
-       "slog_g": 4.44,
-       "steff": 5778,
-       "impact": 0.1,
-       "duration": 5.0,
-       "depth": 100.0
-     }'`,
+  curl: `curl -X POST https://api.aws.us-east-1.cerebrium.ai/v4/p-e08fc93f/exobengal-api/predict \\
+  -H "Content-Type: application/json" \\
+  -H "Accept: application/json" \\
+  -d '{
+    "item": {
+      "period": 365.0,
+      "prad": 1.0,
+      "teq": 288.0,
+      "srad": 1.0,
+      "slog_g": 4.44,
+      "steff": 5778.0,
+      "impact": 0.1,
+      "duration": 5.0,
+      "depth": 100.0
+    }
+  }'`,
 
-  javascript: `const response = await fetch('http://localhost:8000/predict', {
+  javascript: `const response = await fetch('https://api.aws.us-east-1.cerebrium.ai/v4/p-e08fc93f/exobengal-api/predict', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
   body: JSON.stringify({
-    period: 365.0,
-    prad: 1.0,
-    teq: 288.0,
-    srad: 1.0,
-    slog_g: 4.44,
-    steff: 5778,
-    impact: 0.1,
-    duration: 5.0,
-    depth: 100.0,
-    models: ["random_forest"]
+    item: {
+      period: 365.0,
+      prad: 1.0,
+      teq: 288.0,
+      srad: 1.0,
+      slog_g: 4.44,
+      steff: 5778,
+      impact: 0.1,
+      duration: 5.0,
+      depth: 100.0,
+      models: ["random_forest", "cnn"]
+    }
   })
 });
 
 const data = await response.json();
-console.log('Prediction:', data);`,
+console.log('Run ID:', data.run_id);
+console.log('Predictions:', data.result.predictions);`,
 }
 
 export default function APIAccessPage() {
@@ -118,8 +119,8 @@ export default function APIAccessPage() {
             ExoBengal API Access
           </h1>
           <p className="text-xl text-light-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
-            Access ExoBengal&apos;s machine learning models for exoplanet detection and analysis. 
-            Use Random Forest, CNN, KNN, and Decision Tree models to predict exoplanet characteristics and calculate Earth Similarity Index.
+            Access ExoBengal&apos;s machine learning models deployed on Cerebrium Cloud Platform. 
+            Use Random Forest, CNN, KNN, and Decision Tree models to predict exoplanet characteristics and calculate Earth Similarity Index with auto-scaling and high availability.
           </p>
         </motion.div>
 
@@ -138,10 +139,10 @@ export default function APIAccessPage() {
             >
               <Key className="h-12 w-12 mx-auto mb-4 text-primary-dark-blue" />
               <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                1. No Authentication Required
+                1. Simple Authentication
               </h3>
               <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Free and open access to all API endpoints for research and development
+                Include Content-Type and Accept headers in your requests for proper API communication
               </p>
             </motion.div>
 
@@ -178,13 +179,13 @@ export default function APIAccessPage() {
 
           <div className="text-center">
             <a
-              href="http://localhost:8000/docs"
+              href="https://docs.cerebrium.ai"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary px-8 py-3 text-lg font-semibold inline-flex items-center gap-2"
             >
-              View Interactive Docs
-              <ArrowRight className="h-5 w-5" />
+              View Cerebrium Docs
+              <ExternalLink className="h-5 w-5" />
             </a>
           </div>
         </section>
@@ -195,7 +196,7 @@ export default function APIAccessPage() {
             API Endpoints
           </h2>
           <p className="text-lg text-light-text-secondary dark:text-dark-text-secondary mb-6">
-            Base URL: <code className="px-2 py-1 bg-light-surface dark:bg-dark-surface rounded font-mono">http://localhost:8000</code>
+            Base URL: <code className="px-2 py-1 bg-light-surface dark:bg-dark-surface rounded font-mono">https://api.aws.us-east-1.cerebrium.ai/v4/p-e08fc93f/exobengal-api/</code>
           </p>
 
           <div className="space-y-4">
@@ -210,11 +211,7 @@ export default function APIAccessPage() {
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <span className={`px-2 py-1 text-xs font-mono rounded ${
-                        endpoint.method === 'GET' 
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                          : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                      }`}>
+                      <span className="px-2 py-1 text-xs font-mono rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                         {endpoint.method}
                       </span>
                       <code className="text-lg font-mono text-primary-dark-blue dark:text-primary-light-blue">
@@ -227,21 +224,28 @@ export default function APIAccessPage() {
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="text-sm font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
-                    Parameters:
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {endpoint.params.map((param) => (
-                      <span
-                        key={param}
-                        className="px-2 py-1 text-xs bg-light-surface dark:bg-dark-surface rounded font-mono"
-                      >
-                        {param}
-                      </span>
-                    ))}
+                {endpoint.params.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                      Parameters:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {endpoint.params.map((param) => (
+                        <span
+                          key={param}
+                          className="px-2 py-1 text-xs bg-light-surface dark:bg-dark-surface rounded font-mono"
+                        >
+                          {param}
+                        </span>
+                      ))}
+                    </div>
+                    {endpoint.path === '/predict' && (
+                      <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-2">
+                        Note: Request body must include an 'item' object with all parameters
+                      </p>
+                    )}
                   </div>
-                </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -275,6 +279,151 @@ export default function APIAccessPage() {
                 </pre>
               </motion.div>
             ))}
+          </div>
+        </section>
+
+        {/* Response Format */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-8">
+            Response Format
+          </h2>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="card overflow-hidden"
+          >
+            <div className="flex items-center justify-between p-4 bg-light-surface dark:bg-dark-surface border-b border-light-border dark:border-dark-border">
+              <h3 className="font-semibold text-light-text-primary dark:text-dark-text-primary">
+                Cerebrium API Response Structure
+              </h3>
+              <button className="p-2 hover:bg-light-hover dark:hover:bg-dark-hover rounded transition-colors" data-target-cursor="true">
+                <Copy className="h-4 w-4" />
+              </button>
+            </div>
+            <pre className="p-4 bg-slate-900 text-green-400 overflow-x-auto">
+              <code>{`{
+  "run_id": "c514a61a-34f4-9cb7-bba8-a11679c5e2d5",
+  "result": {
+    "predictions": {
+      "random_forest": {
+        "prediction": {
+          "prediction": "Not a Planet",
+          "probability": 0.452
+        },
+        "model_type": "Random Forest"
+      },
+      "knn": {
+        "prediction": {
+          "prediction": "Planet",
+          "probability": 1,
+          "ESI": 0.021
+        },
+        "model_type": "Knn"
+      }
+    },
+    "esi": 1,
+    "input_data": {...},
+    "models_executed": ["random_forest", "decision_tree", "knn", "cnn"],
+    "status": "success"
+  },
+  "run_time_ms": 7866.67
+}`}</code>
+            </pre>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mt-6 p-4 bg-light-surface dark:bg-dark-surface rounded-lg"
+          >
+            <p className="text-light-text-secondary dark:text-dark-text-secondary">
+              The API returns a <code className="px-1 py-0.5 bg-light-background dark:bg-dark-background rounded text-xs">run_id</code> for tracking, 
+              a <code className="px-1 py-0.5 bg-light-background dark:bg-dark-background rounded text-xs">result</code> object with predictions from each model, 
+              calculated Earth Similarity Index (ESI), and execution time in milliseconds.
+            </p>
+          </motion.div>
+        </section>
+
+        {/* Error Handling */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-8">
+            Error Handling
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="card overflow-hidden"
+            >
+              <div className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
+                <h3 className="font-semibold text-red-800 dark:text-red-200">
+                  Missing Parameters
+                </h3>
+                <button className="p-2 hover:bg-red-100 dark:hover:bg-red-800/30 rounded transition-colors" data-target-cursor="true">
+                  <Copy className="h-4 w-4 text-red-600 dark:text-red-400" />
+                </button>
+              </div>
+              <pre className="p-4 bg-slate-900 text-red-400 overflow-x-auto">
+                <code>{`{
+  "error": "Missing required fields: ['period', 'prad']",
+  "status": "error"
+}`}</code>
+              </pre>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="card overflow-hidden"
+            >
+              <div className="flex items-center justify-between p-4 bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800">
+                <h3 className="font-semibold text-yellow-800 dark:text-yellow-200">
+                  Invalid Model
+                </h3>
+                <button className="p-2 hover:bg-yellow-100 dark:hover:bg-yellow-800/30 rounded transition-colors" data-target-cursor="true">
+                  <Copy className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                </button>
+              </div>
+              <pre className="p-4 bg-slate-900 text-yellow-400 overflow-x-auto">
+                <code>{`{
+  "error": "Invalid model(s): ['invalid_model']. Available models: ['random_forest', 'decision_tree', 'knn', 'cnn']",
+  "status": "error"
+}`}</code>
+              </pre>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="card overflow-hidden"
+            >
+              <div className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-900/20 border-b border-orange-200 dark:border-orange-800">
+                <h3 className="font-semibold text-orange-800 dark:text-orange-200">
+                  Model Execution Error
+                </h3>
+                <button className="p-2 hover:bg-orange-100 dark:hover:bg-orange-800/30 rounded transition-colors" data-target-cursor="true">
+                  <Copy className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                </button>
+              </div>
+              <pre className="p-4 bg-slate-900 text-orange-400 overflow-x-auto">
+                <code>{`{
+  "predictions": {
+    "random_forest": {
+      "error": "Model execution failed: [error details]",
+      "model_type": "Random Forest"
+    }
+  },
+  "status": "success"
+}`}</code>
+              </pre>
+            </motion.div>
           </div>
         </section>
 
@@ -433,6 +582,154 @@ export default function APIAccessPage() {
           </div>
         </section>
 
+        {/* Deployment Configuration */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-8">
+            Deployment Configuration
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="card p-6"
+            >
+              <Code className="h-8 w-8 mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
+                Hardware Specifications
+              </h3>
+              <ul className="space-y-2 text-light-text-secondary dark:text-dark-text-secondary">
+                <li>• <strong>CPU:</strong> 2.0 cores</li>
+                <li>• <strong>Memory:</strong> 4.0 GB</li>
+                <li>• <strong>Compute:</strong> CPU (AWS)</li>
+                <li>• <strong>Python:</strong> 3.10</li>
+                <li>• <strong>Base Image:</strong> python:3.10-bookworm</li>
+              </ul>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="card p-6"
+            >
+              <Database className="h-8 w-8 mb-4 text-primary-dark-blue" />
+              <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
+                Auto-scaling Settings
+              </h3>
+              <ul className="space-y-2 text-light-text-secondary dark:text-dark-text-secondary">
+                <li>• <strong>Min Replicas:</strong> 0 (scales to zero when idle)</li>
+                <li>• <strong>Max Replicas:</strong> 3</li>
+                <li>• <strong>Cooldown:</strong> 10 seconds</li>
+                <li>• <strong>Concurrency:</strong> 1 request per replica</li>
+                <li>• <strong>Metric:</strong> Concurrency utilization</li>
+              </ul>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="card p-6"
+          >
+            <Shield className="h-8 w-8 mb-4 text-primary-dark-blue" />
+            <h3 className="text-xl font-semibold text-light-text-primary dark:text-dark-text-primary mb-4">
+              Model Files
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="p-3 bg-light-surface dark:bg-dark-surface rounded">
+                <code className="text-sm text-primary-dark-blue dark:text-primary-light-blue">random_forest_classifier.pkl</code>
+              </div>
+              <div className="p-3 bg-light-surface dark:bg-dark-surface rounded">
+                <code className="text-sm text-primary-dark-blue dark:text-primary-light-blue">decision_tree_classifier.pkl</code>
+              </div>
+              <div className="p-3 bg-light-surface dark:bg-dark-surface rounded">
+                <code className="text-sm text-primary-dark-blue dark:text-primary-light-blue">cnn_model.h5</code>
+              </div>
+              <div className="p-3 bg-light-surface dark:bg-dark-surface rounded">
+                <code className="text-sm text-primary-dark-blue dark:text-primary-light-blue">knn_model.pkl</code>
+              </div>
+              <div className="p-3 bg-light-surface dark:bg-dark-surface rounded">
+                <code className="text-sm text-primary-dark-blue dark:text-primary-light-blue">scaler.pkl</code>
+              </div>
+              <div className="p-3 bg-light-surface dark:bg-dark-surface rounded">
+                <code className="text-sm text-primary-dark-blue dark:text-primary-light-blue">imputer.pkl</code>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Performance */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary mb-8">
+            Performance
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="card p-6 text-center"
+            >
+              <div className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-2">~10-15s</div>
+              <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                Cold Start
+              </h3>
+              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                Model loading time for idle replicas
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="card p-6 text-center"
+            >
+              <div className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-2">~100-500ms</div>
+              <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                Warm Response
+              </h3>
+              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                Response time for active replicas
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="card p-6 text-center"
+            >
+              <div className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-2">99.9%</div>
+              <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                Availability
+              </h3>
+              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                Uptime on Cerebrium platform
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="card p-6 text-center"
+            >
+              <div className="text-3xl font-bold text-primary-dark-blue dark:text-primary-light-blue mb-2">3</div>
+              <h3 className="text-lg font-semibold text-light-text-primary dark:text-dark-text-primary mb-2">
+                Concurrent Requests
+              </h3>
+              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                Maximum concurrent requests
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
         {/* API Features & Resources */}
         <section className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -468,22 +765,32 @@ export default function APIAccessPage() {
               <ul className="space-y-2">
                 <li>
                   <a 
-                    href="http://localhost:8000/docs" 
+                    href="https://docs.cerebrium.ai" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary-dark-blue dark:text-primary-light-blue hover:underline"
                   >
-                    Interactive API Docs (Swagger UI)
+                    Cerebrium Documentation
                   </a>
                 </li>
                 <li>
                   <a 
-                    href="http://localhost:8000/redoc" 
+                    href="https://pypi.org/project/exobengal/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary-dark-blue dark:text-primary-light-blue hover:underline"
                   >
-                    ReDoc Documentation
+                    ExoBengal Package (PyPI)
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="https://exoplanetarchive.ipac.caltech.edu/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary-dark-blue dark:text-primary-light-blue hover:underline"
+                  >
+                    NASA Exoplanet Archive
                   </a>
                 </li>
                 <li>
