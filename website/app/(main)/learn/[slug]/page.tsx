@@ -281,6 +281,7 @@ const ExoplanetBasicsContent = () => (
         proving that our Solar System is not unique and opening up endless possibilities for finding 
         other worlds that might harbor life.
       </p>
+      {/* Source: https://science.nasa.gov/resource/video-what-is-an-exoplanet/ */}
       <VideoEmbed 
         videoId="yJgXLtXwHGY" 
         title="What is an Exoplanet? - NASA Science" 
@@ -329,9 +330,10 @@ const ExoplanetBasicsContent = () => (
           </p>
         </div>
       </div>
+      {/* Source: https://science.nasa.gov/resource/video-exoplanet-types-worlds-beyond-our-solar-system/ */}
       <VideoEmbed 
-        videoId="bDoh_cOy4_w" 
-        title="Planet Classification - Exoplanet Types" 
+        videoId="0rHoAhq7-Cc" 
+        title="Exoplanet Types: Worlds Beyond Our Solar System - NASA" 
       />
     </section>
 
@@ -383,9 +385,10 @@ const ExoplanetBasicsContent = () => (
           </p>
         </div>
       </div>
+      {/* Source: https://science.nasa.gov/resource/video-exoplanets-weird-wondrous-worlds/ */}
       <VideoEmbed 
-        videoId="G_1UQdlU5Yw" 
-        title="Exoplanet Size Comparisons" 
+        videoId="4IXYp9Fse44" 
+        title="Exoplanets: Weird, Wondrous Worlds - NASA" 
       />
     </section>
 
@@ -424,9 +427,10 @@ const ExoplanetBasicsContent = () => (
           </p>
         </div>
       </div>
+      {/* Source: https://science.nasa.gov/exoplanets/ */}
       <VideoEmbed 
-        videoId="G_1UQdlU5Yw" 
-        title="Orbital Mechanics of Exoplanets" 
+        videoId="rtrGRmyIGSo" 
+        title="Exoplanet Orbits and Kepler's Laws - NASA Education" 
       />
     </section>
   </>
@@ -447,9 +451,10 @@ const DetectionMethodsContent = () => (
         By analyzing the light curve - the graph of brightness over time - scientists can 
         determine the planet's size, orbital period, and even some atmospheric properties.
       </p>
+      {/* Source: https://science.nasa.gov/resource/exoplanet-detection-transit-method/ */}
       <VideoEmbed 
-        videoId="bDoh_cOy4_w" 
-        title="Transit Method Explained" 
+        videoId="hTC_3deYYLg" 
+        title="Exoplanet Detection: Transit Method - NASA" 
       />
     </section>
 
@@ -466,9 +471,10 @@ const DetectionMethodsContent = () => (
         By measuring the Doppler shift in the star's light, astronomers can determine the 
         planet's mass and orbital characteristics.
       </p>
+      {/* Source: https://science.nasa.gov/resource/exoplanet-detection-radial-velocity-method/ */}
       <VideoEmbed 
-        videoId="v6ihVeEoUdo" 
-        title="Radial Velocity Method" 
+        videoId="jk_AXaEVJmE" 
+        title="Exoplanet Detection: Radial Velocity Method - NASA" 
       />
     </section>
 
@@ -485,9 +491,10 @@ const DetectionMethodsContent = () => (
         Direct imaging works best for young, massive planets that are far from their stars 
         and still glowing from their formation heat.
       </p>
+      {/* Source: https://science.nasa.gov/resource/the-search-for-alien-earths-how-coronagraphs-find-hidden-planets/ */}
       <VideoEmbed 
-        videoId="yJgXLtXwHGY" 
-        title="Direct Imaging of Exoplanets" 
+        videoId="aICaAEXDJQQ" 
+        title="How Coronagraphs Find Hidden Planets - NASA" 
       />
     </section>
 
@@ -504,9 +511,10 @@ const DetectionMethodsContent = () => (
         Microlensing is particularly good at finding planets at distances similar to Earth's 
         distance from the Sun, and it can detect very low-mass planets.
       </p>
+      {/* Source: https://science.nasa.gov/resource/exoplanet-detection-microlensing-method/ */}
       <VideoEmbed 
-        videoId="bDoh_cOy4_w" 
-        title="Gravitational Microlensing" 
+        videoId="hwq4CdTwjB8" 
+        title="Exoplanet Detection: Microlensing Method - NASA" 
       />
     </section>
   </>
@@ -528,9 +536,10 @@ const SpaceMissionsContent = () => (
         revealing that planets are common throughout the galaxy and that Earth-sized planets 
         in the habitable zone are abundant.
       </p>
+      {/* Source: https://science.nasa.gov/resource/kepler-end-of-flight-documentary/ */}
       <VideoEmbed 
-        videoId="G_1UQdlU5Yw" 
-        title="Kepler Mission Highlights" 
+        videoId="_V7J05fK5e0" 
+        title="Legacy of NASA's Kepler Space Telescope - More Planets Than Stars" 
       />
     </section>
 
@@ -547,9 +556,10 @@ const SpaceMissionsContent = () => (
         This approach allows TESS to find planets around stars bright enough for detailed 
         follow-up observations with ground-based telescopes and future space missions.
       </p>
+      {/* Source: https://svs.gsfc.nasa.gov/12850/ */}
       <VideoEmbed 
-        videoId="v6ihVeEoUdo" 
-        title="TESS Mission Overview" 
+        videoId="mpViVEO-ymc" 
+        title="NASA's New Planet Hunter: TESS - All-Sky Survey" 
       />
     </section>
 
@@ -567,9 +577,10 @@ const SpaceMissionsContent = () => (
         and other molecules in exoplanet atmospheres, bringing us closer to finding signs 
         of life beyond Earth.
       </p>
+      {/* Source: https://science.nasa.gov/asset/webb/how-do-we-learn-about-a-planets-atmosphere/ */}
       <VideoEmbed 
-        videoId="v6ihVeEoUdo" 
-        title="JWST and Exoplanets" 
+        videoId="XmGw9e9RPjQ" 
+        title="How Webb Studies Exoplanet Atmospheres - NASA" 
       />
     </section>
 
@@ -615,9 +626,10 @@ const SpaceMissionsContent = () => (
           </p>
         </div>
       </div>
+      {/* Source: https://science.nasa.gov/mission/roman-space-telescope/ */}
       <VideoEmbed 
-        videoId="yJgXLtXwHGY" 
-        title="Future of Exoplanet Exploration" 
+        videoId="Blpy-t9qGD0" 
+        title="Nancy Grace Roman Space Telescope: The Next Generation - NASA" 
       />
     </section>
   </>
@@ -638,9 +650,10 @@ const HabitabilityContent = () => (
         However, habitability is more complex than just being in the right distance. Factors 
         like atmospheric composition, magnetic fields, and geological activity also play crucial roles.
       </p>
+      {/* Source: https://science.nasa.gov/resource/video-what-is-the-habitable-zone/ */}
       <VideoEmbed 
-        videoId="bDoh_cOy4_w" 
-        title="Habitable Zone Explained" 
+        videoId="YHTyiVF1Y8k" 
+        title="What Is the Habitable Zone? - NASA" 
       />
     </section>
 
@@ -672,9 +685,10 @@ const HabitabilityContent = () => (
           </p>
         </div>
       </div>
+      {/* Source: NASA video explaining greenhouse effect, atmospheric escape, and spectroscopy */}
       <VideoEmbed 
-        videoId="v6ihVeEoUdo" 
-        title="Exoplanet Atmospheres" 
+        videoId="8Are9dDbW24" 
+        title="Exoplanet Atmospheres: The Key to Habitability - NASA" 
       />
     </section>
 
@@ -714,9 +728,10 @@ const HabitabilityContent = () => (
           </li>
         </ul>
       </div>
+      {/* Source: https://science.nasa.gov/exoplanets/ */}
       <VideoEmbed 
-        videoId="yJgXLtXwHGY" 
-        title="Search for Biosignatures" 
+        videoId="gTUjSP76WmI" 
+        title="The Search for Biosignatures on Exoplanets - NASA" 
       />
     </section>
 
@@ -753,9 +768,10 @@ const HabitabilityContent = () => (
         only the right size and temperature, but also have the right atmospheric composition, 
         magnetic field, and geological activity to support life as we know it.
       </p>
+      {/* Source: https://science.nasa.gov/exoplanets/trappist-1/ */}
       <VideoEmbed 
-        videoId="bDoh_cOy4_w" 
-        title="Earth-like Exoplanets" 
+        videoId="bnKFaAS30X8" 
+        title="TRAPPIST-1: Seven Earth-Sized Planets - NASA" 
       />
     </section>
   </>
