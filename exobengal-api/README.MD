@@ -54,9 +54,22 @@ The API will be available at `http://localhost:8000`
 
 - **Swagger UI**: `http://localhost:8000/docs`
 - **ReDoc**: `http://localhost:8000/redoc`
+##
 
 ### Endpoints
 
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Root endpoint with API information |
+| `GET` | `/health` | Health check endpoint |
+| `GET` | `/docs` | Interactive API documentation (Swagger UI) |
+| `GET` | `/models/info` | Information about available models |
+| `POST` | `/predict` | Single exoplanet prediction |
+| `POST` | `/predict/batch` | Batch predictions |
+
+#
+
+### Endpoint Details
 #### `GET /`
 Welcome endpoint with basic API information.
 
@@ -90,18 +103,21 @@ Predict exoplanet characteristics using specified or all available models.
 }
 ```
 
-**Parameters:**
-- `period` (float): Orbital period in days
-- `prad` (float): Planet radius in Earth radii
-- `teq` (float): Equilibrium temperature in Kelvin
-- `srad` (float): Stellar radius in solar radii
-- `slog_g` (float): Stellar surface gravity (log scale)
-- `steff` (float): Stellar effective temperature in Kelvin
-- `impact` (float): Impact parameter (transit geometry)
-- `duration` (float): Transit duration in hours
-- `depth` (float): Transit depth in parts per million
-- `models` (array, optional): Specific models to run. If not specified, all models execute.
+**Input Parameters**
 
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `period` | float | Orbital period (days) | 365.25 |
+| `prad` | float | Planet radius (Earth radii) | 1.0 |
+| `teq` | float | Equilibrium temperature (Kelvin) | 288.0 |
+| `srad` | float | Stellar radius (solar radii) | 1.0 |
+| `slog_g` | float | Stellar surface gravity (log scale) | 4.44 |
+| `steff` | float | Stellar effective temperature (Kelvin) | 5778 |
+| `impact` | float | Impact parameter | 0.0 |
+| `duration` | float | Transit duration (hours) | 13.0 |
+| `depth` | float | Transit depth (parts per million) | 84.0 |
+| `models` | array | Optional: specific models to run | ["random_forest", "cnn", "knn", "decision_tree"] |
+##
 **Response:**
 ```json
 {
