@@ -103,14 +103,14 @@ pip install exobengal
 
 #### Source Installation
 ```bash
-git clone https://github.com/your-username/exobengal.git
+git clone https://github.com/gazi-faysal-jubayer/ExoBengal.git
 cd exobengal
 pip install -r requirements.txt
 ```
 
 #### Development Mode
 ```bash
-git clone https://github.com/your-username/exobengal.git
+git clone https://github.com/gazi-faysal-jubayer/ExoBengal.git
 cd exobengal
 pip install -e .
 ```
@@ -2020,7 +2020,7 @@ jupyter        # Notebook environment (for local use)
 For local development:
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/ExoBengal.git
+git clone https://github.com/gazi-faysal-jubayer/ExoBengal.git
 cd ExoBengal
 
 # Install dependencies

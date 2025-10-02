@@ -17,74 +17,74 @@ const quickLinks = [
   },
   {
     title: 'Installation',
-    description: 'Python versions, install steps, and dependencies',
+    description: 'Python versions, dependencies, and setup',
     href: '/docs/installation',
     icon: Download,
     color: 'from-gray-500 to-slate-600',
   },
   {
-    title: 'API Reference',
-    description: 'DetectExoplanet class, training and inference methods',
-    href: '/docs/api',
+    title: 'Python Library',
+    description: 'DetectExoplanet and ExoParams API reference',
+    href: '/docs/api/detect-exoplanet',
     icon: Code,
     color: 'from-blue-500 to-cyan-600',
   },
   {
-    title: 'Tutorials',
-    description: 'Step-by-step guides for common tasks',
-    href: '/docs/tutorials',
-    icon: BookOpen,
+    title: 'Model Artifacts',
+    description: 'Pre-trained models, architectures, and performance',
+    href: '/docs/models',
+    icon: Star,
     color: 'from-purple-500 to-pink-600',
   },
   {
-    title: 'Examples',
-    description: 'Real-world examples and use cases',
-    href: '/docs/examples',
-    icon: Star,
+    title: 'Tutorials & Learning',
+    description: 'Step-by-step learning path with Jupyter notebooks',
+    href: '/docs/tutorials',
+    icon: BookOpen,
     color: 'from-orange-500 to-red-600',
   },
   {
-    title: 'Data Reference',
-    description: 'Dataset columns, labels, and preprocessing',
-    href: '/docs/data-reference',
-    icon: BookOpen,
+    title: 'API Deployment',
+    description: 'Cerebrium cloud API with live endpoints',
+    href: '/docs/api',
+    icon: Zap,
     color: 'from-teal-500 to-emerald-600',
   },
   {
-    title: 'Models',
-    description: 'Artifacts, loading behavior, and retraining',
-    href: '/docs/models',
-    icon: Code,
+    title: 'Data Reference',
+    description: 'NASA Exoplanet Archive data format and features',
+    href: '/docs/data-reference',
+    icon: BookOpen,
     color: 'from-indigo-500 to-blue-600',
   },
   {
-    title: 'Notebook',
-    description: 'Walkthrough of test.ipynb and outputs',
-    href: '/docs/notebook',
-    icon: BookOpen,
+    title: 'Examples',
+    description: 'Real-world use cases and code samples',
+    href: '/docs/examples',
+    icon: Code,
     color: 'from-pink-500 to-rose-600',
   },
 ]
 
 const features = [
   {
-    title: 'Easy Data Access',
-    description: 'Simple Python interface to NASA Exoplanet Archive',
-    icon: Download,
-  },
-  {
-    title: 'Rich Filtering',
-    description: 'Advanced filtering and search capabilities',
-    icon: Zap,
-  },
-  {
-    title: 'Visualization Tools',
-    description: 'Built-in plotting and visualization functions',
+    title: 'Four ML Models',
+    description: 'Random Forest, CNN, k-Nearest Neighbors, and Decision Tree classifiers',
     icon: Star,
   },
   {
-    title: 'Open Source',
-    description: 'MIT licensed and community driven',
+    title: 'Pre-trained Artifacts',
+    description: 'Ready-to-use models trained on NASA Kepler mission data',
+    icon: Download,
+  },
+  {
+    title: 'ESI Calculation',
+    description: 'Automatic Earth Similarity Index for habitability assessment',
+    icon: Zap,
+  },
+  {
+    title: 'Cloud API',
+    description: 'Production-ready REST API deployed on Cerebrium',
     icon: Users,
   },
 ]
@@ -101,11 +101,10 @@ export default function DocsPage() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-5xl font-bold text-light-text-primary dark:text-dark-text-primary mb-6">
-              ExoBengal Documentation
+              ExoBengal Documentation - ML-Powered Exoplanet Detection
             </h1>
             <p className="text-xl text-light-text-secondary dark:text-dark-text-secondary mb-8 max-w-3xl mx-auto">
-              A powerful Python package for accessing, analyzing, and visualizing NASA exoplanet data.
-              Build amazing discoveries with our comprehensive toolkit.
+              A comprehensive machine learning toolkit for exoplanet detection using NASA Kepler mission data. Train and deploy Random Forest, CNN, k-Nearest Neighbors, and Decision Tree models for planet classification.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -209,11 +208,23 @@ export default function DocsPage() {
           </h2>
           <div className="max-w-4xl mx-auto">
             <div className="bg-slate-900 rounded-lg p-6 overflow-x-auto">
-              <CodeBlock language="python" code={`from exobengal.exobengal import DetectExoplanet
+              <CodeBlock language="python" code={`from exobengal import DetectExoplanet, ExoParams
 
+# Initialize detector
 detector = DetectExoplanet()
-sample = [365.0, 1.0, 288.0, 1.0, 4.44, 5778, 0.1, 5.0, 100.0]
-print(detector.random_forest(sample))`} />
+
+# Create Earth-like parameters
+params = ExoParams(
+    period=365.0, prad=1.0, teq=288.0,
+    srad=1.0, slog_g=4.44, steff=5778,
+    impact=0.1, duration=5.0, depth=100.0
+)
+
+# Make prediction
+result = detector.random_forest(params)
+print(f"Prediction: {result['prediction']}")
+print(f"Probability: {result['probability']:.2%}")
+print(f"ESI: {result['ESI']:.3f}")`} />
             </div>
           </div>
         </motion.div>
@@ -231,23 +242,23 @@ print(detector.random_forest(sample))`} />
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/docs/tutorials/basic-search" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                  Basic Exoplanet Search and Filtering
+                <Link href="/docs/tutorials/training" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                  Training Models with Custom Hyperparameters
                 </Link>
               </li>
               <li>
-                <Link href="/docs/tutorials/visualizations" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                  Creating Beautiful Visualizations
+                <Link href="/docs/tutorials/prediction" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                  Making Predictions with Pre-trained Models
                 </Link>
               </li>
               <li>
-                <Link href="/docs/tutorials/statistical-analysis" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                  Statistical Analysis of Planet Populations
+                <Link href="/docs/models" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                  Understanding Model Performance Metrics
                 </Link>
               </li>
               <li>
-                <Link href="/docs/tutorials/machine-learning" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                  Machine Learning Applications
+                <Link href="/docs/tutorials" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                  Running Notebooks on Google Colab
                 </Link>
               </li>
             </ul>
@@ -259,18 +270,18 @@ print(detector.random_forest(sample))`} />
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/docs/api/client" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                  NASAClient - Main interface
+                <Link href="/docs/api/detect-exoplanet" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                  DetectExoplanet Class
                 </Link>
               </li>
               <li>
-                <Link href="/docs/api/search" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                  Search and Filtering Methods
+                <Link href="/docs/api/exo-params" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                  ExoParams Class
                 </Link>
               </li>
               <li>
-                <Link href="/docs/api/plotting" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
-                  Plotting and Visualization
+                <Link href="/docs/tutorials/training" className="text-primary-dark-blue dark:text-primary-light-blue hover:underline">
+                  Model Training Methods
                 </Link>
               </li>
               <li>

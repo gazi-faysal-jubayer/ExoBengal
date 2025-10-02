@@ -997,3 +997,4 @@ A: Yes! ExoBengal is open-source (MIT License) and suitable for academic researc
 **Ready to start learning?** Open `test.ipynb` (local) or `pip_test.ipynb` (Colab) and begin your exoplanet detection journey!
 
 For questions or issues, please open an issue on GitHub or consult the documentation links above.
+

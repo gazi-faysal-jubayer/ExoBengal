@@ -22,14 +22,14 @@ pip install exobengal
 
 ### From Source
 ```bash
-git clone https://github.com/yourusername/ExoBengal.git
+git clone https://github.com/gazi-faysal-jubayer/ExoBengal.git
 cd ExoBengal
 pip install -r requirements.txt
 ```
 
 ### Development Mode
 ```bash
-git clone https://github.com/yourusername/ExoBengal.git
+git clone https://github.com/gazi-faysal-jubayer/ExoBengal.git
 cd ExoBengal
 pip install -e .
 ```
@@ -828,3 +828,4 @@ This library is part of the ExoBengal project, licensed under the MIT License.
 ---
 
 **Note**: This README focuses on the Python library API. For web interface documentation, see the main project README.
+
